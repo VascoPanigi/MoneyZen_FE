@@ -18,20 +18,21 @@
 //   font-weight: 600 !important;
 // }
 
+// SOSTITUIRE BACKGROUND CON BG COLOR
 $themes: (
   light: (
-    text: #647365,
-    bg-color: #dfdddd,
-    primary: #db350f,
-    secondary: #ce5f40,
-    accent: #c89814,
+    text: #072722,
+    bg-color: #f7fdfc,
+    primary: #14715d,
+    secondary: #7da6e8,
+    accent: #2032b6,
   ),
   dark: (
-    text: #8c9b8d,
-    bg-color: #222020,
-    primary: #f04924,
-    secondary: #bf5031,
-    accent: #ebbb37,
+    text: #d8f8f3,
+    bg-color: #020807,
+    primary: #8eebd7,
+    secondary: #174082,
+    accent: #495adf,
   ),
 );
 
