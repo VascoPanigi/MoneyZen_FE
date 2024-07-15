@@ -21,18 +21,18 @@
 // SOSTITUIRE BACKGROUND CON BG COLOR
 $themes: (
   light: (
-    text: #072722,
-    bg-color: #f7fdfc,
+    text: #062823,
+    bg-primary: #fbfefe,
     primary: #14715d,
-    secondary: #7da6e8,
-    accent: #2032b6,
+    secondary: #1e5fc8,
+    accent: #3d1ec8,
   ),
   dark: (
-    text: #d8f8f3,
-    bg-color: #020807,
+    text: #d7f9f4,
+    bg-primary: #010605,
     primary: #8eebd7,
-    secondary: #174082,
-    accent: #495adf,
+    secondary: #3778e1,
+    accent: #5637e1,
   ),
 );
 
@@ -41,7 +41,7 @@ $theme: map-get($themes, dark);
 
 // Override Bootstrap variables
 $body-color: map-get($theme, text);
-$bg-color: map-get($theme, bg-color);
+$bg-primary: map-get($theme, bg-primary);
 $primary: map-get($theme, primary);
 $secondary: map-get($theme, secondary);
 $accent: map-get($theme, accent);
