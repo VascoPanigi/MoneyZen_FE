@@ -1,0 +1,53 @@
+.logo {
+  width: 100px;
+  height: 100px;
+  @media screen and (max-width: 578px) {
+  }
+}
+
+// a.nav-link:hover {
+//   color: $primary;
+// }
+a.nav-link {
+  //   :hover,
+  //   :focus {
+  //     color: $accent;
+  //   }
+
+  color: $body-color;
+  font-family: "Roboto", sans-serif;
+  letter-spacing: 1px;
+}
+
+.navbar_container {
+  position: sticky;
+  top: 0;
+  background-color: $bg-primary;
+  z-index: 9999;
+  width: 100%;
+  padding-inline: 3rem;
+  margin-inline: auto;
+  @media screen and (max-width: 1000px) {
+    padding-inline: 1rem;
+  }
+}
+
+.nav-link span {
+  color: $primary;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+a.nav-link.active {
+  color: $body-color !important;
+}
+
+.burger-icon {
+  color: $body-color;
+  font-size: 2.5rem;
+  border: 1px solid transparent;
+}
+
+.navbar-toggler {
+  border: 1px solid transparent;
+}

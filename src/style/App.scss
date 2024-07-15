@@ -1,5 +1,6 @@
 @import "./partials/bootstrap-overrides";
 @import "./partials/login";
+@import "./partials/navbar";
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
 
@@ -9,13 +10,16 @@ body {
   background-color: $bg-primary;
 }
 
-// a,
-// p,
-// h1,
-// h2,
-// h3,
-// h4,
-// h5,
-// li, label {
-//   font-family: "Rubik", sans-serif;
-// }
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+li,
+label {
+  color: $body-color;
+
+  // font-family: "Rubik", sans-serif;
+}
