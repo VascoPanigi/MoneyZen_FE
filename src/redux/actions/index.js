@@ -72,4 +72,22 @@ export const fetchUserWallets = (token) => {
   };
 };
 
+// Specific wallet
+// export const fetchUserSpecificWallet = (token) => {
+//   return async (dispatch) => {
+//     try {
+//       const response = await axios.get("http://localhost:3001/wallets/my-wallets", {
+//         headers: { Authorization: "Bearer " + token },
+//       });
+//       dispatch({
+//         type: GET_USER_WALLETS,
+//         payload: response.data,
+//       });
+//       console.log(response);
+//     } catch (err) {
+//       console.log(err.message);
+//     }
+//   };
+// };
+
 //-----------------------------------------------------------------------------------------------------------

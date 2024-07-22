@@ -2,3 +2,8 @@
   min-height: 100vh;
   max-width: 100vw;
 }
+
+.wallet-preview {
+  display: flex;
+  flex-direction: column;
+}
