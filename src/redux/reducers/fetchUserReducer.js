@@ -1,9 +1,10 @@
-import { TOGGLE_IS_LOGGED, GET_USER_LOGGED_TOKEN, GET_USER_LOGGED_PROFILE } from "../actions/index";
+import { TOGGLE_IS_LOGGED, GET_USER_INFO, GET_USER_WALLETS } from "../actions/index";
 
 const initialState = {
   isLogged: false,
   isAdmin: false,
   user_info: {},
+  user_wallets: {},
 };
 
 const fetchUserReducer = (state = initialState, action) => {
@@ -13,15 +14,15 @@ const fetchUserReducer = (state = initialState, action) => {
         ...state,
         isLogged: true,
       };
-    case GET_USER_LOGGED_TOKEN:
-      return {
-        ...state,
-        user_bearer: action.payload,
-      };
-    case GET_USER_LOGGED_PROFILE:
+    case GET_USER_INFO:
       return {
         ...state,
         user_info: action.payload,
+      };
+    case GET_USER_WALLETS:
+      return {
+        ...state,
+        user_wallets: action.payload,
       };
     default:
       return state;
