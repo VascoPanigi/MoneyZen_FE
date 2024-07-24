@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, ListGroup, Modal, Row } from "react-bootstrap";
 import {
   addNewPersonalWalletAction,
@@ -16,6 +16,7 @@ const Homepage = () => {
   const [name, setName] = useState("");
   const [showNamingOptionNewWallet, setShowNamingOptionNewWallet] = useState(false);
   const [typeNewWalletShared, setTypeNewWalletShared] = useState(false);
+  const [showNewTransactionModal, setShowNewTransactionModal] = useState(false);
 
   const [show, setShow] = useState(false);
 
@@ -24,6 +25,9 @@ const Homepage = () => {
     setShow(true);
     setShowNamingOptionNewWallet(false);
   };
+
+  const handleCloseNewTransaction = () => setShowNewTransactionModal(false);
+  const handleShowNewTransaction = () => setShowNewTransactionModal(true);
 
   const wallets = useSelector((state) => state.user.user_wallets);
   const selectedWallet = useSelector((state) => state.user.user_wallets[selectedWalletIndex]);
@@ -77,7 +81,12 @@ const Homepage = () => {
         {wallets.length > 0 &&
           wallets.map((wallet, index) => (
             <Col className="wallet-preview" key={wallet.id} onClick={() => handleWalletSelection(index)}>
-              <h3>{wallet.name}</h3> <p>{wallet.balance}:-</p>
+              <Container>
+                <h3>{wallet.name}</h3>
+              </Container>
+              <Container>
+                <p>{wallet.balance}:-</p>
+              </Container>
             </Col>
           ))}
         <>
@@ -121,9 +130,37 @@ const Homepage = () => {
       </Row>
       <Row>
         {selectedWallet && (
-          <Col className="selected-wallet-details">
-            <h2>Selected Wallet Details</h2>
+          <Col className="new-transaction-container">
+            <h2>Create a new transaction</h2>
             <h3>{selectedWallet.name}</h3>
+            <Button variant="primary" onClick={() => handleShowNewTransaction}>
+              New Transaction
+            </Button>
+            <Modal
+              className="new-wallet-modal-container"
+              show={showNewTransactionModal}
+              onHide={handleCloseNewTransaction}
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>New Transaction</Modal.Title>
+              </Modal.Header>
+              <Row className="new-transaction-form-container">
+                <Form>
+                  <Form.Group className="mb-3" controlId="newWalletName">
+                    <Form.Label>Wallet Name</Form.Label>
+                    <Form.Control
+                      type="name"
+                      placeholder="Enter wallet name"
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Button variant="primary" type="submit">
+                    Submit
+                  </Button>
+                </Form>
+              </Row>
+            </Modal>
             <p>Balance: {selectedWallet.balance}:-</p>
             <ListGroup>
               {selectedWallet.transactions.length > 0 ? (
