@@ -138,3 +138,23 @@ export const addNewTransactionAction = (registerObject, walletId) => {
     }
   };
 };
+
+//-----------------------------------------------TRANSACTIONS CATEGORIES OPERATIONS------------------------------------------------------------
+
+// Get all transaction categories to then save them in the state, divided by outcome and income ones
+export const fetchAllCategories = (token) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get("http://localhost:3001/categories", {
+        headers: { Authorization: "Bearer " + token },
+      });
+      dispatch({
+        type: G,
+        payload: response.data,
+      });
+      console.log(response);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
