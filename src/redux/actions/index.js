@@ -4,8 +4,7 @@ export const TOGGLE_IS_LOGGED = "TOGGLE_IS_LOGGED";
 export const GET_USER_WALLETS = "GET_USER_WALLETS";
 export const GET_USER_INFO = "GET_USER_INFO";
 
-//-----------------------------------------------------------------------------------------------------------
-// Auth operations
+//----------------------------------------------- AUTH OPERATIONS ------------------------------------------------------------
 // Login
 export const LoginUserAction = (loginObject, navigate) => {
   return async () => {
@@ -34,8 +33,7 @@ export const registerUserAction = (registerObject) => {
   };
 };
 
-//-----------------------------------------------------------------------------------------------------------
-// Fetch user info
+//-----------------------------------------------USER OPERATIONS------------------------------------------------------------
 // Generic info
 export const fetchUserInfo = (token) => {
   return async (dispatch) => {
@@ -54,7 +52,9 @@ export const fetchUserInfo = (token) => {
   };
 };
 
-// Wallets
+//-----------------------------------------------WALLET OPERATIONS------------------------------------------------------------
+
+// Get all wallets
 export const fetchUserWallets = (token) => {
   return async (dispatch) => {
     try {
@@ -66,6 +66,41 @@ export const fetchUserWallets = (token) => {
         payload: response.data,
       });
       console.log(response);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
+// Create a personal wallet
+export const addNewPersonalWalletAction = (registerObject, token) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post("http://localhost:3001/wallets/personal-wallets", registerObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
+      console.log(response.data);
+      dispatch(fetchUserWallets(token));
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
+// Create a shared wallet
+export const addNewSharedWalletAction = (registerObject, token) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/wallets/shared-wallets",
+        registerObject,
+        registerObject,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      );
+      console.log(response.data);
+      dispatch(fetchUserWallets(token));
     } catch (err) {
       console.log(err.message);
     }
@@ -90,4 +125,16 @@ export const fetchUserWallets = (token) => {
 //   };
 // };
 
-//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------------------TRANSACTIONS OPERATIONS------------------------------------------------------------
+
+// Post a new transaction on a wallet
+export const addNewTransactionAction = (registerObject, walletId) => {
+  return async () => {
+    try {
+      const response = await axios.post("http://localhost:3001/transactions/" + walletId, registerObject);
+      console.log(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
