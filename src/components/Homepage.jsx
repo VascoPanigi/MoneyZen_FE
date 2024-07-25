@@ -3,6 +3,7 @@ import { Button, Col, Container, Form, ListGroup, Modal, Row } from "react-boots
 import {
   addNewPersonalWalletAction,
   addNewSharedWalletAction,
+  fetchAllCategories,
   fetchUserInfo,
   fetchUserWallets,
 } from "../redux/actions";
@@ -19,6 +20,8 @@ const Homepage = () => {
   const [showNewTransactionModal, setShowNewTransactionModal] = useState(false);
   const [transactionType, setTransactionType] = useState("Outcome");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [radio, setRadio] = useState(1);
+  const [options, setOptions] = useState({});
 
   const [show, setShow] = useState(false);
 
@@ -34,6 +37,8 @@ const Homepage = () => {
   const wallets = useSelector((state) => state.user.user_wallets);
   const selectedWallet = useSelector((state) => state.user.user_wallets[selectedWalletIndex]);
   // const selectedWalletTransactions = selectedWallet.transactions;
+  const transactionCategories = useSelector((state) => state.transaction_categories);
+  // console.log(transactionCategories.categories);
 
   // console.log(wallets.length);
 
@@ -41,6 +46,7 @@ const Homepage = () => {
     console.log("sono nello useEffect, che sballo!");
     dispatch(fetchUserInfo(token));
     dispatch(fetchUserWallets(token));
+    dispatch(fetchAllCategories(token));
   }, []);
 
   // useEffect(() => {
@@ -79,25 +85,58 @@ const Homepage = () => {
 
   const handleTransactionTypeChange = (event) => {
     setTransactionType(event.target.value);
+    console.log(transactionType);
   };
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
 
-  const incomeOptions = [
-    { value: "1", label: "Salary" },
-    { value: "2", label: "Investment" },
-    { value: "3", label: "Gift" },
-  ];
+  useEffect(() => {
+    if (transactionCategories.categories.length > 0) {
+      console.log("Initial radio value" + radio);
+      console.log("Initial options " + options);
+      const incomeCategories = transactionCategories.categories.filter(
+        (category) => category.transactionType === "INCOME"
+      );
+      // console.log(incomeCategories);
+      const incomeOptions = incomeCategories.map((category, index) => ({
+        value: index + 1,
+        label: category.name,
+      }));
+      const outcomeCategories = transactionCategories.categories.filter(
+        (category) => category.transactionType === "OUTCOME"
+      );
 
-  const outcomeOptions = [
-    { value: "1", label: "Food & Drink" },
-    { value: "2", label: "Groceries" },
-    { value: "3", label: "Entertainment" },
-  ];
+      // console.log(outcomeCategories);
+      const outcomeOptions = outcomeCategories.map((category, index) => ({
+        value: index + 1,
+        label: category.name,
+      }));
 
-  const options = transactionType === "Income" ? incomeOptions : outcomeOptions;
+      // console.log(outcomeOptions);
+      // console.log(incomeOptions);
+      console.log(radio);
+      radio === 1 ? setOptions(outcomeOptions) : setOptions(incomeOptions);
+      console.log(options);
+    }
+  }, [radio]);
+
+  function handleRadioButtonsChange(e) {
+    // Grab the nodeName and value from
+    // the clicked element
+    const { nodeName, value } = e.target;
+
+    // Because we're using event delegation (attaching
+    // an event listener to a parent element and capturing
+    // events from child elements as they "bubble up" the DOM)
+    // we need to check to see if the clicked element is an input
+    if (nodeName === "INPUT") {
+      // Set the state with the input value
+      setRadio(value);
+      console.log(radio);
+    }
+  }
 
   return (
     <Container className="homepage-container">
@@ -192,26 +231,36 @@ const Homepage = () => {
                     />
                   </Form.Group>
 
-                  <Form.Group className="mb-3">
+                  <Form.Group className="mb-3" onChange={handleRadioButtonsChange}>
                     <Form.Check
-                      defaultChecked={true}
+                      // defaultChecked={true}
                       type="radio"
                       label="Outcome"
                       name="group1"
-                      onChange={handleTransactionTypeChange}
-                      checked={transactionType === "Income"}
+                      value={1}
+
+                      // onChange={handleTransactionTypeChange}
+                      // checked={transactionType === "Outcome"}
                     />
-                    <Form.Check type="radio" label="Income" name="group1" />
+                    <Form.Check
+                      type="radio"
+                      label="Income"
+                      name="group1"
+                      value={2}
+                      // onChange={handleTransactionTypeChange}
+                      // checked={transactionType === "Income"}
+                    />
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Category</Form.Label>
 
                     <Form.Select aria-label="Select category" onChange={handleCategoryChange}>
-                      {options.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
+                      {options.length > 0 &&
+                        options.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
                       {/* <option>Open this select menu</option>
                       <option value="1">One</option>
                       <option value="2">Two</option>

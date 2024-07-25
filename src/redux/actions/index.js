@@ -3,6 +3,7 @@ import axios from "axios";
 export const TOGGLE_IS_LOGGED = "TOGGLE_IS_LOGGED";
 export const GET_USER_WALLETS = "GET_USER_WALLETS";
 export const GET_USER_INFO = "GET_USER_INFO";
+export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 
 //----------------------------------------------- AUTH OPERATIONS ------------------------------------------------------------
 // Login
@@ -149,7 +150,7 @@ export const fetchAllCategories = (token) => {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch({
-        type: G,
+        type: GET_ALL_CATEGORIES,
         payload: response.data,
       });
       console.log(response);
