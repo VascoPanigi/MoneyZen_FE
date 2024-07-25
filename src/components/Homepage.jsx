@@ -22,6 +22,8 @@ const Homepage = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [radio, setRadio] = useState(1);
   const [options, setOptions] = useState({});
+  const [incomeOptions, setIncomeOptions] = useState([]);
+  const [outcomeOptions, setOutcomeOptions] = useState([]);
 
   const [show, setShow] = useState(false);
 
@@ -95,32 +97,44 @@ const Homepage = () => {
   useEffect(() => {
     if (transactionCategories.categories.length > 0) {
       console.log("Initial radio value" + radio);
-      console.log("Initial options " + options);
+      // console.log("Initial options " + options);
       const incomeCategories = transactionCategories.categories.filter(
         (category) => category.transactionType === "INCOME"
       );
       // console.log(incomeCategories);
-      const incomeOptions = incomeCategories.map((category, index) => ({
-        value: index + 1,
-        label: category.name,
-      }));
+      setIncomeOptions(
+        incomeCategories.map((category, index) => ({
+          value: index + 1,
+          label: category.name,
+        }))
+      );
       const outcomeCategories = transactionCategories.categories.filter(
         (category) => category.transactionType === "OUTCOME"
       );
 
       // console.log(outcomeCategories);
-      const outcomeOptions = outcomeCategories.map((category, index) => ({
-        value: index + 1,
-        label: category.name,
-      }));
+      setOutcomeOptions(
+        outcomeCategories.map((category, index) => ({
+          value: index + 1,
+          label: category.name,
+        }))
+      );
 
-      // console.log(outcomeOptions);
-      // console.log(incomeOptions);
-      console.log(radio);
-      radio === 1 ? setOptions(outcomeOptions) : setOptions(incomeOptions);
-      console.log(options);
+      console.log(outcomeOptions);
+      console.log(incomeOptions);
+      // console.log(radio);
+      // radio === 1 ? setOptions(outcomeOptions) : setOptions(incomeOptions);
+      // console.log(options);
     }
-  }, [radio]);
+  }, [transactionCategories]);
+
+  useEffect(() => {
+    if (radio === "2") {
+      setOptions(incomeOptions);
+    } else if (radio === "1") {
+      setOptions(outcomeOptions);
+    } else console.log("CAPITU CAPITU");
+  }, [radio, incomeOptions, outcomeOptions]);
 
   function handleRadioButtonsChange(e) {
     // Grab the nodeName and value from
