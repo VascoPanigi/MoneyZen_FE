@@ -3,6 +3,7 @@ import { Button, Col, Container, Form, ListGroup, Modal, Row } from "react-boots
 import {
   addNewPersonalWalletAction,
   addNewSharedWalletAction,
+  addNewTransactionAction,
   fetchAllCategories,
   fetchUserInfo,
   fetchUserWallets,
@@ -15,15 +16,20 @@ const Homepage = () => {
 
   const [selectedWalletIndex, setSelectedWalletIndex] = useState(0);
   const [name, setName] = useState("");
+  const [transactionName, setTransactionName] = useState("");
+  const [transactionAmount, setTransactionAmount] = useState(null);
   const [showNamingOptionNewWallet, setShowNamingOptionNewWallet] = useState(false);
   const [typeNewWalletShared, setTypeNewWalletShared] = useState(false);
   const [showNewTransactionModal, setShowNewTransactionModal] = useState(false);
   const [transactionType, setTransactionType] = useState("Outcome");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [radio, setRadio] = useState(1);
+  const [transactionCategory, setTransactionCategory] = useState("");
+  const [transactionDescription, setTransactionDescription] = useState("");
+  const [transactionRecurrence, setTransactionRecurrence] = useState("NONE");
+  const [radio, setRadio] = useState(0);
   const [options, setOptions] = useState({});
   const [incomeOptions, setIncomeOptions] = useState([]);
   const [outcomeOptions, setOutcomeOptions] = useState([]);
+  const [transactionDate, setTransactionDate] = useState(null);
 
   const [show, setShow] = useState(false);
 
@@ -91,7 +97,10 @@ const Homepage = () => {
   };
 
   const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
+    const selectedOption = event.target.options[event.target.selectedIndex];
+    console.log(selectedOption.label);
+    setTransactionCategory(selectedOption.label);
+    // setTransactionCategory(event.target.value);
   };
 
   useEffect(() => {
@@ -152,6 +161,24 @@ const Homepage = () => {
     }
   }
 
+  const handleNewTransactionSubmit = (e) => {
+    e.preventDefault();
+    console.log("Creating a new transaction...");
+    const transactionObject = {
+      name: transactionName,
+      amount: transactionAmount,
+      categoryName: transactionCategory,
+      description: transactionDescription,
+      transactionRecurrence: transactionRecurrence,
+      date: transactionDate,
+    };
+
+    console.log(transactionObject);
+
+    const walletId = wallets[selectedWalletIndex].id;
+    dispatch(addNewTransactionAction(transactionObject, walletId, token));
+    dispatch(fetchUserWallets(token));
+  };
   return (
     <Container className="homepage-container">
       <Row>
@@ -223,29 +250,35 @@ const Homepage = () => {
                 <Modal.Title>New Transaction</Modal.Title>
               </Modal.Header>
               <Row className="new-transaction-form-container">
-                <Form>
+                <Form onSubmit={handleNewTransactionSubmit}>
                   <Form.Group className="mb-3" controlId="newTransactionName">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
+                      required
                       type="name"
                       placeholder="Enter transaction name"
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => setTransactionName(e.target.value)}
                     />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="transactionDescription">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control as="textarea" rows={2} />
+                    <Form.Control
+                      as="textarea"
+                      rows={2}
+                      value={transactionDescription}
+                      onChange={(e) => setTransactionDescription(e.target.value)}
+                    />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="transactionAmount">
                     <Form.Label>Insert transaction amount </Form.Label>
                     <Form.Control
                       type="name"
                       placeholder="Enter wallet name"
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => setTransactionAmount(e.target.value)}
                     />
                   </Form.Group>
 
-                  <Form.Group className="mb-3" onChange={handleRadioButtonsChange}>
+                  <Form.Group required className="mb-3" onChange={handleRadioButtonsChange}>
                     <Form.Check
                       // defaultChecked={true}
                       type="radio"
@@ -268,7 +301,7 @@ const Homepage = () => {
                   <Form.Group className="mb-3">
                     <Form.Label>Category</Form.Label>
 
-                    <Form.Select aria-label="Select category" onChange={handleCategoryChange}>
+                    <Form.Select required aria-label="Select category" onChange={handleCategoryChange}>
                       {options.length > 0 &&
                         options.map((option) => (
                           <option key={option.value} value={option.value}>
@@ -280,6 +313,16 @@ const Homepage = () => {
                       <option value="2">Two</option>
                       <option value="3">Three</option> */}
                     </Form.Select>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      required
+                      type="datetime-local"
+                      name="date"
+                      placeholder="Date"
+                      value={transactionDate}
+                      onChange={(e) => setTransactionDate(e.target.value)}
+                    ></Form.Control>
                   </Form.Group>
 
                   <Button variant="primary" type="submit">

@@ -92,14 +92,9 @@ export const addNewPersonalWalletAction = (registerObject, token) => {
 export const addNewSharedWalletAction = (registerObject, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/wallets/shared-wallets",
-        registerObject,
-        registerObject,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.post("http://localhost:3001/wallets/shared-wallets", registerObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
       console.log(response.data);
       dispatch(fetchUserWallets(token));
     } catch (err) {
@@ -129,10 +124,12 @@ export const addNewSharedWalletAction = (registerObject, token) => {
 //-----------------------------------------------TRANSACTIONS OPERATIONS------------------------------------------------------------
 
 // Post a new transaction on a wallet
-export const addNewTransactionAction = (registerObject, walletId) => {
+export const addNewTransactionAction = (transactionObject, walletId, token) => {
   return async () => {
     try {
-      const response = await axios.post("http://localhost:3001/transactions/" + walletId, registerObject);
+      const response = await axios.post("http://localhost:3001/transactions/" + walletId, transactionObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
       console.log(response.data);
     } catch (err) {
       console.log(err.message);
