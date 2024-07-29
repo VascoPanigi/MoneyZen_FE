@@ -3,7 +3,6 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LoginUserAction, registerUserAction } from "../redux/actions";
-import MyNavbar from "./MyNavbar";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -40,7 +39,6 @@ const LoginPage = () => {
 
   return (
     <Container fluid className="login-page-container">
-      <MyNavbar />
       <Row>
         <Col sm={5} className="login-container">
           <Form onSubmit={handleLoginSubmit}>
