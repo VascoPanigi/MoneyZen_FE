@@ -78,6 +78,7 @@ a.nav-link.active {
 .sidebar-container {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   min-height: 100vh;
   max-width: 100px;
   position: absolute;
@@ -112,6 +113,19 @@ a.nav-link.active {
           text-decoration: none;
           font-size: 1.3rem;
         }
+      }
+    }
+  }
+  .sidebar-footer {
+    .users-avatar-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-block-start: auto;
+      margin-block-end: 3rem;
+      .users-avatar {
+        border-radius: 50%;
       }
     }
   }

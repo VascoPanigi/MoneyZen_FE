@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const MyNavbar = () => {
   const location = useLocation();
@@ -10,6 +11,8 @@ const MyNavbar = () => {
   console.log(isSearchPage);
 
   // const [collapsed, setCollapsed] = useState(true);
+
+  const users_avatar = useSelector((state) => state.user.user_info.avatarURL);
 
   return (
     <>
@@ -100,6 +103,11 @@ const MyNavbar = () => {
               {/* <Nav.Link href="#contact">
                   <span>04.</span> Contact me
                 </Nav.Link> */}
+            </div>
+          </div>
+          <div className="sidebar-footer">
+            <div className="users-avatar-container">
+              {users_avatar && <img className="users-avatar" src={users_avatar} alt="logged user avatar"></img>}
             </div>
           </div>
         </div>
