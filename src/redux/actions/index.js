@@ -111,6 +111,7 @@ export const fetchUserSpecificWalletAction = (walletId, token) => {
       const response = await axios.get("http://localhost:3001/wallets/" + walletId, {
         headers: { Authorization: "Bearer " + token },
       });
+      console.log(response.data);
       dispatch({
         type: GET_SPECIFIC_WALLET,
         payload: response.data,
@@ -126,11 +127,12 @@ export const fetchUserSpecificWalletAction = (walletId, token) => {
 
 // Post a new transaction on a wallet
 export const addNewTransactionAction = (transactionObject, walletId, token) => {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await axios.post("http://localhost:3001/transactions/" + walletId, transactionObject, {
         headers: { Authorization: "Bearer " + token },
       });
+      dispatch(fetchUserSpecificWalletAction(walletId, token));
       console.log(response.data);
     } catch (err) {
       console.log(err.message);
@@ -139,12 +141,13 @@ export const addNewTransactionAction = (transactionObject, walletId, token) => {
 };
 
 // delete a transaction
-export const deleteTransactionAction = (transactionId, token) => {
-  return async () => {
+export const deleteTransactionAction = (transactionId, walletId, token) => {
+  return async (dispatch) => {
     try {
       const response = await axios.delete("http://localhost:3001/transactions/" + transactionId, {
         headers: { Authorization: "Bearer " + token },
       });
+      dispatch(fetchUserSpecificWalletAction(walletId, token));
       console.log(response.data);
     } catch (err) {
       console.log(err.message);

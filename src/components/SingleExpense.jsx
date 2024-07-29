@@ -1,7 +1,5 @@
 import { ListGroup, Button } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
-import { useDispatch } from "react-redux";
-import { deleteTransactionAction } from "../redux/actions";
 
 const SingleExpense = ({ transaction, handleDelete, handleModify }) => {
   return (

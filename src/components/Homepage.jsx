@@ -1,5 +1,4 @@
-// Homepage.js
-import React, { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,8 +8,7 @@ import {
   deleteTransactionAction,
   fetchAllCategories,
   fetchUserInfo,
-  fetchUserSpecificWallet,
-  fetchUserSpecificWalletAction,
+  // fetchUserSpecificWalletAction,
   fetchUserWallets,
 } from "../redux/actions";
 import SingleWallet from "./SingleWallet";
@@ -22,6 +20,8 @@ const Homepage = () => {
   const token = localStorage.getItem("Bearer");
   const dispatch = useDispatch();
 
+  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+
   const [selectedWalletIndex, setSelectedWalletIndex] = useState(0);
   const [name, setName] = useState("");
   const [showNamingOptionNewWallet, setShowNamingOptionNewWallet] = useState(false);
@@ -31,6 +31,7 @@ const Homepage = () => {
   const wallets = useSelector((state) => state.user.user_wallets);
   const selectedWallet = useSelector((state) => state.user.user_wallets[selectedWalletIndex]);
   const transactionCategories = useSelector((state) => state.transaction_categories);
+  // const selectedWalletTransactions = useSelector((state) => state.user.user_wallets[selectedWalletIndex].transactions);
 
   const [incomeOptions, setIncomeOptions] = useState([]);
   const [outcomeOptions, setOutcomeOptions] = useState([]);
@@ -129,8 +130,7 @@ const Homepage = () => {
 
   // Delete an existing transaction
   const handleDeleteTransaction = (transactionId) => {
-    dispatch(deleteTransactionAction(transactionId, token));
-    dispatch(fetchUserSpecificWalletAction(selectedWallet, token));
+    dispatch(deleteTransactionAction(transactionId, selectedWallet.id, token));
   };
 
   // Modify an existing transaction
