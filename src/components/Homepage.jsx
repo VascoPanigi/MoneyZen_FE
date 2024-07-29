@@ -6,8 +6,11 @@ import {
   addNewPersonalWalletAction,
   addNewSharedWalletAction,
   addNewTransactionAction,
+  deleteTransactionAction,
   fetchAllCategories,
   fetchUserInfo,
+  fetchUserSpecificWallet,
+  fetchUserSpecificWalletAction,
   fetchUserWallets,
 } from "../redux/actions";
 import SingleWallet from "./SingleWallet";
@@ -97,6 +100,9 @@ const Homepage = () => {
     setShowNamingOptionNewWallet(true);
   };
 
+  // -----------------------------------------TRANSACTIONS CRUD----------------------------------------------
+
+  // new transaction creation
   const handleNewTransactionSubmit = (
     e,
     transactionName,
@@ -121,10 +127,14 @@ const Homepage = () => {
     dispatch(fetchUserWallets(token));
   };
 
-  // const handleModify = (transactionId) => {
-  // };
+  // Delete an existing transaction
+  const handleDeleteTransaction = (transactionId) => {
+    dispatch(deleteTransactionAction(transactionId, token));
+    dispatch(fetchUserSpecificWalletAction(selectedWallet, token));
+  };
 
-  // const handleDelete = (transactionId) => {
+  // Modify an existing transaction
+  // const handleModifyTransaction = (transactionId) => {
   // };
 
   return (
@@ -172,8 +182,8 @@ const Homepage = () => {
                   <SingleExpense
                     key={transaction.id}
                     transaction={transaction}
-                    onModify={() => handleModify(transaction.id)}
-                    onDelete={() => handleDelete(transaction.id)}
+                    // onModify={() => handleModify(transaction.id)}
+                    handleDelete={() => handleDeleteTransaction(transaction.id)}
                   />
                 ))
               ) : (

@@ -1,4 +1,4 @@
-import { TOGGLE_IS_LOGGED, GET_USER_INFO, GET_USER_WALLETS } from "../actions/index";
+import { TOGGLE_IS_LOGGED, GET_USER_INFO, GET_USER_WALLETS, GET_SPECIFIC_WALLET } from "../actions/index";
 
 const initialState = {
   isLogged: false,
@@ -23,6 +23,11 @@ const fetchUserReducer = (state = initialState, action) => {
       return {
         ...state,
         user_wallets: action.payload,
+      };
+    case GET_SPECIFIC_WALLET:
+      return {
+        ...state,
+        user_wallets: state.user_wallets.map((wallet) => (wallet.id === action.payload.id ? action.payload : wallet)),
       };
     default:
       return state;
