@@ -12,7 +12,7 @@ function App() {
       {/* <MyNavbar /> */}
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth" element={<LoginPage />} />
           <Route path="/home" element={<Homepage />} />
           <Route path="/chart" element={<Component />} />
         </Routes>
