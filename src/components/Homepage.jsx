@@ -15,12 +15,12 @@ import SingleWallet from "./SingleWallet";
 import SingleExpense from "./SingleExpense";
 import TransactionModal from "./TransactionModal";
 import NewWalletModal from "./NewWalletModal";
+import Slider from "react-slick";
+import BalancePreview from "./BalancePreview";
 
 const Homepage = () => {
   const token = localStorage.getItem("Bearer");
   const dispatch = useDispatch();
-
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const [selectedWalletIndex, setSelectedWalletIndex] = useState(0);
   const [name, setName] = useState("");
@@ -29,6 +29,7 @@ const Homepage = () => {
   const [showNewTransactionModal, setShowNewTransactionModal] = useState(false);
 
   const wallets = useSelector((state) => state.user.user_wallets);
+  const user_info = useSelector((state) => state.user.user_info);
   const selectedWallet = useSelector((state) => state.user.user_wallets[selectedWalletIndex]);
   const transactionCategories = useSelector((state) => state.transaction_categories);
   // const selectedWalletTransactions = useSelector((state) => state.user.user_wallets[selectedWalletIndex].transactions);
@@ -137,13 +138,62 @@ const Homepage = () => {
   // const handleModifyTransaction = (transactionId) => {
   // };
 
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 6,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+          initialSlide: 4,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        },
+      },
+    ],
+  };
+
   return (
-    <Container className="homepage-container">
-      <Row>
+    <Container className="homepage-container margin-right-navbar-open">
+      <Row className="homepage-greeting-container">
+        {user_info && (
+          <>
+            <h1 className="homepage-greeting">
+              Hello, <span className="homepage-greeting-name">{user_info.name}</span>!
+            </h1>
+            <p className="homepage-greating-paragraph">Choose a wallet and manage your expenses</p>
+          </>
+        )}
+      </Row>
+      <Row className="wallets-preview-container">
+        {/* <div className="slider-container">
+          <Slider {...settings}> */}
         {wallets.length > 0 &&
           wallets.map((wallet, index) => (
             <SingleWallet key={wallet.id} wallet={wallet} onSelect={() => handleWalletSelection(index)} />
           ))}
+        {/* </Slider>
+        </div> */}
         <Col>
           <Button variant="primary" onClick={handleShow}>
             +
@@ -158,6 +208,9 @@ const Homepage = () => {
             setName={setName}
           />
         </Col>
+      </Row>
+      <Row className="homepage-body-container">
+        {selectedWallet && <BalancePreview TransactionType={"income"} amount={selectedWallet.amount} />}
       </Row>
       <Row>
         {selectedWallet && (

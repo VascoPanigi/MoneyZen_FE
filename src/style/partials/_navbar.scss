@@ -81,7 +81,9 @@ a.nav-link.active {
   justify-content: space-between;
   min-height: 100vh;
   max-width: 100px;
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: $bg-primary;
   border-radius: 0px 20px 20px 0px;
   .sidebar-body {
