@@ -1,5 +1,6 @@
 .homepage-container {
   min-height: 100vh;
+  margin-inline: auto;
   // max-width: 100vw;
   // position: relative;
   .homepage-greeting-container {
@@ -52,6 +53,13 @@
   }
 }
 
-.margin-right-navbar-open {
-  margin-inline-start: 6.5rem;
+// .margin-right-navbar-open {
+//   margin-inline-start: 6.5rem;
+// }
+
+//-------------------------------HOMEPAGE CARDS-----------------------
+
+.card {
+  background-color: $bg-primary !important;
+  border: 1px solid $primary;
 }

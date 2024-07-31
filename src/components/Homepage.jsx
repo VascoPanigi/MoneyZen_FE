@@ -17,6 +17,7 @@ import TransactionModal from "./TransactionModal";
 import NewWalletModal from "./NewWalletModal";
 import Slider from "react-slick";
 import BalancePreview from "./BalancePreview";
+import { LargeChart } from "./LargeChart";
 
 const Homepage = () => {
   const token = localStorage.getItem("Bearer");
@@ -210,7 +211,26 @@ const Homepage = () => {
         </Col>
       </Row>
       <Row className="homepage-body-container">
-        {selectedWallet && <BalancePreview TransactionType={"income"} amount={selectedWallet.amount} />}
+        {selectedWallet && (
+          <>
+            <Col lg={{ span: 6, order: 1 }}>
+              <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+            </Col>
+            <Col lg={{ span: 6, order: 2 }}>
+              <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+            </Col>
+            <Col lg={{ span: 12, order: 2 }}>
+              <LargeChart />
+            </Col>
+            {/* <Col lg={{ span: 4, order: 3 }}>
+              <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+            </Col>
+            <Col lg={{ span: 4, order: 4 }}>
+              <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+            </Col> */}
+            {/* <Col lg={4}></Col> */}
+          </>
+        )}
       </Row>
       <Row>
         {selectedWallet && (

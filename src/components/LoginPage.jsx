@@ -3,6 +3,7 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LoginUserAction, registerUserAction } from "../redux/actions";
+import NotLoggedUserSidebar from "./NotLoggedUserSidebar";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -38,66 +39,69 @@ const LoginPage = () => {
   };
 
   return (
-    <Container fluid className="login-page-container">
-      <Row>
-        <Col sm={5} className="login-container">
-          <Form onSubmit={handleLoginSubmit}>
-            <Form.Group className="mb-3" controlId="loginEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
-              <Form.Text className="text-muted">We&apos;ll never share your email with anyone else.</Form.Text>
-            </Form.Group>
+    <div>
+      <NotLoggedUserSidebar />
+      <Container fluid className="login-page-container">
+        <Row>
+          <Col sm={5} className="login-container">
+            <Form onSubmit={handleLoginSubmit}>
+              <Form.Group className="mb-3" controlId="loginEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+                <Form.Text className="text-muted">We&apos;ll never share your email with anyone else.</Form.Text>
+              </Form.Group>
 
-            <Form.Group className="mb-3" controlId="loginPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="loginCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </Col>
-        <Col sm={5} className="login-container">
-          <Form onSubmit={handleRegisterSubmit}>
-            <Form.Group className="mb-3" controlId="userName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="name" placeholder="Enter name" onChange={(e) => setName(e.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="userSurname">
-              <Form.Label>Surname</Form.Label>
-              <Form.Control type="surname" placeholder="Enter surname" onChange={(e) => setSurname(e.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="userUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                type="username"
-                placeholder="Enter username"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="userEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
-              <Form.Text className="text-muted">We&apos;ll never share your email with anyone else.</Form.Text>
-            </Form.Group>
+              <Form.Group className="mb-3" controlId="loginPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="loginCheckbox">
+                <Form.Check type="checkbox" label="Check me out" />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </Col>
+          <Col sm={5} className="login-container">
+            <Form onSubmit={handleRegisterSubmit}>
+              <Form.Group className="mb-3" controlId="userName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="name" placeholder="Enter name" onChange={(e) => setName(e.target.value)} />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="userSurname">
+                <Form.Label>Surname</Form.Label>
+                <Form.Control type="surname" placeholder="Enter surname" onChange={(e) => setSurname(e.target.value)} />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="userUsername">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type="username"
+                  placeholder="Enter username"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="userEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+                <Form.Text className="text-muted">We&apos;ll never share your email with anyone else.</Form.Text>
+              </Form.Group>
 
-            <Form.Group className="mb-3" controlId="userPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="registerCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+              <Form.Group className="mb-3" controlId="userPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="registerCheckbox">
+                <Form.Check type="checkbox" label="Check me out" />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

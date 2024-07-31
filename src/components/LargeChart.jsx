@@ -121,7 +121,7 @@ const chartConfig = {
   },
 };
 
-export function Component() {
+export function LargeChart() {
   const [timeRange, setTimeRange] = React.useState("90d");
 
   const filteredData = chartData.filter((item) => {
@@ -140,7 +140,7 @@ export function Component() {
   return (
     <Card>
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-        <div className="grid flex-1 gap-1 text-center sm:text-left">
+        {/* <div className="grid flex-1 gap-1 text-center sm:text-left">
           <CardTitle>Area Chart - Interactive</CardTitle>
           <CardDescription>Showing total visitors for the last 3 months</CardDescription>
         </div>
@@ -159,10 +159,10 @@ export function Component() {
               Last 7 days
             </SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
+      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 large-chart-content-container">
+        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full chart-content-container">
           <AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
