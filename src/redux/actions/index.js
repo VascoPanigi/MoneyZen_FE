@@ -1,10 +1,12 @@
 import axios from "axios";
 
+//------------------------------------------------ACTION TYPES EXPORTS-----------------------------------------------------------
 export const TOGGLE_IS_LOGGED = "TOGGLE_IS_LOGGED";
 export const GET_USER_WALLETS = "GET_USER_WALLETS";
 export const GET_USER_INFO = "GET_USER_INFO";
 export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 export const GET_SPECIFIC_WALLET = "GET_SPECIFIC_WALLET";
+export const GET_WALLET_TRANSACTIONS = "GET_WALLET_TRANSACTIONS";
 
 //----------------------------------------------- AUTH OPERATIONS ------------------------------------------------------------
 // Login
@@ -125,6 +127,28 @@ export const fetchUserSpecificWalletAction = (walletId, token) => {
 
 //-----------------------------------------------TRANSACTIONS OPERATIONS------------------------------------------------------------
 
+// Get all the transaction for a specific wallet
+export const fetchSpecificWalletTransactionsActions = (walletId, token, pageNum = 0) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/transactions/wallet/" + walletId + "?pageNumber=" + pageNum,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      );
+      console.log(response.data);
+      dispatch({
+        type: GET_WALLET_TRANSACTIONS,
+        payload: response.data,
+      });
+      console.log(response);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
 // Post a new transaction on a wallet
 export const addNewTransactionAction = (transactionObject, walletId, token) => {
   return async (dispatch) => {
@@ -157,7 +181,7 @@ export const deleteTransactionAction = (transactionId, walletId, token) => {
 
 //-----------------------------------------------TRANSACTIONS CATEGORIES OPERATIONS------------------------------------------------------------
 
-// Get all transaction categories to then save them in the state, divided by outcome and income ones
+// Get all transaction categories
 export const fetchAllCategories = (token) => {
   return async (dispatch) => {
     try {

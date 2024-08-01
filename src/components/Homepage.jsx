@@ -7,6 +7,7 @@ import {
   addNewTransactionAction,
   deleteTransactionAction,
   fetchAllCategories,
+  fetchSpecificWalletTransactionsActions,
   fetchUserInfo,
   // fetchUserSpecificWalletAction,
   fetchUserWallets,
@@ -45,6 +46,12 @@ const Homepage = () => {
     dispatch(fetchUserWallets(token));
     dispatch(fetchAllCategories(token));
   }, []);
+
+  useEffect(() => {
+    if (wallets.length > 0 && selectedWalletIndex < wallets.length) {
+      dispatch(fetchSpecificWalletTransactionsActions(wallets[selectedWalletIndex].id, token));
+    }
+  }, [wallets, selectedWalletIndex]);
 
   useEffect(() => {
     if (transactionCategories.categories.length > 0) {
@@ -139,40 +146,40 @@ const Homepage = () => {
   // const handleModifyTransaction = (transactionId) => {
   // };
 
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 6,
-    initialSlide: 0,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 4,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 4,
-          initialSlide: 4,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-        },
-      },
-    ],
-  };
+  // const settings = {
+  //   dots: false,
+  //   infinite: false,
+  //   speed: 500,
+  //   slidesToShow: 6,
+  //   slidesToScroll: 6,
+  //   initialSlide: 0,
+  //   responsive: [
+  //     {
+  //       breakpoint: 1024,
+  //       settings: {
+  //         slidesToShow: 4,
+  //         slidesToScroll: 4,
+  //         infinite: true,
+  //         dots: true,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 600,
+  //       settings: {
+  //         slidesToShow: 4,
+  //         slidesToScroll: 4,
+  //         initialSlide: 4,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 480,
+  //       settings: {
+  //         slidesToShow: 3,
+  //         slidesToScroll: 3,
+  //       },
+  //     },
+  //   ],
+  // };
 
   return (
     <Container className="homepage-container margin-right-navbar-open">
@@ -210,7 +217,7 @@ const Homepage = () => {
           />
         </Col>
       </Row>
-      <Row className="homepage-body-container">
+      {/* <Row className="homepage-body-container">
         {selectedWallet && (
           <>
             <Col lg={{ span: 6, order: 1 }}>
@@ -222,13 +229,6 @@ const Homepage = () => {
             <Col lg={{ span: 12, order: 2 }}>
               <LargeChart />
             </Col>
-            {/* <Col lg={{ span: 4, order: 3 }}>
-              <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
-            </Col>
-            <Col lg={{ span: 4, order: 4 }}>
-              <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
-            </Col> */}
-            {/* <Col lg={4}></Col> */}
           </>
         )}
       </Row>
@@ -265,7 +265,7 @@ const Homepage = () => {
             </ListGroup>
           </Col>
         )}
-      </Row>
+      </Row> */}
     </Container>
   );
 };

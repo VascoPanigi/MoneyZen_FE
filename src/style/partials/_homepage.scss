@@ -22,17 +22,37 @@
 .wallet-preview {
   display: flex;
   flex-direction: column;
+  align-items: center;
   border: 1px solid $primary;
-  border-radius: 20px;
+  border-radius: 10px;
   width: 150px;
-  .wallet-name-container {
-    padding-block: 0.5rem;
+  height: 80px;
+
+  .wallet-header-container {
+    // padding-block-start: 0.3rem;
+    display: flex;
+    justify-content: space-between;
     .wallet-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .wallet-mnodify-icon {
+      opacity: 0;
     }
   }
 
   .wallet-balance-container {
     .wallet-balance {
+    }
+  }
+  &:hover {
+    .wallet-mnodify-icon {
+      opacity: 1;
+      transition: all 0.5s ease 0s;
     }
   }
 }
