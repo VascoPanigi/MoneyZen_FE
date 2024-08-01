@@ -102,12 +102,19 @@ const Homepage = () => {
   };
 
   const handleClickOnNewPersonalWalletModal = () => {
+    console.log("lalalalala sono un personal wallet");
+    console.log(showNamingOptionNewWallet);
     setTypeNewWalletShared(false);
     setShowNamingOptionNewWallet(true);
+    console.log(showNamingOptionNewWallet);
   };
   const handleClickOnNewSharedWalletModal = () => {
+    console.log("tralalalala sono uno shared wallet");
+    console.log(showNamingOptionNewWallet);
+
     setTypeNewWalletShared(true);
     setShowNamingOptionNewWallet(true);
+    console.log(showNamingOptionNewWallet);
   };
 
   // -----------------------------------------TRANSACTIONS CRUD----------------------------------------------
@@ -146,40 +153,40 @@ const Homepage = () => {
   // const handleModifyTransaction = (transactionId) => {
   // };
 
-  // const settings = {
-  //   dots: false,
-  //   infinite: false,
-  //   speed: 500,
-  //   slidesToShow: 6,
-  //   slidesToScroll: 6,
-  //   initialSlide: 0,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1024,
-  //       settings: {
-  //         slidesToShow: 4,
-  //         slidesToScroll: 4,
-  //         infinite: true,
-  //         dots: true,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 600,
-  //       settings: {
-  //         slidesToShow: 4,
-  //         slidesToScroll: 4,
-  //         initialSlide: 4,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 480,
-  //       settings: {
-  //         slidesToShow: 3,
-  //         slidesToScroll: 3,
-  //       },
-  //     },
-  //   ],
-  // };
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 3,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+          initialSlide: 4,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        },
+      },
+    ],
+  };
 
   return (
     <Container className="homepage-container margin-right-navbar-open">
@@ -189,20 +196,43 @@ const Homepage = () => {
             <h1 className="homepage-greeting">
               Hello, <span className="homepage-greeting-name">{user_info.name}</span>!
             </h1>
-            <p className="homepage-greating-paragraph">Choose a wallet and manage your expenses</p>
+            <p className="homepage-greating-paragraph">Choose a wallet and start managing your expenses</p>
           </>
         )}
       </Row>
       <Row className="wallets-preview-container">
-        {/* <div className="slider-container">
+        <div className="wallets-scroll-container">
+          {/* <div className="slider-container">
           <Slider {...settings}> */}
-        {wallets.length > 0 &&
-          wallets.map((wallet, index) => (
-            <SingleWallet key={wallet.id} wallet={wallet} onSelect={() => handleWalletSelection(index)} />
-          ))}
+          {wallets.length > 0 &&
+            wallets.map((wallet, index) => (
+              <SingleWallet
+                key={wallet.id}
+                wallet={wallet}
+                isSelected={index === selectedWalletIndex}
+                onSelect={() => handleWalletSelection(index)}
+              />
+            ))}
+          <Col className="wallet-preview-add" onClick={handleShow}>
+            <Container className="wallet-plus-container">
+              <i className="bi bi-plus-lg"></i>
+              <p className="wallet-plus-text">Add wallet</p>
+            </Container>
+
+            <NewWalletModal
+              show={show}
+              handleClose={handleClose}
+              handleSubmit={handleNewWalletCreation}
+              showNamingOptionNewWallet={showNamingOptionNewWallet}
+              handlePersonal={handleClickOnNewPersonalWalletModal}
+              handleShared={handleClickOnNewSharedWalletModal}
+              setName={setName}
+            />
+          </Col>
+        </div>
         {/* </Slider>
         </div> */}
-        <Col>
+        {/* <Col>
           <Button variant="primary" onClick={handleShow}>
             +
           </Button>
@@ -215,7 +245,7 @@ const Homepage = () => {
             handleShared={handleClickOnNewSharedWalletModal}
             setName={setName}
           />
-        </Col>
+        </Col> */}
       </Row>
       {/* <Row className="homepage-body-container">
         {selectedWallet && (

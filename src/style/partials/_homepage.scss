@@ -23,11 +23,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid $primary;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba($primary, 0.5);
   border-radius: 10px;
   width: 150px;
   height: 80px;
-
+  margin-inline-end: 1rem;
+  background-color: rgba($secondary, 0.3);
   .wallet-header-container {
     // padding-block-start: 0.3rem;
     display: flex;
@@ -38,6 +41,7 @@
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      margin-block-end: 0px;
     }
 
     .wallet-mnodify-icon {
@@ -47,13 +51,44 @@
 
   .wallet-balance-container {
     .wallet-balance {
+      margin-block-end: 0px;
+      font-size: 0.83rem;
     }
   }
   &:hover {
+    transform: translate(0, -2px);
+    box-shadow: 0 2px 8px -1px $primary;
     .wallet-mnodify-icon {
       opacity: 1;
       transition: all 0.5s ease 0s;
     }
+  }
+  &.selected {
+    background-color: $secondary;
+  }
+}
+
+.wallet-preview-add {
+  border: 1px dashed $primary;
+  opacity: 0.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+
+  .wallet-plus-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .wallet-plus-text {
+      margin-block-end: 0px;
+    }
+  }
+  &:hover {
+    opacity: 1;
+    transition: all 0.5s ease 0s;
+    transform: translate(0, -1px);
+    box-shadow: 0 1px 3px -1px $primary;
   }
 }
 
@@ -62,6 +97,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     .wallet-type-modal {
       display: flex;
       justify-content: center;
@@ -82,4 +118,26 @@
 .card {
   background-color: $bg-primary !important;
   border: 1px solid $primary;
+}
+
+.wallets-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+
+.wallets-scroll-container::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar for WebKit browsers */
+}
+
+.wallets-scroll-container {
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.wallets-scroll-container > * {
+  flex: 0 0 auto;
+  margin-right: 15px;
 }
