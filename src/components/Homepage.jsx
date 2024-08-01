@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
-import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, ListGroup, Modal, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewPersonalWalletAction,
@@ -76,10 +76,13 @@ const Homepage = () => {
     }
   }, [transactionCategories]);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setShowNamingOptionNewWallet(false);
+  };
   const handleShow = () => {
     setShow(true);
-    setShowNamingOptionNewWallet(false);
+    // setShowNamingOptionNewWallet(false);
   };
 
   const handleCloseNewTransaction = () => setShowNewTransactionModal(false);
@@ -102,19 +105,17 @@ const Homepage = () => {
   };
 
   const handleClickOnNewPersonalWalletModal = () => {
-    console.log("lalalalala sono un personal wallet");
-    console.log(showNamingOptionNewWallet);
+    console.log("Before - Personal Wallet:", showNamingOptionNewWallet, typeNewWalletShared);
     setTypeNewWalletShared(false);
     setShowNamingOptionNewWallet(true);
-    console.log(showNamingOptionNewWallet);
+    console.log("After - Personal Wallet:", showNamingOptionNewWallet, typeNewWalletShared);
   };
-  const handleClickOnNewSharedWalletModal = () => {
-    console.log("tralalalala sono uno shared wallet");
-    console.log(showNamingOptionNewWallet);
 
+  const handleClickOnNewSharedWalletModal = () => {
+    console.log("Before - Shared Wallet:", showNamingOptionNewWallet, typeNewWalletShared);
     setTypeNewWalletShared(true);
     setShowNamingOptionNewWallet(true);
-    console.log(showNamingOptionNewWallet);
+    console.log("After - Shared Wallet:", showNamingOptionNewWallet, typeNewWalletShared);
   };
 
   // -----------------------------------------TRANSACTIONS CRUD----------------------------------------------
@@ -218,8 +219,41 @@ const Homepage = () => {
               <i className="bi bi-plus-lg"></i>
               <p className="wallet-plus-text">Add wallet</p>
             </Container>
+            <Modal className="new-wallet-modal-container" show={show} onHide={handleClose} centered>
+              <Modal.Header closeButton>
+                <Modal.Title>Modal heading</Modal.Title>
+              </Modal.Header>
+              <Row className="wallet-type-modal-container">
+                {!showNamingOptionNewWallet ? (
+                  <>
+                    <Col className="wallet-type-modal" xs={5} onClick={() => handleClickOnNewPersonalWalletModal()}>
+                      Personal
+                    </Col>
+                    <Col className="wallet-type-modal" xs={5} onClick={() => handleClickOnNewSharedWalletModal()}>
+                      Shared
+                    </Col>
+                  </>
+                ) : (
+                  <Form onSubmit={handleNewWalletCreation}>
+                    <Form.Group className="mb-3" controlId="newWalletName">
+                      <Form.Label>Wallet Name</Form.Label>
+                      <Form.Control
+                        type="name"
+                        placeholder="Enter wallet name"
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                      Submit
+                    </Button>
+                  </Form>
+                )}
+              </Row>
+            </Modal>
 
-            <NewWalletModal
+            {/* <Button type="text" onClick={()=>handleClickOnNewPersonalWalletModal}> bella</Button> */}
+
+            {/* <NewWalletModal
               show={show}
               handleClose={handleClose}
               handleSubmit={handleNewWalletCreation}
@@ -227,7 +261,7 @@ const Homepage = () => {
               handlePersonal={handleClickOnNewPersonalWalletModal}
               handleShared={handleClickOnNewSharedWalletModal}
               setName={setName}
-            />
+            /> */}
           </Col>
         </div>
         {/* </Slider>
