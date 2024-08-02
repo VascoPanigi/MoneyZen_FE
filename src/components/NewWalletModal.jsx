@@ -16,11 +16,15 @@ const NewWalletModal = ({
     <Row className="wallet-type-modal-container">
       {!showNamingOptionNewWallet ? (
         <>
-          <Col className="wallet-type-modal" xs={5} onClick={handlePersonal}>
-            Personal
+          <Col className="wallet-type-modal" xs={5}>
+            <Button type="text" onClick={handlePersonal}>
+              Personal
+            </Button>
           </Col>
-          <Col className="wallet-type-modal" xs={5} onClick={handleShared}>
-            Shared
+          <Col className="wallet-type-modal" xs={5}>
+            <Button type="text" onClick={handleShared}>
+              Shared
+            </Button>
           </Col>
         </>
       ) : (

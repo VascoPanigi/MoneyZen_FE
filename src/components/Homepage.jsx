@@ -78,16 +78,53 @@ const Homepage = () => {
 
   const handleCloseNewWalletModal = () => {
     setShowNewWalletCreationModal(false);
+    // setTypeNewWalletShared(false);
+    handleNewWalletTypeVariance(false);
+
     // setShowNamingOptionNewWallet(false);
   };
   const handleShowNewWalletModal = () => {
+    console.log("this is the type on show" + typeNewWalletShared);
     setShowNewWalletCreationModal(true);
-    // setShowNamingOptionNewWallet(false);
+    setShowNamingOptionNewWallet(false);
+    // setTypeNewWalletShared(false);
   };
 
   const handleCloseNewTransaction = () => setShowNewTransactionModal(false);
   const handleShowNewTransaction = () => setShowNewTransactionModal(true);
 
+  const handleWalletSelection = (index) => {
+    setSelectedWalletIndex(index);
+  };
+
+  const handleNewWalletTypeVariance = (value) => {
+    switch (value) {
+      case true:
+        setTypeNewWalletShared(true);
+        break;
+      case false:
+        setTypeNewWalletShared(false);
+        break;
+      default:
+        console.log("An error occured during state change.");
+    }
+  };
+
+  const handleClickOnNewPersonalWalletModal = () => {
+    handleNewWalletTypeVariance(false);
+    setShowNamingOptionNewWallet(true);
+  };
+  const handleClickOnNewSharedWalletModal = () => {
+    setShowNamingOptionNewWallet(true);
+    handleNewWalletTypeVariance(true);
+  };
+
+  // this useEffect is needed to update the state and send the right newWalletObject
+  useEffect(() => {
+    console.log(typeNewWalletShared);
+  }, [typeNewWalletShared]);
+
+  // New wallet creation
   const handleNewWalletCreation = (e) => {
     e.preventDefault();
     const walletObject = {
@@ -98,26 +135,8 @@ const Homepage = () => {
     } else {
       dispatch(addNewPersonalWalletAction(walletObject, token));
     }
+    handleCloseNewWalletModal();
   };
-
-  const handleWalletSelection = (index) => {
-    setSelectedWalletIndex(index);
-  };
-
-  const handleClickOnNewPersonalWalletModal = () => {
-    console.log("Before - Personal Wallet:", showNamingOptionNewWallet, typeNewWalletShared);
-    setTypeNewWalletShared(false);
-    setShowNamingOptionNewWallet(true);
-    console.log("After - Personal Wallet:", showNamingOptionNewWallet, typeNewWalletShared);
-  };
-
-  const handleClickOnNewSharedWalletModal = () => {
-    console.log("Before - Shared Wallet:", showNamingOptionNewWallet, typeNewWalletShared);
-    setTypeNewWalletShared(true);
-    setShowNamingOptionNewWallet(true);
-    console.log("After - Shared Wallet:", showNamingOptionNewWallet, typeNewWalletShared);
-  };
-
   // -----------------------------------------TRANSACTIONS CRUD----------------------------------------------
 
   // new transaction creation
