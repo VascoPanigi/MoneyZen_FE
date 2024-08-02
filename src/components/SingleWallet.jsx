@@ -1,10 +1,19 @@
-import { Container, Col } from "react-bootstrap";
+import { Container, Col, Button } from "react-bootstrap";
 
-const SingleWallet = ({ wallet, onSelect, isSelected }) => (
+const SingleWallet = ({ wallet, onSelect, isSelected, onEdit }) => (
   <Col className={`wallet-preview ${isSelected ? "selected" : ""}`} onClick={onSelect}>
     <Container className="wallet-header-container">
       <p className="wallet-name">{wallet.name}</p>
-      <i className="bi bi-pencil wallet-mnodify-icon"></i>
+      <Button
+        variant="light"
+        onClick={(e) => {
+          e.stopPropagation();
+          onEdit();
+        }}
+      >
+        <i className="bi bi-pencil"></i>
+      </Button>
+      {/* <i className="bi bi-pencil wallet-mnodify-icon"></i> */}
     </Container>
 
     <Container className="wallet-balance-container">

@@ -125,6 +125,36 @@ export const fetchUserSpecificWalletAction = (walletId, token) => {
   };
 };
 
+// Change a wallet's name
+export const updateWalletAction = (walletObject, walletId, token) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.patch("http://localhost:3001/wallets/" + walletId + "/name", walletObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
+      console.log(response.data);
+      dispatch(fetchUserSpecificWalletAction(walletId, token));
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
+// Delete a wallet
+export const deleteWalletAction = (walletId, token) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete("http://localhost:3001/wallets/" + walletId, {
+        headers: { Authorization: "Bearer " + token },
+      });
+      dispatch(fetchUserWallets(token));
+      console.log(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
 //-----------------------------------------------TRANSACTIONS OPERATIONS------------------------------------------------------------
 
 // Get all the transaction for a specific wallet

@@ -6,11 +6,13 @@ import {
   addNewSharedWalletAction,
   addNewTransactionAction,
   deleteTransactionAction,
+  deleteWalletAction,
   fetchAllCategories,
   fetchSpecificWalletTransactionsActions,
   fetchUserInfo,
   // fetchUserSpecificWalletAction,
   fetchUserWallets,
+  updateWalletAction,
 } from "../redux/actions";
 import SingleWallet from "./SingleWallet";
 import SingleExpense from "./SingleExpense";
@@ -19,15 +21,27 @@ import NewWalletModal from "./NewWalletModal";
 import Slider from "react-slick";
 import BalancePreview from "./BalancePreview";
 import { LargeChart } from "./LargeChart";
+import EditWalletModal from "./EditWalletModal";
 
 const Homepage = () => {
   const token = localStorage.getItem("Bearer");
   const dispatch = useDispatch();
 
-  const [selectedWalletIndex, setSelectedWalletIndex] = useState(0);
+  // State for wallet
   const [name, setName] = useState("");
+  const [selectedWalletIndex, setSelectedWalletIndex] = useState(0);
   const [showNamingOptionNewWallet, setShowNamingOptionNewWallet] = useState(false);
   const [typeNewWalletShared, setTypeNewWalletShared] = useState(false);
+  const [showNewWalletCreationModal, setShowNewWalletCreationModal] = useState(false);
+
+  // State for edit wallet modal
+  const [showEditWalletModal, setShowEditWalletModal] = useState(false);
+  const [editWalletName, setEditWalletName] = useState("");
+  const [editWalletIndex, setEditWalletIndex] = useState(null);
+
+  // State for transactions
+  const [incomeOptions, setIncomeOptions] = useState([]);
+  const [outcomeOptions, setOutcomeOptions] = useState([]);
   const [showNewTransactionModal, setShowNewTransactionModal] = useState(false);
 
   const wallets = useSelector((state) => state.user.user_wallets);
@@ -35,11 +49,6 @@ const Homepage = () => {
   const selectedWallet = useSelector((state) => state.user.user_wallets[selectedWalletIndex]);
   const transactionCategories = useSelector((state) => state.transaction_categories);
   // const selectedWalletTransactions = useSelector((state) => state.user.user_wallets[selectedWalletIndex].transactions);
-
-  const [incomeOptions, setIncomeOptions] = useState([]);
-  const [outcomeOptions, setOutcomeOptions] = useState([]);
-
-  const [showNewWalletCreationModal, setShowNewWalletCreationModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchUserInfo(token));
@@ -169,44 +178,37 @@ const Homepage = () => {
     dispatch(deleteTransactionAction(transactionId, selectedWallet.id, token));
   };
 
-  // Modify an existing transaction
-  // const handleModifyTransaction = (transactionId) => {
-  // };
+  const handleEditWalletClick = (index) => {
+    setEditWalletIndex(index);
+    setEditWalletName(wallets[index].name);
+    setShowEditWalletModal(true);
+    console.log("porcaccia la madonnaccia");
+  };
 
-  // const settings = {
-  //   dots: false,
-  //   infinite: false,
-  //   speed: 500,
-  //   slidesToShow: 6,
-  //   slidesToScroll: 3,
-  //   initialSlide: 0,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1024,
-  //       settings: {
-  //         slidesToShow: 4,
-  //         slidesToScroll: 4,
-  //         infinite: true,
-  //         dots: true,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 600,
-  //       settings: {
-  //         slidesToShow: 4,
-  //         slidesToScroll: 4,
-  //         initialSlide: 4,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 480,
-  //       settings: {
-  //         slidesToShow: 3,
-  //         slidesToScroll: 3,
-  //       },
-  //     },
-  //   ],
-  // };
+  const handleCloseEditWalletModal = () => {
+    setShowEditWalletModal(false);
+    setEditWalletName("");
+    setEditWalletIndex(null);
+  };
+
+  const handleEditWalletSubmit = (e) => {
+    e.preventDefault();
+    console.log("sto modificando il wallettozzo diddio");
+    const walletId = wallets[editWalletIndex].id;
+    const updatedWallet = {
+      name: editWalletName,
+    };
+    dispatch(updateWalletAction(updatedWallet, walletId, token));
+    handleCloseEditWalletModal();
+  };
+
+  const handleDeleteWallet = () => {
+    console.log("sto eliminando il wallettozzo noooooooooooooooooooooooo");
+
+    const walletId = wallets[editWalletIndex].id;
+    dispatch(deleteWalletAction(walletId, token));
+    handleCloseEditWalletModal();
+  };
 
   return (
     <Container className="homepage-container margin-right-navbar-open">
@@ -231,6 +233,7 @@ const Homepage = () => {
                 wallet={wallet}
                 isSelected={index === selectedWalletIndex}
                 onSelect={() => handleWalletSelection(index)}
+                onEdit={() => handleEditWalletClick(index)}
               />
             ))}
           {/* <Col className="wallet-preview-add" onClick={handleShowNewWalletModal}> */}
@@ -240,44 +243,6 @@ const Homepage = () => {
               <p className="wallet-plus-text">Add wallet</p>
             </Container>
           </Button>
-          {/* <Modal className="new-wallet-modal-container" show={show} onHide={handleClose} centered>
-              <Modal.Header>
-                <div className="new-wallet-modal-title-subcontainer">
-                  <p>Choose the wallet type</p>
-
-                  <i className="bi bi-x-lg" onClick={handleClose}></i>
-                </div>
-              </Modal.Header>
-              <Row className="wallet-type-modal-container">
-                {!showNamingOptionNewWallet ? (
-                  <>
-                    <Col className="wallet-type-modal" xs={5} onClick={() => handleClickOnNewPersonalWalletModal()}>
-                      Personal
-                    </Col>
-                    <Col className="wallet-type-modal" xs={5} onClick={() => handleClickOnNewSharedWalletModal()}>
-                      Shared
-                    </Col>
-                  </>
-                ) : (
-                  <Form onSubmit={handleNewWalletCreation}>
-                    <Form.Group className="mb-3" controlId="newWalletName">
-                      <Form.Label>Wallet Name</Form.Label>
-                      <Form.Control
-                        type="name"
-                        placeholder="Enter wallet name"
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                      Submit
-                    </Button>
-                  </Form>
-                )}
-              </Row>
-            </Modal> */}
-
-          {/* <Button type="text" onClick={()=>handleClickOnNewPersonalWalletModal}> bella</Button> */}
-
           <NewWalletModal
             show={showNewWalletCreationModal}
             handleClose={handleCloseNewWalletModal}
@@ -290,6 +255,32 @@ const Homepage = () => {
           {/* </Col> */}
         </div>
       </Row>
+      <Modal show={showEditWalletModal} onHide={handleCloseEditWalletModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Wallet</Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={handleEditWalletSubmit}>
+          <Modal.Body>
+            <Form.Group controlId="formWalletName">
+              <Form.Label>Wallet Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter wallet name"
+                value={editWalletName}
+                onChange={(e) => setEditWalletName(e.target.value)}
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleDeleteWallet}>
+              Delete Wallet
+            </Button>
+            <Button variant="primary" type="submit">
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
       {/* </Slider>
         </div> */}
       {/* <Col>
