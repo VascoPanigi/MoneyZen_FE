@@ -311,21 +311,34 @@ const Homepage = () => {
         incomeOptions={incomeOptions}
         outcomeOptions={outcomeOptions}
       /> */}
-      {/* <Row className="homepage-body-container">
+      <Row className="homepage-body-container">
         {selectedWallet && (
           <>
             <Col lg={{ span: 6, order: 1 }}>
-              <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+              <Row>
+                <Col>
+                  <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+                </Col>
+                <Col>
+                  <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+                </Col>
+                <Col>
+                  <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <LargeChart />
+                </Col>
+              </Row>
+              {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}
             </Col>
             <Col lg={{ span: 6, order: 2 }}>
               <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
             </Col>
-            <Col lg={{ span: 12, order: 2 }}>
-              <LargeChart />
-            </Col>
           </>
         )}
-      </Row>*/}
+      </Row>
       {/* <Row>
         {selectedWallet && (
           <Col className="new-transaction-container">

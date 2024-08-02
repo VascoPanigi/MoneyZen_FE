@@ -63,8 +63,18 @@
       transition: all 0.5s ease 0s;
     }
   }
+
   &.selected {
     background-color: $secondary;
+    .wallet-header-container {
+      .wallet-name {
+        font-size: 1.3rem;
+        transition: all 0.1s ease 0s;
+      }
+    }
+    .wallet-balance-container {
+      display: none;
+    }
   }
 }
 
