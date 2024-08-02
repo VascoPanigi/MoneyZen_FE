@@ -1,4 +1,23 @@
 .modal-content {
-  background-color: rgba($secondary, 0.6);
-  border: 1px solid $primary;
+  //   background-color: rgba($secondary, 0.6);
+  background-color: #282828;
+  //   border: 1px solid $primary;
+
+  .new-wallet-modal-title-subcontainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    p {
+      font-size: 1.44rem;
+      font-weight: 600;
+    }
+    i {
+      font-size: 1.44rem;
+    }
+  }
+}
+
+input {
+  background-color: #3f3f3f;
 }

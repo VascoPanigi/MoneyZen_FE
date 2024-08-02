@@ -133,3 +133,50 @@ a.nav-link.active {
     }
   }
 }
+
+//------------------------------------------------MOBILE MENU BAR------------------------------------------------------
+
+.mobile-menu-bar-container {
+  background-color: $bg-primary;
+  height: 100px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  margin: 0px;
+
+  .mobile-menu-bar-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba($body-color, 0.8);
+    &:hover {
+      background-color: $secondary;
+    }
+
+    .mobile-menu-bar-icon {
+      i {
+        color: $body-color;
+        font-size: 2rem;
+      }
+    }
+  }
+}
+
+//------------------------------------------------SWITCH MOBILE AND DESKTOP MENU BAR------------------------------------------------------
+
+@media screen and (max-width: 500px) {
+  .mobile-menu-bar-container {
+    display: flex;
+  }
+  .sidebar-container {
+    display: none;
+  }
+}
+@media screen and (min-width: 500px) {
+  .mobile-menu-bar-container {
+    display: none;
+  }
+  .sidebar-container {
+    display: flex;
+  }
+}

@@ -39,7 +39,7 @@ const Homepage = () => {
   const [incomeOptions, setIncomeOptions] = useState([]);
   const [outcomeOptions, setOutcomeOptions] = useState([]);
 
-  const [show, setShow] = useState(false);
+  const [showNewWalletCreationModal, setShowNewWalletCreationModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchUserInfo(token));
@@ -76,12 +76,12 @@ const Homepage = () => {
     }
   }, [transactionCategories]);
 
-  const handleClose = () => {
-    setShow(false);
-    setShowNamingOptionNewWallet(false);
+  const handleCloseNewWalletModal = () => {
+    setShowNewWalletCreationModal(false);
+    // setShowNamingOptionNewWallet(false);
   };
-  const handleShow = () => {
-    setShow(true);
+  const handleShowNewWalletModal = () => {
+    setShowNewWalletCreationModal(true);
     // setShowNamingOptionNewWallet(false);
   };
 
@@ -154,40 +154,40 @@ const Homepage = () => {
   // const handleModifyTransaction = (transactionId) => {
   // };
 
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 3,
-    initialSlide: 0,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 4,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 4,
-          initialSlide: 4,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-        },
-      },
-    ],
-  };
+  // const settings = {
+  //   dots: false,
+  //   infinite: false,
+  //   speed: 500,
+  //   slidesToShow: 6,
+  //   slidesToScroll: 3,
+  //   initialSlide: 0,
+  //   responsive: [
+  //     {
+  //       breakpoint: 1024,
+  //       settings: {
+  //         slidesToShow: 4,
+  //         slidesToScroll: 4,
+  //         infinite: true,
+  //         dots: true,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 600,
+  //       settings: {
+  //         slidesToShow: 4,
+  //         slidesToScroll: 4,
+  //         initialSlide: 4,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 480,
+  //       settings: {
+  //         slidesToShow: 3,
+  //         slidesToScroll: 3,
+  //       },
+  //     },
+  //   ],
+  // };
 
   return (
     <Container className="homepage-container margin-right-navbar-open">
@@ -214,14 +214,20 @@ const Homepage = () => {
                 onSelect={() => handleWalletSelection(index)}
               />
             ))}
-          <Col className="wallet-preview-add" onClick={handleShow}>
+          {/* <Col className="wallet-preview-add" onClick={handleShowNewWalletModal}> */}
+          <Button variant="primary" onClick={handleShowNewWalletModal} className="wallet-preview-button-add">
             <Container className="wallet-plus-container">
               <i className="bi bi-plus-lg"></i>
               <p className="wallet-plus-text">Add wallet</p>
             </Container>
-            <Modal className="new-wallet-modal-container" show={show} onHide={handleClose} centered>
-              <Modal.Header closeButton>
-                <Modal.Title>Modal heading</Modal.Title>
+          </Button>
+          {/* <Modal className="new-wallet-modal-container" show={show} onHide={handleClose} centered>
+              <Modal.Header>
+                <div className="new-wallet-modal-title-subcontainer">
+                  <p>Choose the wallet type</p>
+
+                  <i className="bi bi-x-lg" onClick={handleClose}></i>
+                </div>
               </Modal.Header>
               <Row className="wallet-type-modal-container">
                 {!showNamingOptionNewWallet ? (
@@ -249,24 +255,25 @@ const Homepage = () => {
                   </Form>
                 )}
               </Row>
-            </Modal>
+            </Modal> */}
 
-            {/* <Button type="text" onClick={()=>handleClickOnNewPersonalWalletModal}> bella</Button> */}
+          {/* <Button type="text" onClick={()=>handleClickOnNewPersonalWalletModal}> bella</Button> */}
 
-            {/* <NewWalletModal
-              show={show}
-              handleClose={handleClose}
-              handleSubmit={handleNewWalletCreation}
-              showNamingOptionNewWallet={showNamingOptionNewWallet}
-              handlePersonal={handleClickOnNewPersonalWalletModal}
-              handleShared={handleClickOnNewSharedWalletModal}
-              setName={setName}
-            /> */}
-          </Col>
+          <NewWalletModal
+            show={showNewWalletCreationModal}
+            handleClose={handleCloseNewWalletModal}
+            handleSubmit={handleNewWalletCreation}
+            showNamingOptionNewWallet={showNamingOptionNewWallet}
+            handlePersonal={handleClickOnNewPersonalWalletModal}
+            handleShared={handleClickOnNewSharedWalletModal}
+            setName={setName}
+          />
+          {/* </Col> */}
         </div>
-        {/* </Slider>
+      </Row>
+      {/* </Slider>
         </div> */}
-        {/* <Col>
+      {/* <Col>
           <Button variant="primary" onClick={handleShow}>
             +
           </Button>
@@ -280,7 +287,20 @@ const Homepage = () => {
             setName={setName}
           />
         </Col> */}
-      </Row>
+      {/* </Row>
+      <h2>Create a new transaction</h2>
+      <h3>{selectedWallet.name}</h3>
+      <Button variant="primary" onClick={handleShowNewTransaction}>
+        New Transaction
+      </Button>
+      <TransactionModal
+        show={showNewTransactionModal}
+        handleClose={handleCloseNewTransaction}
+        handleSubmit={handleNewTransactionSubmit}
+        categories={transactionCategories}
+        incomeOptions={incomeOptions}
+        outcomeOptions={outcomeOptions}
+      /> */}
       {/* <Row className="homepage-body-container">
         {selectedWallet && (
           <>
@@ -295,8 +315,8 @@ const Homepage = () => {
             </Col>
           </>
         )}
-      </Row>
-      <Row>
+      </Row>*/}
+      {/* <Row>
         {selectedWallet && (
           <Col className="new-transaction-container">
             <h2>Create a new transaction</h2>

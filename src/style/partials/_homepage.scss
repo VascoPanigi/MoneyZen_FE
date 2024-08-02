@@ -68,11 +68,12 @@
   }
 }
 
-.wallet-preview-add {
+.wallet-preview-button-add {
   border: 1px dashed $primary;
+  background-color: transparent;
   opacity: 0.8;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   border-radius: 10px;
 
@@ -82,6 +83,10 @@
     align-items: center;
     .wallet-plus-text {
       margin-block-end: 0px;
+      font-size: 1rem;
+    }
+    i {
+      color: $body-color;
     }
   }
   &:hover {
@@ -89,6 +94,8 @@
     transition: all 0.5s ease 0s;
     transform: translate(0, -1px);
     box-shadow: 0 1px 3px -1px $primary;
+    background-color: $accent;
+    border: none;
   }
 }
 
@@ -126,15 +133,31 @@
   -webkit-overflow-scrolling: touch;
   padding: 10px 0;
   margin-bottom: 20px;
+
+  @media screen and (max-width: 500px) {
+    max-width: 390px;
+  }
+  @media screen and (min-width: 826px) {
+    max-width: 880px;
+  }
+  @media screen and (min-width: 1039px) {
+    max-width: 930px;
+  }
+  @media screen and (min-width: 1068px) {
+    max-width: 1050px;
+  }
+  @media screen and (min-width: 1221px) {
+    max-width: 100%;
+  }
 }
 
 .wallets-scroll-container::-webkit-scrollbar {
-  display: none; /* Hide the scrollbar for WebKit browsers */
+  display: none;
 }
 
 .wallets-scroll-container {
-  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .wallets-scroll-container > * {
