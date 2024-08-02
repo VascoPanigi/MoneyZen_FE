@@ -21,7 +21,6 @@ import NewWalletModal from "./NewWalletModal";
 import Slider from "react-slick";
 import BalancePreview from "./BalancePreview";
 import { LargeChart } from "./LargeChart";
-import EditWalletModal from "./EditWalletModal";
 
 const Homepage = () => {
   const token = localStorage.getItem("Bearer");
