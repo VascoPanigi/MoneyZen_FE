@@ -222,6 +222,7 @@ const Homepage = () => {
         )}
       </Row>
       <Row className="wallets-preview-container">
+        <h5>Your wallets</h5>
         <div className="wallets-scroll-container">
           {/* <div className="slider-container">
           <Slider {...settings}> */}
@@ -274,7 +275,7 @@ const Homepage = () => {
             <Button variant="danger" onClick={handleDeleteWallet}>
               Delete Wallet
             </Button>
-            <Button variant="primary" type="submit">
+            <Button variant="secondary" type="submit">
               Save Changes
             </Button>
           </Modal.Footer>

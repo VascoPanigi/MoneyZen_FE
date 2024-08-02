@@ -44,7 +44,7 @@
       margin-block-end: 0px;
     }
 
-    .wallet-mnodify-icon {
+    .wallet-modify-icon {
       opacity: 0;
     }
   }
@@ -58,7 +58,7 @@
   &:hover {
     transform: translate(0, -2px);
     box-shadow: 0 2px 8px -1px $primary;
-    .wallet-mnodify-icon {
+    .wallet-modify-icon {
       opacity: 1;
       transition: all 0.5s ease 0s;
     }

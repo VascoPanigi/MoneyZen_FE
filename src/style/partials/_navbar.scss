@@ -87,6 +87,7 @@ a.nav-link.active {
   // left: 0;
   background-color: $bg-primary;
   border-radius: 0px 20px 20px 0px;
+  border-right: 1px solid rgba($body-color, 0.05);
   .sidebar-body {
     .logo-container {
       width: 100px;

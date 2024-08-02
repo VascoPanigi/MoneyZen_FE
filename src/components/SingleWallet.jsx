@@ -4,15 +4,15 @@ const SingleWallet = ({ wallet, onSelect, isSelected, onEdit }) => (
   <Col className={`wallet-preview ${isSelected ? "selected" : ""}`} onClick={onSelect}>
     <Container className="wallet-header-container">
       <p className="wallet-name">{wallet.name}</p>
-      <Button
-        variant="light"
+
+      <i
+        className="bi bi-pencil wallet-modify-icon"
         onClick={(e) => {
           e.stopPropagation();
           onEdit();
         }}
-      >
-        <i className="bi bi-pencil"></i>
-      </Button>
+      ></i>
+      {/* </Button> */}
       {/* <i className="bi bi-pencil wallet-mnodify-icon"></i> */}
     </Container>
 
