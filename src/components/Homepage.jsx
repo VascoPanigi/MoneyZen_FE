@@ -21,6 +21,9 @@ import NewWalletModal from "./NewWalletModal";
 import Slider from "react-slick";
 import BalancePreview from "./BalancePreview";
 import { LargeChart } from "./LargeChart";
+import LastTransactionsSection from "./LastTransactionsSection";
+import moment from "moment";
+import { groupTransactionsByMonth, calculateMonthlyTotals } from "../utils/utils";
 
 const Homepage = () => {
   const token = localStorage.getItem("Bearer");
@@ -47,7 +50,7 @@ const Homepage = () => {
   const user_info = useSelector((state) => state.user.user_info);
   const selectedWallet = useSelector((state) => state.user.user_wallets[selectedWalletIndex]);
   const transactionCategories = useSelector((state) => state.transaction_categories);
-  // const selectedWalletTransactions = useSelector((state) => state.user.user_wallets[selectedWalletIndex].transactions);
+  const selectedWalletTransactions = useSelector((state) => state.user.wallet_transactions.content);
 
   useEffect(() => {
     dispatch(fetchUserInfo(token));
@@ -209,6 +212,39 @@ const Homepage = () => {
     handleCloseEditWalletModal();
   };
 
+  // -----------------------------------------TRANSACTIONS ANALYSIS----------------------------------------------
+
+  // Transactions analysis
+  let currentIncome = 0;
+  let currentOutcome = 0;
+  let incomeChange = 0;
+  let outcomeChange = 0;
+
+  if (selectedWalletTransactions && selectedWalletTransactions.length > 0) {
+    const groupedTransactions = groupTransactionsByMonth(selectedWalletTransactions);
+    const monthlyTotals = calculateMonthlyTotals(groupedTransactions);
+
+    const currentMonth = moment().format("YYYY-MM");
+    const previousMonth = moment().subtract(1, "months").format("YYYY-MM");
+
+    currentIncome = monthlyTotals[currentMonth]?.income || 0;
+    const previousIncome = monthlyTotals[previousMonth]?.income || 0;
+    currentOutcome = monthlyTotals[currentMonth]?.outcome || 0;
+    const previousOutcome = monthlyTotals[previousMonth]?.outcome || 0;
+
+    incomeChange = ((currentIncome - previousIncome) / (previousIncome || 1)) * 100;
+    outcomeChange = ((currentOutcome - previousOutcome) / (previousOutcome || 1)) * 100;
+
+    console.log("CURRENT INCOME: " + currentIncome);
+    console.log("CURRENT OUTCOME: " + currentOutcome);
+    console.log("PREVIOUS INCOME: " + previousIncome);
+    console.log("PREVIOUS OUTCOME: " + previousOutcome);
+
+    console.log("INCOME CHANGE: " + incomeChange);
+    console.log("OUTCOME CHANGE: " + outcomeChange);
+  } else {
+    console.log("No transactions detected");
+  }
   return (
     <Container className="homepage-container margin-right-navbar-open">
       <Row className="homepage-greeting-container">
@@ -224,8 +260,6 @@ const Homepage = () => {
       <Row className="wallets-preview-container">
         <h5>Your wallets</h5>
         <div className="wallets-scroll-container">
-          {/* <div className="slider-container">
-          <Slider {...settings}> */}
           {wallets.length > 0 &&
             wallets.map((wallet, index) => (
               <SingleWallet
@@ -314,16 +348,16 @@ const Homepage = () => {
       <Row className="homepage-body-container">
         {selectedWallet && (
           <>
-            <Col lg={{ span: 6, order: 1 }}>
+            <Col lg={{ span: 7, order: 1 }}>
               <Row>
                 <Col>
-                  <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+                  <BalancePreview TransactionType={"Income"} balance={currentIncome} balanceChange={incomeChange} />
                 </Col>
                 <Col>
-                  <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+                  <BalancePreview TransactionType={"Outcome"} balance={currentOutcome} balanceChange={outcomeChange} />
                 </Col>
                 <Col>
-                  <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+                  <BalancePreview TransactionType={"Total"} balance={selectedWallet.balance} balanceChange={0} />
                 </Col>
               </Row>
               <Row>
@@ -333,8 +367,9 @@ const Homepage = () => {
               </Row>
               {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}
             </Col>
-            <Col lg={{ span: 6, order: 2 }}>
-              <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} />
+            <Col lg={{ span: 5, order: 2 }}>
+              <LastTransactionsSection />
+              {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}
             </Col>
           </>
         )}

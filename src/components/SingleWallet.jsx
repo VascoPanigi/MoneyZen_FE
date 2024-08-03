@@ -1,4 +1,4 @@
-import { Container, Col, Button } from "react-bootstrap";
+import { Container, Col } from "react-bootstrap";
 
 const SingleWallet = ({ wallet, onSelect, isSelected, onEdit }) => (
   <Col className={`wallet-preview ${isSelected ? "selected" : ""}`} onClick={onSelect}>
