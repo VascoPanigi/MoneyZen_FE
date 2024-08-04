@@ -1,5 +1,4 @@
 import moment from "moment";
-import { format } from "date-fns";
 
 // Group transactions by month
 export const groupTransactionsByMonth = (transactions) => {
