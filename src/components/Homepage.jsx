@@ -24,10 +24,12 @@ import { LargeChart } from "./LargeChart";
 import LastTransactionsSection from "./LastTransactionsSection";
 import moment from "moment";
 import { groupTransactionsByMonth, calculateMonthlyTotals } from "../utils/utils";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   const token = localStorage.getItem("Bearer");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // State for wallet
   const [name, setName] = useState("");
@@ -240,6 +242,13 @@ const Homepage = () => {
   } else {
     console.log("No transactions detected");
   }
+
+  // Handle redirect on transactions page
+
+  const handleCLickOnTransactionPage = () => {
+    navigate("/transactions");
+  };
+
   return (
     <Container className="homepage-container margin-right-navbar-open">
       <Row className="homepage-greeting-container">
@@ -402,7 +411,7 @@ const Homepage = () => {
                   )}
                   {/* <LastTransactionsSection /> */}
                   {selectedWalletTransactions && selectedWalletTransactions.length > 0 && (
-                    <Row className="last-transactionms-section-footer-redirect ">
+                    <Row className="last-transactionms-section-footer-redirect " onClick={handleCLickOnTransactionPage}>
                       <p>Click here to see all your transactions</p>
                     </Row>
                   )}

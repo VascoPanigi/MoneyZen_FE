@@ -15,7 +15,7 @@
     margin: 0px;
   }
   .last-transactionms-section-single-transaction-container {
-    height: 80px;
+    height: 78px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,6 +28,19 @@
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+    }
+  }
+
+  .last-transactionms-section-footer-redirect {
+    padding-block: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+      text-align: center;
+    }
+    &:hover {
+      background-color: rgba($color: $secondary, $alpha: 0.3);
     }
   }
 }

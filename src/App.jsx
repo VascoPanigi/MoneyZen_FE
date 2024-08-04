@@ -6,6 +6,7 @@ import LoginPage from "./components/LoginPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MyNavbar from "./components/MyNavbar";
 import Homepage from "./components/Homepage";
+import TransactionPage from "./components/TransactionPage";
 // import { Component } from "./components/Component";
 // import WalletsSlider from "./components/WalletsSlider";
 
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/auth" element={<LoginPage />} />
           <Route path="/home" element={<Homepage />} />
+          <Route path="/transactions" element={<TransactionPage />} />
           {/* <Route path="/chart" element={<Component />} /> */}
         </Routes>
       </BrowserRouter>
