@@ -1,5 +1,5 @@
-import { useEffect, useReducer, useState } from "react";
-import { Button, Col, Container, Form, ListGroup, Modal, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Card, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewPersonalWalletAction,
@@ -89,16 +89,12 @@ const Homepage = () => {
 
   const handleCloseNewWalletModal = () => {
     setShowNewWalletCreationModal(false);
-    // setTypeNewWalletShared(false);
     handleNewWalletTypeVariance(false);
-
-    // setShowNamingOptionNewWallet(false);
   };
   const handleShowNewWalletModal = () => {
     console.log("this is the type on show" + typeNewWalletShared);
     setShowNewWalletCreationModal(true);
     setShowNamingOptionNewWallet(false);
-    // setTypeNewWalletShared(false);
   };
 
   const handleCloseNewTransaction = () => setShowNewTransactionModal(false);
@@ -184,7 +180,6 @@ const Homepage = () => {
     setEditWalletIndex(index);
     setEditWalletName(wallets[index].name);
     setShowEditWalletModal(true);
-    console.log("porcaccia la madonnaccia");
   };
 
   const handleCloseEditWalletModal = () => {
@@ -195,7 +190,6 @@ const Homepage = () => {
 
   const handleEditWalletSubmit = (e) => {
     e.preventDefault();
-    console.log("sto modificando il wallettozzo diddio");
     const walletId = wallets[editWalletIndex].id;
     const updatedWallet = {
       name: editWalletName,
@@ -205,8 +199,6 @@ const Homepage = () => {
   };
 
   const handleDeleteWallet = () => {
-    console.log("sto eliminando il wallettozzo noooooooooooooooooooooooo");
-
     const walletId = wallets[editWalletIndex].id;
     dispatch(deleteWalletAction(walletId, token));
     handleCloseEditWalletModal();
@@ -219,6 +211,7 @@ const Homepage = () => {
   let currentOutcome = 0;
   let incomeChange = 0;
   let outcomeChange = 0;
+  let totalBalanceChangeLastMonthInCurrency = 0;
 
   if (selectedWalletTransactions && selectedWalletTransactions.length > 0) {
     const groupedTransactions = groupTransactionsByMonth(selectedWalletTransactions);
@@ -235,13 +228,15 @@ const Homepage = () => {
     incomeChange = ((currentIncome - previousIncome) / (previousIncome || 1)) * 100;
     outcomeChange = ((currentOutcome - previousOutcome) / (previousOutcome || 1)) * 100;
 
-    console.log("CURRENT INCOME: " + currentIncome);
-    console.log("CURRENT OUTCOME: " + currentOutcome);
-    console.log("PREVIOUS INCOME: " + previousIncome);
-    console.log("PREVIOUS OUTCOME: " + previousOutcome);
+    totalBalanceChangeLastMonthInCurrency = currentIncome - currentOutcome;
 
-    console.log("INCOME CHANGE: " + incomeChange);
-    console.log("OUTCOME CHANGE: " + outcomeChange);
+    // console.log("CURRENT INCOME: " + currentIncome);
+    // console.log("CURRENT OUTCOME: " + currentOutcome);
+    // console.log("PREVIOUS INCOME: " + previousIncome);
+    // console.log("PREVIOUS OUTCOME: " + previousOutcome);
+
+    // console.log("INCOME CHANGE: " + incomeChange);
+    // console.log("OUTCOME CHANGE: " + outcomeChange);
   } else {
     console.log("No transactions detected");
   }
@@ -350,14 +345,30 @@ const Homepage = () => {
           <>
             <Col lg={{ span: 7, order: 1 }}>
               <Row>
+                <h3>Current month statistics</h3>
                 <Col>
-                  <BalancePreview TransactionType={"Income"} balance={currentIncome} balanceChange={incomeChange} />
+                  <BalancePreview
+                    TransactionType={"Income"}
+                    balance={currentIncome}
+                    balanceChange={incomeChange}
+                    balanceVariation={totalBalanceChangeLastMonthInCurrency}
+                  />
                 </Col>
                 <Col>
-                  <BalancePreview TransactionType={"Outcome"} balance={currentOutcome} balanceChange={outcomeChange} />
+                  <BalancePreview
+                    TransactionType={"Expense"}
+                    balance={currentOutcome}
+                    balanceChange={outcomeChange}
+                    balanceVariation={totalBalanceChangeLastMonthInCurrency}
+                  />
                 </Col>
                 <Col>
-                  <BalancePreview TransactionType={"Total"} balance={selectedWallet.balance} balanceChange={0} />
+                  <BalancePreview
+                    TransactionType={"Total"}
+                    balance={selectedWallet.balance}
+                    balanceChange={0}
+                    balanceVariation={totalBalanceChangeLastMonthInCurrency}
+                  />
                 </Col>
               </Row>
               <Row>
@@ -368,7 +379,35 @@ const Homepage = () => {
               {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}
             </Col>
             <Col lg={{ span: 5, order: 2 }}>
-              <LastTransactionsSection />
+              <h3>Last transactions</h3>
+
+              <Container className="last-transactionms-section-container">
+                {/* <Row className="last-transactionms-section-title-container">
+                  <h4>Last transactions</h4>
+                  </Row> */}
+
+                <Card className="last-transactionms-section-container ">
+                  <Row className="last-transactionms-section-single-transaction-legenda-container">
+                    <Col>Name</Col>
+                    <Col>Amount</Col>
+                    <Col>Date</Col>
+                    <Col>Category</Col>
+                  </Row>
+                  {selectedWalletTransactions && selectedWalletTransactions.length > 0 ? (
+                    selectedWalletTransactions
+                      .slice(0, 5)
+                      .map((transaction) => <LastTransactionsSection transaction={transaction} key={transaction.id} />)
+                  ) : (
+                    <p>No transactions in your history</p>
+                  )}
+                  {/* <LastTransactionsSection /> */}
+                  {selectedWalletTransactions && selectedWalletTransactions.length > 0 && (
+                    <Row className="last-transactionms-section-footer-redirect ">
+                      <p>Click here to see all your transactions</p>
+                    </Row>
+                  )}
+                </Card>
+              </Container>
               {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}
             </Col>
           </>

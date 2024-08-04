@@ -1,42 +1,16 @@
 import { Col, Container, Row } from "react-bootstrap";
+import { formatDate } from "../utils/utils";
 
-const LastTransactionsSection = () => {
+const LastTransactionsSection = ({ transaction }) => {
+  const formattedDate = formatDate(transaction.date);
+
   return (
-    <Container className="last-transactionms-section-container">
-      <Row className="last-transactionms-section-title-container">
-        <h4>Last transactions</h4>
-      </Row>
-      <Row className="last-transactionms-section-single-transaction-legenda-container">
-        <Col>Name</Col>
-        <Col>Amount</Col>
-        <Col>Date</Col>
-        <Col>Category</Col>
-      </Row>
-      <Row className="last-transactionms-section-single-transaction-container">
-        <Col>Transaction name</Col>
-        <Col>Amount</Col>
-        <Col>10/10/2000</Col>
-        <Col>Category</Col>
-      </Row>
-      <Row className="last-transactionms-section-single-transaction-container">
-        <Col>Transaction name</Col>
-        <Col>Amount</Col>
-        <Col>10/10/2000</Col>
-        <Col>Category</Col>
-      </Row>
-      <Row className="last-transactionms-section-single-transaction-container">
-        <Col>Transaction name</Col>
-        <Col>Amount</Col>
-        <Col>10/10/2000</Col>
-        <Col>Category</Col>
-      </Row>
-      <Row className="last-transactionms-section-single-transaction-container">
-        <Col>Transaction name</Col>
-        <Col>Amount</Col>
-        <Col>10/10/2000</Col>
-        <Col>Category</Col>
-      </Row>
-    </Container>
+    <Row className="last-transactionms-section-single-transaction-container">
+      <Col>{transaction.name}</Col>
+      <Col>&#8364;{transaction.amount.toFixed(2)}</Col>
+      <Col>{formattedDate}</Col>
+      <Col>{transaction.category.name}</Col>
+    </Row>
   );
 };
 

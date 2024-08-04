@@ -1,0 +1,33 @@
+.last-transactionms-section-container {
+  margin-block: 1rem;
+
+  .last-transactionms-section-single-transaction-legenda-container {
+    border-bottom: 1px solid $body-color;
+    padding-block: 1rem;
+    .col {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .row {
+    margin: 0px;
+  }
+  .last-transactionms-section-single-transaction-container {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgba($body-color, 0.15);
+
+    .col {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}

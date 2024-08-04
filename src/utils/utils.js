@@ -1,4 +1,5 @@
 import moment from "moment";
+import { format } from "date-fns";
 
 // Group transactions by month
 export const groupTransactionsByMonth = (transactions) => {
@@ -9,7 +10,7 @@ export const groupTransactionsByMonth = (transactions) => {
     return acc;
   }, {});
 
-  console.log("Grouped Transactions by Month:", groupedTransactions);
+  // console.log("Grouped Transactions by Month:", groupedTransactions);
   return groupedTransactions;
 };
 
@@ -30,6 +31,12 @@ export const calculateMonthlyTotals = (groupedTransactions) => {
 
     totals[month] = { income, outcome, total: income - outcome };
   });
-  console.log("Monthly Totals:", totals);
+  // console.log("Monthly Totals:", totals);
   return totals;
+};
+
+export const formatDate = (dateString) => {
+  const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("en-GB", options).format(date);
 };

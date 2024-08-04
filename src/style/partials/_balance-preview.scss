@@ -1,0 +1,39 @@
+.balance-preview-container {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  //   align-items: center;
+  margin-block: 1rem;
+  .balance-preview-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .balance-preview-type {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .balance-preview-balance {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+  }
+  .balance-preview-footer {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: auto;
+    background-color: $bg-primary;
+    border: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    .negative-balance {
+      color: red;
+    }
+
+    .positive-balance {
+      color: green;
+    }
+  }
+}

@@ -1,24 +1,54 @@
-import { Card, Col } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
-const BalancePreview = ({ TransactionType, balance, balanceChange }) => {
+const BalancePreview = ({ TransactionType, balance, balanceChange, balanceVariation }) => {
   console.log(TransactionType, balance);
 
   const balanceChangeClass = balanceChange < 0 ? "negative-balance" : "positive-balance";
+  const totalBalanceVariationClass = balanceVariation < 0 ? "negative-balance" : "positive-balance";
   const formattedBalanceChange = balanceChange.toFixed(2);
 
-  const changeText =
-    balanceChange < 0
-      ? `This wallet lost <span>${formattedBalanceChange}%</span>this month`
-      : `This wallet gained ${formattedBalanceChange}% this month`;
+  let keyword = "";
+  // let lessMore = balanceChange < 0 ? "less" : "more";
+
+  if (TransactionType === "Income") {
+    keyword = "gained";
+  } else {
+    keyword = "spent";
+  }
 
   return (
     <Card className="balance-preview-container">
-      <Card.Body>
+      <Card.Body className="balance-preview-body">
         <Card.Title className="balance-preview-type">{TransactionType}</Card.Title>
-        <Card.Text className="balance-preview-balance">{balance}</Card.Text>
-
-        <Card.Text className={`balance-preview-footer ${balanceChangeClass}`}>{changeText}</Card.Text>
+        <Card.Text className="balance-preview-balance">&#8364;{balance.toFixed(2)}</Card.Text>
       </Card.Body>
+      {TransactionType === "Total" ? (
+        <Card.Footer className="balance-preview-footer">
+          {balanceVariation < 0 ? (
+            <p>
+              You lost <span className={`${totalBalanceVariationClass}`}>&#8364;{Math.abs(balanceVariation)}</span> this
+              month
+            </p>
+          ) : (
+            <p>
+              You&#8217;re up <span className={`${totalBalanceVariationClass}`}>&#8364;{balanceVariation}</span> this
+              month
+            </p>
+          )}
+        </Card.Footer>
+      ) : (
+        <Card.Footer className="balance-preview-footer">
+          {TransactionType === "Income" ? (
+            <p>
+              You {keyword} <span className={`${balanceChangeClass}`}>{formattedBalanceChange}%</span> this month
+            </p>
+          ) : (
+            <p>
+              You {keyword} <span className={`${balanceChangeClass}`}>{formattedBalanceChange}%</span> this month
+            </p>
+          )}
+        </Card.Footer>
+      )}
     </Card>
   );
 };
