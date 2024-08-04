@@ -5,18 +5,7 @@ import { formatDateTime } from "../utils/utils";
 const SingleTransaction = ({ transaction }) => {
   const formattedDate = formatDateTime(transaction.date);
   return (
-    // <ListGroup.Item>
-    //   {transaction.name}
-    //   <span>{transaction.amount}</span>
-    //   <Button variant="link">
-    //     <PencilSquare />
-    //   </Button>
-    //   <Button variant="link" onClick={handleDelete}>
-    //     <Trash />
-    //   </Button>
-    // </ListGroup.Item>
-
-    <Row>
+    <Row className="single-transaction-container">
       <Col>{transaction.name}</Col>
       <Col>{transaction.amount.toFixed(2)}</Col>
       <Col>{formattedDate}</Col>

@@ -7,6 +7,14 @@ export const GET_USER_INFO = "GET_USER_INFO";
 export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 export const GET_SPECIFIC_WALLET = "GET_SPECIFIC_WALLET";
 export const GET_WALLET_TRANSACTIONS = "GET_WALLET_TRANSACTIONS";
+export const GET_SELECTED_WALLET_ID = "GET_SELECTED_WALLET_ID";
+
+export const setSelectedWalletIdAction = (walletId, dispatch) => {
+  dispatch({
+    type: GET_SELECTED_WALLET_ID,
+    payload: walletId,
+  });
+};
 
 //----------------------------------------------- AUTH OPERATIONS ------------------------------------------------------------
 // Login
@@ -167,12 +175,19 @@ export const fetchSpecificWalletTransactionsActions = (walletId, token, pageNum 
           headers: { Authorization: "Bearer " + token },
         }
       );
-      console.log(response.data);
+
       dispatch({
         type: GET_WALLET_TRANSACTIONS,
-        payload: response.data,
+        payload: {
+          ...response.data,
+        },
       });
-      console.log(response);
+
+      dispatch({
+        type: GET_SELECTED_WALLET_ID,
+        payload: walletId,
+      });
+      // console.log(response);
     } catch (err) {
       console.log(err.message);
     }

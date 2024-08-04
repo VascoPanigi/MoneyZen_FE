@@ -4,6 +4,7 @@ import {
   GET_USER_WALLETS,
   GET_SPECIFIC_WALLET,
   GET_WALLET_TRANSACTIONS,
+  GET_SELECTED_WALLET_ID,
 } from "../actions/index";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   isAdmin: false,
   user_info: {},
   user_wallets: {},
+  selected_wallet_id: "",
   wallet_transactions: {},
 };
 
@@ -41,6 +43,12 @@ const fetchUserReducer = (state = initialState, action) => {
         ...state,
         wallet_transactions: action.payload,
       };
+    case GET_SELECTED_WALLET_ID:
+      return {
+        ...state,
+        selected_wallet_id: action.payload,
+      };
+
     default:
       return state;
   }

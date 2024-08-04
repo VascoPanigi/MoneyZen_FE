@@ -12,6 +12,7 @@ import {
   fetchUserInfo,
   // fetchUserSpecificWalletAction,
   fetchUserWallets,
+  setSelectedWalletIdAction,
   updateWalletAction,
 } from "../redux/actions";
 import SingleWallet from "./SingleWallet";
@@ -63,6 +64,7 @@ const Homepage = () => {
   useEffect(() => {
     if (wallets.length > 0 && selectedWalletIndex < wallets.length) {
       dispatch(fetchSpecificWalletTransactionsActions(wallets[selectedWalletIndex].id, token));
+      // dispatch(setSelectedWalletIdAction(wallets[selectedWalletIndex].id, dispatch));
     }
   }, [wallets, selectedWalletIndex]);
 
@@ -104,6 +106,7 @@ const Homepage = () => {
 
   const handleWalletSelection = (index) => {
     setSelectedWalletIndex(index);
+    dispatch(setSelectedWalletIdAction(wallets[index].id, dispatch));
   };
 
   const handleNewWalletTypeVariance = (value) => {

@@ -1,7 +1,7 @@
 import { Card } from "react-bootstrap";
 
 const BalancePreview = ({ TransactionType, balance, balanceChange, balanceVariation }) => {
-  console.log(TransactionType, balance);
+  // console.log(TransactionType, balance);
 
   const balanceChangeClass = balanceChange < 0 ? "negative-balance" : "positive-balance";
   const totalBalanceVariationClass = balanceVariation < 0 ? "negative-balance" : "positive-balance";
