@@ -8,6 +8,35 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        .col {
+          display: flex;
+          justify-content: end;
+          align-items: center;
+          margin-inline-end: 0.3rem;
+        }
+        .transaction-page-date-arrow-section-container {
+          display: flex;
+          justify-content: start;
+          align-items: center;
+          margin-inline-start: 0.3rem;
+          .transaction-page-date-arrow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            svg {
+              // fill: $body-color;
+              height: 15px;
+            }
+
+            .transaction-page-date-arrow {
+              fill: rgba($body-color, 0.4);
+            }
+
+            .selected {
+              fill: $body-color;
+            }
+          }
+        }
       }
     }
     .transaction-page-transactions-container {
@@ -18,6 +47,28 @@
           display: flex;
           justify-content: center;
           align-items: center;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+
+        .single-transaction-date-container {
+          display: none;
+        }
+
+        .single-transaction-amount-container {
+          svg {
+            height: 15px;
+            margin-inline-start: 0.4rem;
+          }
+          .single-transaction-expense-icon {
+            fill: red;
+            rotate: 45deg;
+          }
+          .single-transaction-income-icon {
+            fill: green;
+            rotate: 220deg;
+          }
         }
       }
     }
@@ -31,4 +82,34 @@
       }
     }
   }
+}
+
+@media screen and (max-width: 640px) {
+  .transaction-page-recurrency-container,
+  .single-transaction-recurrency-container {
+    display: none !important;
+  }
+
+  .single-transaction-date-time-container {
+    display: none !important;
+  }
+  .single-transaction-date-container {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .single-transaction-category-container,
+  .transaction-page-category-container {
+    display: none !important;
+  }
+}
+
+// No transactions style
+
+.transaction-page-no-transactions-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

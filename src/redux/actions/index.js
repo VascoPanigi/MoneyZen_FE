@@ -166,11 +166,11 @@ export const deleteWalletAction = (walletId, token) => {
 //-----------------------------------------------TRANSACTIONS OPERATIONS------------------------------------------------------------
 
 // Get all the transaction for a specific wallet
-export const fetchSpecificWalletTransactionsActions = (walletId, token, pageNum = 0) => {
+export const fetchSpecificWalletTransactionsActions = (walletId, token, pageNum = 0, sortOrder = "DESC") => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/transactions/wallet/" + walletId + "?pageNumber=" + pageNum,
+        "http://localhost:3001/transactions/wallet/" + walletId + "?pageNumber=" + pageNum + "&sortOrder=" + sortOrder,
         {
           headers: { Authorization: "Bearer " + token },
         }
