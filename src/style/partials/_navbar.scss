@@ -147,6 +147,7 @@ a.nav-link.active {
   bottom: 0px;
   width: 100%;
   margin: 0px;
+  z-index: 9999;
 
   .mobile-menu-bar-col {
     display: flex;

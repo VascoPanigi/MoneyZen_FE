@@ -14,12 +14,12 @@
           align-items: center;
           margin-inline-end: 0.3rem;
         }
-        .transaction-page-date-arrow-section-container {
+        .transaction-page-arrow-section-container {
           display: flex;
           justify-content: start;
           align-items: center;
           margin-inline-start: 0.3rem;
-          .transaction-page-date-arrow-container {
+          .transaction-page-arrow-container {
             display: flex;
             flex-direction: column;
             align-items: start;
@@ -69,6 +69,12 @@
             fill: green;
             rotate: 220deg;
           }
+        }
+        &:nth-of-type(odd) {
+          background-color: rgba($color: $secondary, $alpha: 0.1);
+        }
+        &:hover {
+          background-color: $secondary;
         }
       }
     }
