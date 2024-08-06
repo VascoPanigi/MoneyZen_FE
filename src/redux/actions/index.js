@@ -8,12 +8,24 @@ export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 export const GET_SPECIFIC_WALLET = "GET_SPECIFIC_WALLET";
 export const GET_WALLET_TRANSACTIONS = "GET_WALLET_TRANSACTIONS";
 export const GET_SELECTED_WALLET_ID = "GET_SELECTED_WALLET_ID";
+export const GET_TRANSACTION_ID = "GET_TRANSACTION_ID";
 
-export const setSelectedWalletIdAction = (walletId, dispatch) => {
-  dispatch({
+//----------------------------------------------- ID SELECTION OPERATIONS ------------------------------------------------------------
+
+// Store selected wallet id in the store
+export const setSelectedWalletIdAction = (walletId) => {
+  return {
     type: GET_SELECTED_WALLET_ID,
     payload: walletId,
-  });
+  };
+};
+
+// Store selected transaction id in the store
+export const getTransactionId = (value) => {
+  return {
+    type: GET_TRANSACTION_ID,
+    payload: value,
+  };
 };
 
 //----------------------------------------------- AUTH OPERATIONS ------------------------------------------------------------
@@ -199,6 +211,25 @@ export const fetchSpecificWalletTransactionsActions = (
       dispatch({
         type: GET_SELECTED_WALLET_ID,
         payload: walletId,
+      });
+      // console.log(response);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
+export const fetchSpecificWalletTransactionsByNameActions = (walletId, token, name) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get("http://localhost:3001/transactions/wallet/" + walletId + "?name=" + name, {
+        headers: { Authorization: "Bearer " + token },
+      });
+      dispatch({
+        type: GET_WALLET_TRANSACTIONS,
+        payload: {
+          ...response.data,
+        },
       });
       // console.log(response);
     } catch (err) {

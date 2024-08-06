@@ -106,7 +106,7 @@ const Homepage = () => {
 
   const handleWalletSelection = (index) => {
     setSelectedWalletIndex(index);
-    dispatch(setSelectedWalletIdAction(wallets[index].id, dispatch));
+    dispatch(setSelectedWalletIdAction(wallets[index].id));
   };
 
   const handleNewWalletTypeVariance = (value) => {

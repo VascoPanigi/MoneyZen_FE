@@ -2,7 +2,7 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import SingleTransaction from "./SingleTransaction";
 import { useEffect, useState } from "react";
-import { fetchSpecificWalletTransactionsActions } from "../redux/actions";
+import { fetchSpecificWalletTransactionsActions, fetchSpecificWalletTransactionsByNameActions } from "../redux/actions";
 
 const TransactionPage = () => {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ const TransactionPage = () => {
   const [pageNum, setPageNum] = useState(0);
   const [sortOrder, setSortOrder] = useState("DESC");
   const [sortAmount, setSortAmount] = useState("DESC");
+  const [name, setName] = useState("");
   const token = localStorage.getItem("Bearer");
 
   const handleClickOnDifferentPage = (direction) => {
@@ -62,6 +63,14 @@ const TransactionPage = () => {
     }
   }, [sortAmount]);
 
+  const handleSubmitResearchQuery = (e) => {
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    dispatch(fetchSpecificWalletTransactionsByNameActions(selectedWalletId, token, name));
+  }, [name]);
+
   return (
     <>
       {selectedWalletTransactions ? (
@@ -71,10 +80,15 @@ const TransactionPage = () => {
               <h1>Transaction history</h1>
             </Col>
             <Col sm={3}>
-              <Form>
+              <Form onSubmit={handleSubmitResearchQuery}>
                 <Row>
                   <Col xs="auto">
-                    <Form.Control type="text" placeholder="Search" className=" mr-sm-2" />
+                    <Form.Control
+                      type="text"
+                      placeholder="Search"
+                      className=" mr-sm-2"
+                      onChange={(e) => setName(e.target.value)}
+                    />
                   </Col>
                   {/* <Col xs="auto">
             <Button type="submit">Submit</Button>
