@@ -19,17 +19,19 @@ const TransactionPage = () => {
   const [sortAmount, setSortAmount] = useState("DESC");
   const [name, setName] = useState("");
   const token = localStorage.getItem("Bearer");
+  const [currentFilters, setCurrentFilters] = useState(null);
 
   const handleClickOnDifferentPage = (direction) => {
-    if (direction === "next") {
-      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, pageNum + 1));
-      setPageNum(pageNum + 1);
-      window.scrollTo(0, 0);
+    const newPageNum = direction === "next" ? pageNum + 1 : pageNum - 1;
+
+    if (currentFilters) {
+      dispatch(fetchFilteredTransactions(selectedWalletId, token, { ...currentFilters, pageNumber: newPageNum }));
     } else {
-      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, pageNum - 1));
-      setPageNum(pageNum - 1);
-      window.scrollTo(0, 0);
+      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, newPageNum, sortOrder, sortAmount));
     }
+
+    setPageNum(newPageNum);
+    window.scrollTo(0, 0);
   };
 
   const handleClickOnDateOrder = () => {
@@ -87,6 +89,8 @@ const TransactionPage = () => {
     setPageNum(0);
     // Implement the logic to filter transactions based on the filters object
     console.log(filters);
+    setCurrentFilters(filters);
+
     // Example filter logic: dispatch action to fetch filtered transactions
     // dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, sortOrder, sortAmount, filters));
     dispatch(fetchFilteredTransactions(selectedWalletId, token, filters));
@@ -95,6 +99,7 @@ const TransactionPage = () => {
   const handleClickOnClearFiltersButton = () => {
     dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "ASC"));
     setHasFiltered(false);
+    setCurrentFilters(null);
   };
 
   return (
