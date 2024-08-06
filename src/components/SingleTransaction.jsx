@@ -1,13 +1,12 @@
 import { Row, Col } from "react-bootstrap";
-// import { PencilSquare, Trash } from "react-bootstrap-icons";
 import { formatDateTime, formatDate } from "../utils/utils";
 
-const SingleTransaction = ({ transaction }) => {
+const SingleTransaction = ({ transaction, onClick }) => {
   const formattedDateTime = formatDateTime(transaction.date);
   const formattedDate = formatDate(transaction.date);
 
   return (
-    <Row className="single-transaction-container">
+    <Row className="single-transaction-container" onClick={onClick}>
       <Col>{transaction.name}</Col>
       <Col className="single-transaction-amount-container">
         &#8364;{transaction.amount.toFixed(2)}{" "}
@@ -24,7 +23,6 @@ const SingleTransaction = ({ transaction }) => {
       <Col className="single-transaction-date-time-container">{formattedDateTime}</Col>
       <Col className="single-transaction-date-container">{formattedDate}</Col>
       <Col className="single-transaction-category-container">{transaction.category.name}</Col>
-
       <Col className="single-transaction-recurrency-container">{transaction.transactionRecurrence}</Col>
     </Row>
   );

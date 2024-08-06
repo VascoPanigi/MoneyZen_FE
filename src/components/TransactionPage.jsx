@@ -10,16 +10,23 @@ import {
 import FilterForm from "./FilterForm";
 
 const TransactionPage = () => {
+  const token = localStorage.getItem("Bearer");
   const dispatch = useDispatch();
-
   const selectedWalletTransactions = useSelector((state) => state.transactions.wallet_transactions.content);
   const selectedWalletId = useSelector((state) => state.wallets.selected_wallet_id);
+
   const [pageNum, setPageNum] = useState(0);
   const [sortOrder, setSortOrder] = useState("DESC");
   const [sortAmount, setSortAmount] = useState("DESC");
   const [name, setName] = useState("");
-  const token = localStorage.getItem("Bearer");
   const [currentFilters, setCurrentFilters] = useState(null);
+
+  //----------------------------------------SINGLE TRANSACTION MODAL STATES-----------------------
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [notification, setNotification] = useState("");
 
   const handleClickOnDifferentPage = (direction) => {
     const newPageNum = direction === "next" ? pageNum + 1 : pageNum - 1;
@@ -87,12 +94,8 @@ const TransactionPage = () => {
     setShowFilterModal(false);
     setHasFiltered(true);
     setPageNum(0);
-    // Implement the logic to filter transactions based on the filters object
     console.log(filters);
     setCurrentFilters(filters);
-
-    // Example filter logic: dispatch action to fetch filtered transactions
-    // dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, sortOrder, sortAmount, filters));
     dispatch(fetchFilteredTransactions(selectedWalletId, token, filters));
   };
 
@@ -100,6 +103,39 @@ const TransactionPage = () => {
     dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "ASC"));
     setHasFiltered(false);
     setCurrentFilters(null);
+  };
+
+  // ------------------------------------------------HANDLE TRANSACTION MODAL LOGIC -----------------------------------------
+
+  const handleTransactionClick = (transaction) => {
+    setSelectedTransaction(transaction);
+    setShowTransactionModal(true);
+  };
+
+  const handleEditTransaction = () => {
+    setShowTransactionModal(false);
+    setShowEditModal(true);
+  };
+
+  const handleDeleteTransaction = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteTransaction = () => {
+    // Dispatch delete action here
+    setShowDeleteConfirmation(false);
+    setShowTransactionModal(false);
+    setNotification("Transaction successfully deleted");
+  };
+
+  const handleSaveTransaction = () => {
+    // Dispatch save action here
+    setShowEditModal(false);
+    setNotification("Transaction successfully edited");
+  };
+
+  const handleCloseNotification = () => {
+    setNotification("");
   };
 
   return (
@@ -121,9 +157,6 @@ const TransactionPage = () => {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </Col>
-                  {/* <Col xs="auto">
-            <Button type="submit">Submit</Button>
-          </Col> */}
                 </Row>
               </Form>
             </Col>
@@ -200,8 +233,6 @@ const TransactionPage = () => {
                 </Col>
               </Col>
               <Col className="transaction-page-category-container">Category</Col>
-              {/* <Col>Description</Col> */}
-              {/* <Col>Type</Col> */}
               <Col className="transaction-page-recurrency-container">Recurrency</Col>
             </Row>
 
@@ -209,7 +240,11 @@ const TransactionPage = () => {
               {selectedWalletTransactions &&
                 selectedWalletTransactions.length > 0 &&
                 selectedWalletTransactions.map((transaction) => (
-                  <SingleTransaction transaction={transaction} key={transaction.id} />
+                  <SingleTransaction
+                    transaction={transaction}
+                    key={transaction.id}
+                    onClick={() => handleTransactionClick(transaction)}
+                  />
                 ))}
             </Row>
 
@@ -238,6 +273,123 @@ const TransactionPage = () => {
           <FilterForm onFilter={handleFilter} />
         </Modal.Body>
       </Modal>
+
+      <Modal show={showTransactionModal} onHide={() => setShowTransactionModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Transaction Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedTransaction && (
+            <Form>
+              <Form.Group controlId="formTransactionName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="text" value={selectedTransaction.name} readOnly />
+              </Form.Group>
+              <Form.Group controlId="formTransactionAmount">
+                <Form.Label>Amount</Form.Label>
+                <Form.Control type="text" value={selectedTransaction.amount} readOnly />
+              </Form.Group>
+              <Form.Group controlId="formTransactionType">
+                <Form.Label>Transaction Type</Form.Label>
+                <Form.Control type="text" value={selectedTransaction.transactionType} readOnly />
+              </Form.Group>
+              <Form.Group controlId="formTransactionCategory">
+                <Form.Label>Category</Form.Label>
+                <Form.Control type="text" value={selectedTransaction.category.name} readOnly />
+              </Form.Group>
+              <Form.Group controlId="formTransactionDescription">
+                <Form.Label>Description</Form.Label>
+                <Form.Control as="textarea" value={selectedTransaction.description} readOnly />
+              </Form.Group>
+              <Form.Group controlId="formTransactionRecurrence">
+                <Form.Label>Recurrence</Form.Label>
+                <Form.Control type="text" value={selectedTransaction.transactionRecurrence} readOnly />
+              </Form.Group>
+              <Form.Group controlId="formTransactionDate">
+                <Form.Label>Date</Form.Label>
+                <Form.Control type="text" value={new Date(selectedTransaction.date).toLocaleDateString()} readOnly />
+              </Form.Group>
+            </Form>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleEditTransaction}>
+            Edit
+          </Button>
+          <Button variant="danger" onClick={handleDeleteTransaction}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Transaction</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedTransaction && (
+            <Form>
+              <Form.Group controlId="formTransactionName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="text" defaultValue={selectedTransaction.name} />
+              </Form.Group>
+              <Form.Group controlId="formTransactionAmount">
+                <Form.Label>Amount</Form.Label>
+                <Form.Control type="text" defaultValue={selectedTransaction.amount} />
+              </Form.Group>
+              <Form.Group controlId="formTransactionType">
+                <Form.Label>Transaction Type</Form.Label>
+                <Form.Control type="text" defaultValue={selectedTransaction.transactionType} />
+              </Form.Group>
+              <Form.Group controlId="formTransactionCategory">
+                <Form.Label>Category</Form.Label>
+                <Form.Control type="text" defaultValue={selectedTransaction.category.name} />
+              </Form.Group>
+              <Form.Group controlId="formTransactionDescription">
+                <Form.Label>Description</Form.Label>
+                <Form.Control as="textarea" defaultValue={selectedTransaction.description} />
+              </Form.Group>
+              <Form.Group controlId="formTransactionRecurrence">
+                <Form.Label>Recurrence</Form.Label>
+                <Form.Control type="text" defaultValue={selectedTransaction.transactionRecurrence} />
+              </Form.Group>
+              <Form.Group controlId="formTransactionDate">
+                <Form.Label>Date</Form.Label>
+                <Form.Control type="text" defaultValue={new Date(selectedTransaction.date).toLocaleDateString()} />
+              </Form.Group>
+            </Form>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+            Back
+          </Button>
+          <Button variant="primary" onClick={handleSaveTransaction}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this transaction?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
+            No
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteTransaction}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {notification && (
+        <Modal show={true} onHide={handleCloseNotification} centered>
+          <Modal.Body>{notification}</Modal.Body>
+        </Modal>
+      )}
     </>
   );
 };
