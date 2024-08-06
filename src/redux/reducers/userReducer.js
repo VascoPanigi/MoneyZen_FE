@@ -4,12 +4,6 @@ const initialState = {
   isLogged: false,
   isAdmin: false,
   user_info: {},
-  user_wallets: {},
-  selected_wallet_id: null,
-  selected_transaction_id: null,
-  wallet_transactions: {},
-  loading: false,
-  error: null,
 };
 
 const userReducer = (state = initialState, action) => {

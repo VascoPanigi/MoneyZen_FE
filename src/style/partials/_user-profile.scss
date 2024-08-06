@@ -1,0 +1,31 @@
+.user-profile-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .user-profile-section-container {
+    .user-profile-image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        border-radius: 50%;
+        height: 100px;
+      }
+    }
+  }
+  .user-profile-form-container {
+    form {
+      .row {
+        margin-block: 1rem;
+      }
+      .user-profile-form-buttons-container {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        button {
+          margin-block-start: 1rem;
+        }
+      }
+    }
+  }
+}

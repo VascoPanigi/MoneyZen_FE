@@ -1,19 +1,24 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Col, Row } from "react-bootstrap";
 
 const MyNavbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isSearchPage = location.pathname === "/auth";
   // console.log(isSearchPage);
 
   // const [collapsed, setCollapsed] = useState(true);
 
   const users_avatar = useSelector((state) => state.user.user_info.avatarURL);
+
+  const handleClickOnUserAvatar = () => {
+    navigate("/me");
+  };
 
   return (
     <>
@@ -61,7 +66,14 @@ const MyNavbar = () => {
             </div>
             <div className="sidebar-footer">
               <div className="users-avatar-container">
-                {users_avatar && <img className="users-avatar" src={users_avatar} alt="logged user avatar"></img>}
+                {users_avatar && (
+                  <img
+                    className="users-avatar"
+                    src={users_avatar}
+                    alt="logged user avatar"
+                    onClick={handleClickOnUserAvatar}
+                  ></img>
+                )}
               </div>
             </div>
           </div>

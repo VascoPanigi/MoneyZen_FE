@@ -1,5 +1,4 @@
-// src/components/FilterForm.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 
 const FilterForm = ({ onFilter }) => {

@@ -8,6 +8,7 @@ import MyNavbar from "./components/MyNavbar";
 import Homepage from "./components/Homepage";
 import TransactionPage from "./components/TransactionPage";
 import NotFound from "./components/NotFound";
+import UserProfile from "./components/UserProfile";
 // import { Component } from "./components/Component";
 // import WalletsSlider from "./components/WalletsSlider";
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/auth" element={<LoginPage />} />
           <Route path="/home" element={<Homepage />} />
           <Route path="/transactions" element={<TransactionPage />} />
+          <Route path="/me" element={<UserProfile />} />
           <Route path="/*" element={<NotFound />} />
           {/* <Route path="/chart" element={<Component />} /> */}
         </Routes>
