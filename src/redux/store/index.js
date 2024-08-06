@@ -1,9 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import fetchUserReducer from "../reducers/fetchUserReducer";
+import userReducer from "../reducers/userReducer";
+import walletsReducer from "../reducers/walletsReducer";
+import transactionsReducer from "../reducers/transactionsReducer";
 import categoriesReducer from "../reducers/categoriesReducer";
 
 const rootReducer = combineReducers({
-  user: fetchUserReducer,
+  user: userReducer,
+  wallets: walletsReducer,
+  transactions: transactionsReducer,
   transaction_categories: categoriesReducer,
 });
 

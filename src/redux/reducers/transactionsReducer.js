@@ -3,6 +3,7 @@ import {
   FETCH_FILTERED_TRANSACTIONS_REQUEST,
   FETCH_FILTERED_TRANSACTIONS_SUCCESS,
   FETCH_FILTERED_TRANSACTIONS_FAILURE,
+  GET_WALLET_TRANSACTIONS,
 } from "../actions/index";
 
 const initialState = {
@@ -14,6 +15,11 @@ const initialState = {
 
 const transactionsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_WALLET_TRANSACTIONS:
+      return {
+        ...state,
+        wallet_transactions: action.payload,
+      };
     case GET_TRANSACTION_ID:
       return {
         ...state,

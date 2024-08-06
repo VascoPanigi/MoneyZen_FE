@@ -11,7 +11,11 @@ const FilterForm = ({ onFilter }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onFilter({ startDateTime, endDateTime, minAmount, maxAmount, transactionType });
+    if (transactionType !== "") {
+      onFilter({ startDateTime, endDateTime, minAmount, maxAmount, transactionType });
+    } else {
+      onFilter({ startDateTime, endDateTime, minAmount, maxAmount });
+    }
   };
 
   return (

@@ -49,11 +49,11 @@ const Homepage = () => {
   const [outcomeOptions, setOutcomeOptions] = useState([]);
   const [showNewTransactionModal, setShowNewTransactionModal] = useState(false);
 
-  const wallets = useSelector((state) => state.user.user_wallets);
+  const wallets = useSelector((state) => state.wallets.user_wallets);
   const user_info = useSelector((state) => state.user.user_info);
-  const selectedWallet = useSelector((state) => state.user.user_wallets[selectedWalletIndex]);
+  const selectedWallet = useSelector((state) => state.wallets.user_wallets[selectedWalletIndex]);
   const transactionCategories = useSelector((state) => state.transaction_categories);
-  const selectedWalletTransactions = useSelector((state) => state.user.wallet_transactions.content);
+  const selectedWalletTransactions = useSelector((state) => state.transactions.wallet_transactions.content);
 
   useEffect(() => {
     dispatch(fetchUserInfo(token));

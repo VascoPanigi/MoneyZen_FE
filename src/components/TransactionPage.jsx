@@ -12,8 +12,8 @@ import FilterForm from "./FilterForm";
 const TransactionPage = () => {
   const dispatch = useDispatch();
 
-  const selectedWalletTransactions = useSelector((state) => state.user.wallet_transactions.content);
-  const selectedWalletId = useSelector((state) => state.user.selected_wallet_id);
+  const selectedWalletTransactions = useSelector((state) => state.transactions.wallet_transactions.content);
+  const selectedWalletId = useSelector((state) => state.wallets.selected_wallet_id);
   const [pageNum, setPageNum] = useState(0);
   const [sortOrder, setSortOrder] = useState("DESC");
   const [sortAmount, setSortAmount] = useState("DESC");
