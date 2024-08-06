@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MyNavbar from "./components/MyNavbar";
 import Homepage from "./components/Homepage";
 import TransactionPage from "./components/TransactionPage";
+import NotFound from "./components/NotFound";
 // import { Component } from "./components/Component";
 // import WalletsSlider from "./components/WalletsSlider";
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/auth" element={<LoginPage />} />
           <Route path="/home" element={<Homepage />} />
           <Route path="/transactions" element={<TransactionPage />} />
+          <Route path="/*" element={<NotFound />} />
           {/* <Route path="/chart" element={<Component />} /> */}
         </Routes>
       </BrowserRouter>
