@@ -1,8 +1,13 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import SingleTransaction from "./SingleTransaction";
 import { useEffect, useState } from "react";
-import { fetchSpecificWalletTransactionsActions, fetchSpecificWalletTransactionsByNameActions } from "../redux/actions";
+import {
+  fetchFilteredTransactions,
+  fetchSpecificWalletTransactionsActions,
+  fetchSpecificWalletTransactionsByNameActions,
+} from "../redux/actions";
+import FilterForm from "./FilterForm";
 
 const TransactionPage = () => {
   const dispatch = useDispatch();
@@ -71,6 +76,27 @@ const TransactionPage = () => {
     dispatch(fetchSpecificWalletTransactionsByNameActions(selectedWalletId, token, name));
   }, [name]);
 
+  // ------------------------------------------------FILTER LOGIC -----------------------------------------
+
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [hasFiltered, setHasFiltered] = useState(false);
+
+  const handleFilter = (filters) => {
+    setShowFilterModal(false);
+    setHasFiltered(true);
+    setPageNum(0);
+    // Implement the logic to filter transactions based on the filters object
+    console.log(filters);
+    // Example filter logic: dispatch action to fetch filtered transactions
+    // dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, sortOrder, sortAmount, filters));
+    dispatch(fetchFilteredTransactions(selectedWalletId, token, filters));
+  };
+
+  const handleClickOnClearFiltersButton = () => {
+    dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "ASC"));
+    setHasFiltered(false);
+  };
+
   return (
     <>
       {selectedWalletTransactions ? (
@@ -97,7 +123,18 @@ const TransactionPage = () => {
               </Form>
             </Col>
             <Col sm={2}>
-              <Button>Filter</Button>
+              <Row>
+                <Col lg={4} sm={12}>
+                  <Button onClick={() => setShowFilterModal(true)}>Filter</Button>
+                </Col>
+                {hasFiltered && (
+                  <Col lg={8} sm={12}>
+                    <Button variant="outline-primary" onClick={handleClickOnClearFiltersButton}>
+                      Clear filters
+                    </Button>
+                  </Col>
+                )}
+              </Row>
             </Col>
           </Row>
           <div className="transaction-page-body-container">
@@ -187,6 +224,15 @@ const TransactionPage = () => {
           <h1>No wallet selected, please try again!</h1>
         </Container>
       )}
+
+      <Modal show={showFilterModal} onHide={() => setShowFilterModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Filter Transactions</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FilterForm onFilter={handleFilter} />
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

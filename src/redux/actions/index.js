@@ -10,6 +10,10 @@ export const GET_WALLET_TRANSACTIONS = "GET_WALLET_TRANSACTIONS";
 export const GET_SELECTED_WALLET_ID = "GET_SELECTED_WALLET_ID";
 export const GET_TRANSACTION_ID = "GET_TRANSACTION_ID";
 
+export const FETCH_FILTERED_TRANSACTIONS_REQUEST = "FETCH_FILTERED_TRANSACTIONS_REQUEST";
+export const FETCH_FILTERED_TRANSACTIONS_SUCCESS = "FETCH_FILTERED_TRANSACTIONS_SUCCESS";
+export const FETCH_FILTERED_TRANSACTIONS_FAILURE = "FETCH_FILTERED_TRANSACTIONS_FAILURE";
+
 //----------------------------------------------- ID SELECTION OPERATIONS ------------------------------------------------------------
 
 // Store selected wallet id in the store
@@ -219,6 +223,7 @@ export const fetchSpecificWalletTransactionsActions = (
   };
 };
 
+// Filter transaction by name
 export const fetchSpecificWalletTransactionsByNameActions = (walletId, token, name) => {
   return async (dispatch) => {
     try {
@@ -234,6 +239,37 @@ export const fetchSpecificWalletTransactionsByNameActions = (walletId, token, na
       // console.log(response);
     } catch (err) {
       console.log(err.message);
+    }
+  };
+};
+
+// Advanced filter for transactions
+export const fetchFilteredTransactionsRequest = (walletId, token, filters) => ({
+  type: FETCH_FILTERED_TRANSACTIONS_REQUEST,
+  payload: { walletId, token, filters },
+});
+
+export const fetchFilteredTransactionsSuccess = (transactions) => ({
+  type: FETCH_FILTERED_TRANSACTIONS_SUCCESS,
+  payload: transactions,
+});
+
+export const fetchFilteredTransactionsFailure = (error) => ({
+  type: FETCH_FILTERED_TRANSACTIONS_FAILURE,
+  payload: error,
+});
+
+export const fetchFilteredTransactions = (walletId, token, filters) => {
+  return async (dispatch) => {
+    dispatch(fetchFilteredTransactionsRequest(walletId, token, filters));
+    try {
+      const response = await axios.get(`http://localhost:3001/transactions/wallet/${walletId}`, {
+        params: filters,
+        headers: { Authorization: "Bearer " + token },
+      });
+      dispatch(fetchFilteredTransactionsSuccess(response.data));
+    } catch (error) {
+      dispatch(fetchFilteredTransactionsFailure(error.message));
     }
   };
 };

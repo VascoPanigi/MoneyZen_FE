@@ -6,6 +6,9 @@ import {
   GET_WALLET_TRANSACTIONS,
   GET_SELECTED_WALLET_ID,
   GET_TRANSACTION_ID,
+  FETCH_FILTERED_TRANSACTIONS_REQUEST,
+  FETCH_FILTERED_TRANSACTIONS_SUCCESS,
+  FETCH_FILTERED_TRANSACTIONS_FAILURE,
 } from "../actions/index";
 
 const initialState = {
@@ -16,6 +19,8 @@ const initialState = {
   selected_wallet_id: null,
   selected_transaction_id: null,
   wallet_transactions: {},
+  loading: false,
+  error: null,
 };
 
 const fetchUserReducer = (state = initialState, action) => {
@@ -54,6 +59,24 @@ const fetchUserReducer = (state = initialState, action) => {
       return {
         ...state,
         selected_transaction_id: action.payload,
+      };
+    case FETCH_FILTERED_TRANSACTIONS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_FILTERED_TRANSACTIONS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        wallet_transactions: action.payload,
+      };
+    case FETCH_FILTERED_TRANSACTIONS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
     default:
       return state;
