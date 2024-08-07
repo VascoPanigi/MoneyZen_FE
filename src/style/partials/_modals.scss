@@ -28,7 +28,9 @@
   }
 }
 
-.form-control {
+.form-control,
+.form-select,
+.form-check-input {
   background-color: #2b374b;
   &:focus {
     background-color: #4b5b77;

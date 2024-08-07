@@ -4,12 +4,14 @@ import SingleTransaction from "./SingleTransaction";
 import { useEffect, useState } from "react";
 import {
   deleteTransactionAction,
+  fetchAllCategories,
   fetchFilteredTransactions,
   fetchSpecificWalletTransactionsActions,
   fetchSpecificWalletTransactionsByNameActions,
   getTransactionId,
 } from "../redux/actions";
 import FilterForm from "./FilterForm";
+import { formatDateTimeLocal } from "../utils/utils";
 
 const TransactionPage = () => {
   const token = localStorage.getItem("Bearer");
@@ -56,6 +58,7 @@ const TransactionPage = () => {
 
   useEffect(() => {
     dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "DESC"));
+    dispatch(fetchAllCategories(token));
   }, []);
 
   useEffect(() => {
@@ -117,12 +120,31 @@ const TransactionPage = () => {
   const handleTransactionClick = (transaction) => {
     setSelectedTransaction(transaction);
     dispatch(getTransactionId(transaction.id));
+
+    setTransactionName(transaction.name);
+    setTransactionAmount(transaction.amount);
+    setTransactionType(transaction.category.transactionType);
+    setTransactionDescription(transaction.description);
+    setTransactionDate(transaction.date);
+
     setShowTransactionModal(true);
   };
 
   const handleEditTransaction = () => {
     setShowTransactionModal(false);
     setShowEditModal(true);
+    // selectedTransaction.category.transactionType === "OUTCOME" ? setRadio(1) : setRadio(2);
+
+    if (selectedTransaction.category.transactionType === "OUTCOME") {
+      setRadio(2);
+      setOptions(incomeOptions);
+    } else if (radio === "1") {
+      setRadio(1);
+      setOptions(outcomeOptions);
+    }
+
+    setTransactionCategory(selectedTransaction.category.name);
+    // setTransactionType()
   };
 
   const handleDeleteTransaction = () => {
@@ -142,13 +164,72 @@ const TransactionPage = () => {
   };
 
   const handleSaveTransaction = () => {
+    let type = "";
+    radio === "1" ? (type = "OUTCOME") : (type = "INCOME");
     // Dispatch save action here
+    console.log(transactionName);
+    console.log(transactionAmount);
+    console.log(type);
+    console.log(transactionCategory);
+    console.log(transactionDescription);
+    console.log(transactionDate);
     setShowEditModal(false);
     setNotification("Transaction successfully edited");
   };
 
   const handleCloseNotification = () => {
     setNotification("");
+  };
+
+  // ------------------------behaviour modify modal --------------------------------
+  const [incomeOptions, setIncomeOptions] = useState([]);
+  const [outcomeOptions, setOutcomeOptions] = useState([]);
+  const transactionCategories = useSelector((state) => state.transaction_categories);
+
+  const [transactionName, setTransactionName] = useState("");
+  const [transactionAmount, setTransactionAmount] = useState(null);
+  const [transactionType, setTransactionType] = useState("Outcome");
+  const [transactionCategory, setTransactionCategory] = useState("");
+  const [transactionDescription, setTransactionDescription] = useState("");
+  const [transactionRecurrence, setTransactionRecurrence] = useState("NONE");
+  const [transactionDate, setTransactionDate] = useState(null);
+  const [radio, setRadio] = useState(0);
+  const [options, setOptions] = useState({});
+
+  useEffect(() => {
+    if (transactionCategories.categories.length > 0) {
+      const incomeCategories = transactionCategories.categories.filter(
+        (category) => category.transactionType === "INCOME"
+      );
+      setIncomeOptions(
+        incomeCategories.map((category, index) => ({
+          value: index + 1,
+          label: category.name,
+        }))
+      );
+      const outcomeCategories = transactionCategories.categories.filter(
+        (category) => category.transactionType === "OUTCOME"
+      );
+      setOutcomeOptions(
+        outcomeCategories.map((category, index) => ({
+          value: index + 1,
+          label: category.name,
+        }))
+      );
+    }
+  }, [transactionCategories]);
+
+  useEffect(() => {
+    if (radio === "2") {
+      setOptions(incomeOptions);
+    } else if (radio === "1") {
+      setOptions(outcomeOptions);
+    }
+  }, [radio, incomeOptions, outcomeOptions]);
+
+  const handleCategoryChange = (event) => {
+    const selectedOption = event.target.options[event.target.selectedIndex];
+    setTransactionCategory(selectedOption.label);
   };
 
   return (
@@ -296,31 +377,57 @@ const TransactionPage = () => {
             <Form>
               <Form.Group controlId="formTransactionName">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" value={selectedTransaction.name} readOnly />
+                <Form.Control type="text" value={selectedTransaction.name} disabled />
               </Form.Group>
               <Form.Group controlId="formTransactionAmount">
                 <Form.Label>Amount</Form.Label>
-                <Form.Control type="text" value={selectedTransaction.amount} readOnly />
+                <Form.Control type="text" value={selectedTransaction.amount} disabled />
               </Form.Group>
-              <Form.Group controlId="formTransactionType">
+              {/* <Form.Group controlId="formTransactionType">
                 <Form.Label>Transaction Type</Form.Label>
                 <Form.Control type="text" value={selectedTransaction.transactionType} readOnly />
               </Form.Group>
               <Form.Group controlId="formTransactionCategory">
                 <Form.Label>Category</Form.Label>
                 <Form.Control type="text" value={selectedTransaction.category.name} readOnly />
+              </Form.Group> */}
+
+              {selectedTransaction.category.transactionType === "INCOME" ? (
+                <Form.Group required className="radio-buttons-container" onChange={(e) => setRadio(e.target.value)}>
+                  <Form.Label>Transaction Type</Form.Label>
+                  <Form.Check type="radio" label="Outcome" name="group1" value={1} disabled />
+                  <Form.Check type="radio" label="Income" name="group1" value={2} disabled defaultChecked />
+                </Form.Group>
+              ) : (
+                <Form.Group required className="radio-buttons-container" onChange={(e) => setRadio(e.target.value)}>
+                  <Form.Label>Transaction Type</Form.Label>
+                  <Form.Check type="radio" label="Outcome" name="group1" value={1} disabled defaultChecked />
+                  <Form.Check type="radio" label="Income" name="group1" value={2} disabled />
+                </Form.Group>
+              )}
+              <Form.Group className="mb-3">
+                <Form.Label>Category</Form.Label>
+                <Form.Select required aria-label="Select category" onChange={handleCategoryChange} disabled>
+                  <option key={selectedTransaction.id} value={selectedTransaction.category.name}>
+                    {selectedTransaction.category.name}
+                  </option>
+                </Form.Select>
               </Form.Group>
               <Form.Group controlId="formTransactionDescription">
                 <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" value={selectedTransaction.description} readOnly />
+                <Form.Control as="textarea" value={selectedTransaction.description} disabled />
               </Form.Group>
-              <Form.Group controlId="formTransactionRecurrence">
+              {/* <Form.Group controlId="formTransactionRecurrence">
                 <Form.Label>Recurrence</Form.Label>
                 <Form.Control type="text" value={selectedTransaction.transactionRecurrence} readOnly />
-              </Form.Group>
+              </Form.Group> */}
               <Form.Group controlId="formTransactionDate">
                 <Form.Label>Date</Form.Label>
-                <Form.Control type="text" value={new Date(selectedTransaction.date).toLocaleDateString()} readOnly />
+                <Form.Control
+                  type="datetime-local"
+                  value={formatDateTimeLocal(new Date(selectedTransaction.date))}
+                  disabled
+                />
               </Form.Group>
             </Form>
           )}
@@ -344,31 +451,74 @@ const TransactionPage = () => {
             <Form>
               <Form.Group controlId="formTransactionName">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" defaultValue={selectedTransaction.name} />
+                <Form.Control
+                  type="text"
+                  defaultValue={selectedTransaction.name}
+                  onChange={(e) => setTransactionName(e.target.value)}
+                />
               </Form.Group>
               <Form.Group controlId="formTransactionAmount">
                 <Form.Label>Amount</Form.Label>
-                <Form.Control type="text" defaultValue={selectedTransaction.amount} />
+                <Form.Control
+                  type="text"
+                  defaultValue={selectedTransaction.amount}
+                  onChange={(e) => setTransactionAmount(e.target.value)}
+                />
               </Form.Group>
-              <Form.Group controlId="formTransactionType">
+              {/* <Form.Group controlId="formTransactionType">
                 <Form.Label>Transaction Type</Form.Label>
                 <Form.Control type="text" defaultValue={selectedTransaction.transactionType} />
               </Form.Group>
               <Form.Group controlId="formTransactionCategory">
                 <Form.Label>Category</Form.Label>
                 <Form.Control type="text" defaultValue={selectedTransaction.category.name} />
+              </Form.Group> */}
+              {selectedTransaction.category.transactionType === "INCOME" ? (
+                <Form.Group required className="radio-buttons-container" onChange={(e) => setRadio(e.target.value)}>
+                  <Form.Label>Transaction Type</Form.Label>
+                  <Form.Check type="radio" label="Outcome" name="group1" value={1} />
+                  <Form.Check type="radio" label="Income" name="group1" value={2} defaultChecked />
+                </Form.Group>
+              ) : (
+                <Form.Group required className="radio-buttons-container" onChange={(e) => setRadio(e.target.value)}>
+                  <Form.Label>Transaction Type</Form.Label>
+                  <Form.Check type="radio" label="Outcome" name="group1" value={1} defaultChecked />
+                  <Form.Check type="radio" label="Income" name="group1" value={2} />
+                </Form.Group>
+              )}
+              <Form.Group className="mb-3">
+                <Form.Label>Category</Form.Label>
+                <Form.Select required aria-label="Select category" onChange={handleCategoryChange}>
+                  {options.length > 0 &&
+                    options.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  {/* <option key={selectedTransaction.category.id} defaultValue={selectedTransaction.category.name}>
+                    {selectedTransaction.category.name}
+                  </option> */}
+                </Form.Select>
               </Form.Group>
               <Form.Group controlId="formTransactionDescription">
                 <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" defaultValue={selectedTransaction.description} />
+                <Form.Control
+                  as="textarea"
+                  defaultValue={selectedTransaction.description}
+                  onChange={(e) => setTransactionDescription(e.target.value)}
+                />
               </Form.Group>
-              <Form.Group controlId="formTransactionRecurrence">
+              {/* <Form.Group controlId="formTransactionRecurrence">
                 <Form.Label>Recurrence</Form.Label>
                 <Form.Control type="text" defaultValue={selectedTransaction.transactionRecurrence} />
-              </Form.Group>
+              </Form.Group> */}
               <Form.Group controlId="formTransactionDate">
                 <Form.Label>Date</Form.Label>
-                <Form.Control type="text" defaultValue={new Date(selectedTransaction.date).toLocaleDateString()} />
+                <Form.Control
+                  type="datetime-local"
+                  defaultValue={formatDateTimeLocal(new Date(selectedTransaction.date))}
+                  onChange={(e) => setTransactionDate(e.target.value)}
+                />
               </Form.Group>
             </Form>
           )}

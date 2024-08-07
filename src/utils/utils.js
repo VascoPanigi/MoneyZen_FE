@@ -52,3 +52,16 @@ export const formatDateTime = (dateString) => {
 
   return `${formattedDate} ${formattedTime}`;
 };
+
+// date formatter for form autocompilation
+export const formatDateTimeLocal = (date) => {
+  const padZero = (num) => (num < 10 ? "0" + num : num);
+
+  const year = date.getFullYear();
+  const month = padZero(date.getMonth() + 1);
+  const day = padZero(date.getDate());
+  const hours = padZero(date.getHours());
+  const minutes = padZero(date.getMinutes());
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
