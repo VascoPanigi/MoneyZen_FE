@@ -9,6 +9,7 @@ import {
   fetchSpecificWalletTransactionsActions,
   fetchSpecificWalletTransactionsByNameActions,
   getTransactionId,
+  modifyTransactionAction,
 } from "../redux/actions";
 import FilterForm from "./FilterForm";
 import { formatDateTimeLocal } from "../utils/utils";
@@ -35,13 +36,11 @@ const TransactionPage = () => {
 
   const handleClickOnDifferentPage = (direction) => {
     const newPageNum = direction === "next" ? pageNum + 1 : pageNum - 1;
-
     if (currentFilters) {
       dispatch(fetchFilteredTransactions(selectedWalletId, token, { ...currentFilters, pageNumber: newPageNum }));
     } else {
       dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, newPageNum, sortOrder, "date"));
     }
-
     setPageNum(newPageNum);
     window.scrollTo(0, 0);
   };
@@ -126,6 +125,7 @@ const TransactionPage = () => {
     setTransactionType(transaction.category.transactionType);
     setTransactionDescription(transaction.description);
     setTransactionDate(transaction.date);
+    setTransactionRecurrence(transaction.transactionRecurrence);
 
     setShowTransactionModal(true);
   };
@@ -173,6 +173,17 @@ const TransactionPage = () => {
     console.log(transactionCategory);
     console.log(transactionDescription);
     console.log(transactionDate);
+
+    const transactionObject = {
+      name: transactionName,
+      amount: transactionAmount,
+      categoryName: transactionCategory,
+      description: transactionDescription,
+      date: transactionDate,
+      transactionRecurrence: transactionRecurrence,
+    };
+
+    dispatch(modifyTransactionAction(selectedTransactionId, token, selectedWalletId, transactionObject));
     setShowEditModal(false);
     setNotification("Transaction successfully edited");
   };
@@ -395,13 +406,13 @@ const TransactionPage = () => {
               {selectedTransaction.category.transactionType === "INCOME" ? (
                 <Form.Group required className="radio-buttons-container" onChange={(e) => setRadio(e.target.value)}>
                   <Form.Label>Transaction Type</Form.Label>
-                  <Form.Check type="radio" label="Outcome" name="group1" value={1} disabled />
+                  <Form.Check type="radio" label="Expense" name="group1" value={1} disabled />
                   <Form.Check type="radio" label="Income" name="group1" value={2} disabled defaultChecked />
                 </Form.Group>
               ) : (
                 <Form.Group required className="radio-buttons-container" onChange={(e) => setRadio(e.target.value)}>
                   <Form.Label>Transaction Type</Form.Label>
-                  <Form.Check type="radio" label="Outcome" name="group1" value={1} disabled defaultChecked />
+                  <Form.Check type="radio" label="Expense" name="group1" value={1} disabled defaultChecked />
                   <Form.Check type="radio" label="Income" name="group1" value={2} disabled />
                 </Form.Group>
               )}
@@ -476,13 +487,13 @@ const TransactionPage = () => {
               {selectedTransaction.category.transactionType === "INCOME" ? (
                 <Form.Group required className="radio-buttons-container" onChange={(e) => setRadio(e.target.value)}>
                   <Form.Label>Transaction Type</Form.Label>
-                  <Form.Check type="radio" label="Outcome" name="group1" value={1} />
+                  <Form.Check type="radio" label="Expense" name="group1" value={1} />
                   <Form.Check type="radio" label="Income" name="group1" value={2} defaultChecked />
                 </Form.Group>
               ) : (
                 <Form.Group required className="radio-buttons-container" onChange={(e) => setRadio(e.target.value)}>
                   <Form.Label>Transaction Type</Form.Label>
-                  <Form.Check type="radio" label="Outcome" name="group1" value={1} defaultChecked />
+                  <Form.Check type="radio" label="Expense" name="group1" value={1} defaultChecked />
                   <Form.Check type="radio" label="Income" name="group1" value={2} />
                 </Form.Group>
               )}

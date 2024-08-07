@@ -304,6 +304,20 @@ export const deleteTransactionAction = (transactionId, walletId, token) => {
   };
 };
 
+//modify a transaction
+export const modifyTransactionAction = (transactionId, token, walletId, transactionObject) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.put("http://localhost:3001/transactions/" + transactionId, transactionObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
+      dispatch(fetchSpecificWalletTransactionsActions(walletId, token));
+      console.log(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
 //-----------------------------------------------TRANSACTIONS CATEGORIES OPERATIONS------------------------------------------------------------
 
 // Get all transaction categories
