@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import SingleTransaction from "./SingleTransaction";
 import { useEffect, useState } from "react";
 import {
+  deleteTransactionAction,
   fetchFilteredTransactions,
   fetchSpecificWalletTransactionsActions,
   fetchSpecificWalletTransactionsByNameActions,
+  getTransactionId,
 } from "../redux/actions";
 import FilterForm from "./FilterForm";
 
@@ -14,6 +16,7 @@ const TransactionPage = () => {
   const dispatch = useDispatch();
   const selectedWalletTransactions = useSelector((state) => state.transactions.wallet_transactions.content);
   const selectedWalletId = useSelector((state) => state.wallets.selected_wallet_id);
+  const selectedTransactionId = useSelector((state) => state.transactions.selected_transaction_id);
 
   const [pageNum, setPageNum] = useState(0);
   const [sortOrder, setSortOrder] = useState("DESC");
@@ -34,7 +37,7 @@ const TransactionPage = () => {
     if (currentFilters) {
       dispatch(fetchFilteredTransactions(selectedWalletId, token, { ...currentFilters, pageNumber: newPageNum }));
     } else {
-      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, newPageNum, sortOrder, sortAmount));
+      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, newPageNum, sortOrder, "date"));
     }
 
     setPageNum(newPageNum);
@@ -50,6 +53,10 @@ const TransactionPage = () => {
       setSortOrder("DESC");
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "DESC"));
+  }, []);
 
   useEffect(() => {
     if (sortOrder === "DESC") {
@@ -109,6 +116,7 @@ const TransactionPage = () => {
 
   const handleTransactionClick = (transaction) => {
     setSelectedTransaction(transaction);
+    dispatch(getTransactionId(transaction.id));
     setShowTransactionModal(true);
   };
 
@@ -125,6 +133,11 @@ const TransactionPage = () => {
     // Dispatch delete action here
     setShowDeleteConfirmation(false);
     setShowTransactionModal(false);
+    if (selectedTransactionId !== null) {
+      dispatch(deleteTransactionAction(selectedTransactionId, selectedWalletId, token));
+    } else {
+      console.log("Please select a transaction before performing this action.");
+    }
     setNotification("Transaction successfully deleted");
   };
 

@@ -296,7 +296,7 @@ export const deleteTransactionAction = (transactionId, walletId, token) => {
       const response = await axios.delete("http://localhost:3001/transactions/" + transactionId, {
         headers: { Authorization: "Bearer " + token },
       });
-      dispatch(fetchUserSpecificWalletAction(walletId, token));
+      dispatch(fetchSpecificWalletTransactionsActions(walletId, token));
       console.log(response.data);
     } catch (err) {
       console.log(err.message);
