@@ -62,7 +62,7 @@ export const registerUserAction = (registerObject) => {
 };
 
 //-----------------------------------------------USER OPERATIONS------------------------------------------------------------
-// Generic info
+// Fetch generic info
 export const fetchUserInfo = (token) => {
   return async (dispatch) => {
     try {

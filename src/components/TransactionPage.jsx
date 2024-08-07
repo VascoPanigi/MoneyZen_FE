@@ -22,8 +22,8 @@ const TransactionPage = () => {
   const selectedTransactionId = useSelector((state) => state.transactions.selected_transaction_id);
 
   const [pageNum, setPageNum] = useState(0);
-  const [sortOrder, setSortOrder] = useState("DESC");
   const [sortAmount, setSortAmount] = useState("DESC");
+  const [sortOrder, setSortOrder] = useState("DESC");
   const [name, setName] = useState("");
   const [currentFilters, setCurrentFilters] = useState(null);
 
@@ -61,6 +61,14 @@ const TransactionPage = () => {
   }, []);
 
   useEffect(() => {
+    if (sortAmount === "DESC") {
+      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "DESC", "amount"));
+    } else {
+      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "ASC", "amount"));
+    }
+  }, [sortAmount]);
+
+  useEffect(() => {
     if (sortOrder === "DESC") {
       dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "ASC"));
     } else {
@@ -78,20 +86,17 @@ const TransactionPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (sortAmount === "DESC") {
-      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "DESC", "amount"));
-    } else {
-      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, 0, "ASC", "amount"));
-    }
-  }, [sortAmount]);
-
   const handleSubmitResearchQuery = (e) => {
     e.preventDefault();
   };
 
   useEffect(() => {
-    dispatch(fetchSpecificWalletTransactionsByNameActions(selectedWalletId, token, name));
+    // dispatch(fetchSpecificWalletTransactionsByNameActions(selectedWalletId, token, name));
+    if (name) {
+      dispatch(fetchSpecificWalletTransactionsByNameActions(selectedWalletId, token, name));
+    } else {
+      dispatch(fetchSpecificWalletTransactionsActions(selectedWalletId, token, pageNum, sortOrder, "date"));
+    }
   }, [name]);
 
   // ------------------------------------------------FILTER LOGIC -----------------------------------------
