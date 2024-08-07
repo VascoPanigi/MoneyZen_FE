@@ -82,18 +82,34 @@ export const fetchUserInfo = (token) => {
 
 // Patch user profile picture
 export const patchUserAvatar = (file, token) => {
-  return async () => {
+  return async (dispatch) => {
     try {
       const formData = new FormData();
       formData.append("avatar", file);
-
       const response = await axios.patch("http://localhost:3001/users/me/avatar", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
         },
       });
+      dispatch(fetchUserInfo(token));
+      console.log(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
 
+// Update user profile
+export const modifyUserProfile = (token, userObject) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.put("http://localhost:3001/users/me/", userObject, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      dispatch(fetchUserInfo(token));
       console.log(response.data);
     } catch (err) {
       console.log(err.message);
