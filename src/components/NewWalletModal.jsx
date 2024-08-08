@@ -11,7 +11,11 @@ const NewWalletModal = ({
 }) => (
   <Modal show={show} onHide={handleClose} centered>
     <Modal.Header closeButton>
-      <Modal.Title>Modal heading</Modal.Title>
+      {!showNamingOptionNewWallet ? (
+        <Modal.Title>Choose wallet type</Modal.Title>
+      ) : (
+        <Modal.Title>Choose a name for your wallet</Modal.Title>
+      )}
     </Modal.Header>
     <Row className="wallet-type-modal-container">
       {!showNamingOptionNewWallet ? (
@@ -29,13 +33,15 @@ const NewWalletModal = ({
         </>
       ) : (
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="newWalletName">
+          <Form.Group className="form-group-wallet-name" controlId="newWalletName">
             <Form.Label>Wallet Name</Form.Label>
             <Form.Control type="name" placeholder="Enter wallet name" onChange={(e) => setName(e.target.value)} />
           </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
+          <div className="new-wallet-button-container">
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </div>
         </Form>
       )}
     </Row>

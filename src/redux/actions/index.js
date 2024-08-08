@@ -216,6 +216,21 @@ export const deleteWalletAction = (walletId, token) => {
   };
 };
 
+// Action to let a user join a shared wallet
+export const addUserToSharedWallet = (walletId, token) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.patch("http://localhost:3001/wallets/shared-wallets/users", walletId, {
+        headers: { Authorization: "Bearer " + token },
+      });
+      dispatch(fetchUserWallets(token));
+      console.log(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
 //-----------------------------------------------TRANSACTIONS OPERATIONS------------------------------------------------------------
 
 // Get all the transaction for a specific wallet

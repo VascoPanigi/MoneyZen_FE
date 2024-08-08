@@ -25,7 +25,7 @@ import { LargeChart } from "./LargeChart";
 import LastTransactionsSection from "./LastTransactionsSection";
 import moment from "moment";
 import { groupTransactionsByMonth, calculateMonthlyTotals } from "../utils/utils";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   const token = localStorage.getItem("Bearer");
@@ -127,8 +127,8 @@ const Homepage = () => {
     setShowNamingOptionNewWallet(true);
   };
   const handleClickOnNewSharedWalletModal = () => {
-    setShowNamingOptionNewWallet(true);
     handleNewWalletTypeVariance(true);
+    setShowNamingOptionNewWallet(true);
   };
 
   // this useEffect is needed to update the state and send the right newWalletObject
@@ -234,20 +234,11 @@ const Homepage = () => {
     outcomeChange = ((currentOutcome - previousOutcome) / (previousOutcome || 1)) * 100;
 
     totalBalanceChangeLastMonthInCurrency = currentIncome - currentOutcome;
-
-    // console.log("CURRENT INCOME: " + currentIncome);
-    // console.log("CURRENT OUTCOME: " + currentOutcome);
-    // console.log("PREVIOUS INCOME: " + previousIncome);
-    // console.log("PREVIOUS OUTCOME: " + previousOutcome);
-
-    // console.log("INCOME CHANGE: " + incomeChange);
-    // console.log("OUTCOME CHANGE: " + outcomeChange);
   } else {
     console.log("No transactions detected");
   }
 
   // Handle redirect on transactions page
-
   const handleCLickOnTransactionPage = () => {
     navigate("/transactions");
   };
