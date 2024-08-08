@@ -5,6 +5,7 @@ import {
   addNewPersonalWalletAction,
   addNewSharedWalletAction,
   addNewTransactionAction,
+  addUserToSharedWallet,
   deleteTransactionAction,
   deleteWalletAction,
   fetchAllCategories,
@@ -55,6 +56,10 @@ const Homepage = () => {
   const transactionCategories = useSelector((state) => state.transaction_categories);
   const selectedWalletTransactions = useSelector((state) => state.transactions.wallet_transactions.content);
 
+  const [joinSharedWallet, setJoinSharedWallet] = useState(false);
+  const [walletId, setWalletId] = useState("");
+  const [isChoosingSharedWalletOption, setIsChoosingSharedWalletOption] = useState(false);
+
   useEffect(() => {
     dispatch(fetchUserInfo(token));
     dispatch(fetchUserWallets(token));
@@ -94,6 +99,9 @@ const Homepage = () => {
   const handleCloseNewWalletModal = () => {
     setShowNewWalletCreationModal(false);
     handleNewWalletTypeVariance(false);
+    setJoinSharedWallet(false);
+    setWalletId("");
+    setIsChoosingSharedWalletOption(false);
   };
   const handleShowNewWalletModal = () => {
     console.log("this is the type on show" + typeNewWalletShared);
@@ -110,24 +118,32 @@ const Homepage = () => {
   };
 
   const handleNewWalletTypeVariance = (value) => {
-    switch (value) {
-      case true:
-        setTypeNewWalletShared(true);
-        break;
-      case false:
-        setTypeNewWalletShared(false);
-        break;
-      default:
-        console.log("An error occured during state change.");
-    }
+    setJoinSharedWallet(false); // Reset join state whenever switching wallet types
+    setTypeNewWalletShared(value);
   };
 
+  const handleJoinSharedWallet = () => {
+    setIsChoosingSharedWalletOption(false);
+    setShowNamingOptionNewWallet(true);
+    setJoinSharedWallet(true);
+  };
+
+  useEffect(() => {
+    console.log(joinSharedWallet);
+  }, [joinSharedWallet]);
+
   const handleClickOnNewPersonalWalletModal = () => {
-    handleNewWalletTypeVariance(false);
+    setIsChoosingSharedWalletOption(false);
     setShowNamingOptionNewWallet(true);
   };
   const handleClickOnNewSharedWalletModal = () => {
     handleNewWalletTypeVariance(true);
+    setShowNamingOptionNewWallet(false);
+    setIsChoosingSharedWalletOption(true);
+  };
+
+  const handleCreateNewSharedWallet = () => {
+    setIsChoosingSharedWalletOption(false);
     setShowNamingOptionNewWallet(true);
   };
 
@@ -136,16 +152,18 @@ const Homepage = () => {
     console.log(typeNewWalletShared);
   }, [typeNewWalletShared]);
 
-  // New wallet creation
   const handleNewWalletCreation = (e) => {
     e.preventDefault();
-    const walletObject = {
-      name: name,
-    };
-    if (typeNewWalletShared) {
-      dispatch(addNewSharedWalletAction(walletObject, token));
+    if (typeNewWalletShared && joinSharedWallet) {
+      const walletObj = { walletId: walletId };
+      dispatch(addUserToSharedWallet(token, walletObj));
     } else {
-      dispatch(addNewPersonalWalletAction(walletObject, token));
+      const walletObject = { name: name };
+      if (typeNewWalletShared) {
+        dispatch(addNewSharedWalletAction(walletObject, token));
+      } else {
+        dispatch(addNewPersonalWalletAction(walletObject, token));
+      }
     }
     handleCloseNewWalletModal();
   };
@@ -280,9 +298,14 @@ const Homepage = () => {
             handleClose={handleCloseNewWalletModal}
             handleSubmit={handleNewWalletCreation}
             showNamingOptionNewWallet={showNamingOptionNewWallet}
+            isChoosingSharedWalletOption={isChoosingSharedWalletOption}
             handlePersonal={handleClickOnNewPersonalWalletModal}
             handleShared={handleClickOnNewSharedWalletModal}
+            handleCreateNewSharedWallet={handleCreateNewSharedWallet}
+            handleJoinSharedWallet={handleJoinSharedWallet}
             setName={setName}
+            setWalletId={setWalletId}
+            joinSharedWallet={joinSharedWallet}
           />
           {/* </Col> */}
         </div>

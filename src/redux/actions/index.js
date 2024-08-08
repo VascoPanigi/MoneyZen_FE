@@ -217,7 +217,7 @@ export const deleteWalletAction = (walletId, token) => {
 };
 
 // Action to let a user join a shared wallet
-export const addUserToSharedWallet = (walletId, token) => {
+export const addUserToSharedWallet = (token, walletId) => {
   return async (dispatch) => {
     try {
       const response = await axios.patch("http://localhost:3001/wallets/shared-wallets/users", walletId, {
