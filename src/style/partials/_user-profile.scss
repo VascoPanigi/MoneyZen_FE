@@ -7,9 +7,26 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      img {
+      flex-direction: column;
+      .user-profile-image-subcontainer {
         border-radius: 50%;
         height: 100px;
+        width: 100px;
+        background-size: 110px;
+        background-repeat: no-repeat;
+        background-position: center;
+        // img {
+        //   object-fit: fill;
+        //   border-radius: 50%;
+        //   height: 100px;
+        //   width: 100px;
+        // }
+      }
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: $primary;
+        margin-inline-start: auto;
       }
     }
   }

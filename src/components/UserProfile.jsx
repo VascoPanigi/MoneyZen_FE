@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Modal, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserInfo } from "../redux/actions";
+import { fetchUserInfo, patchUserAvatar } from "../redux/actions";
+import ImageResizer from "react-image-file-resizer";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -11,28 +12,77 @@ const UserProfile = () => {
   const [surname, setSurname] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-
-  const [isEditing, setIsEditing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [file, setFile] = useState(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const user = useSelector((state) => state.user.user_info);
 
   useEffect(() => {
     dispatch(fetchUserInfo(token));
-  }, []);
+  }, [dispatch, token]);
 
   useEffect(() => {
-    setName(user.name);
-    setSurname(user.surname);
-    setUsername(user.username);
-    setEmail(user.email);
+    if (user) {
+      setName(user.name);
+      setSurname(user.surname);
+      setUsername(user.username);
+      setEmail(user.email);
+    }
   }, [user]);
+
+  const optimizedImageResizing = (file) => {
+    ImageResizer.imageFileResizer(
+      file,
+      300,
+      300,
+      "JPEG",
+      100,
+      0,
+      (uri) => {
+        setFile(uri);
+      },
+      "file"
+    );
+  };
+
+  const handleFileChange = (e) => {
+    optimizedImageResizing(e.target.files[0]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("sono nel submit wow");
+
+    if (file) {
+      console.log("ora sono nell-if del submit ");
+
+      dispatch(patchUserAvatar(file, token)).then(() => {
+        setShowModal(false);
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 3000); // Hide after 3 seconds
+      });
+    }
+  };
 
   return (
     <Container fluid className="user-profile-page-container">
       {user && (
         <Row className="user-profile-section-container">
           <Col sm={3} className="user-profile-image-container">
-            {user.avatarURL && <img src={user.avatarURL} alt={`${user.name}'s profile picture`}></img>}
+            <svg
+              onClick={() => setShowModal(true)}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              style={{ cursor: "pointer" }}
+            >
+              <path d="M290.7 93.2l128 128-278 278-114.1 12.6C11.4 513.5-1.6 500.6 .1 485.3l12.7-114.2 277.9-277.9zm207.2-19.1l-60.1-60.1c-18.8-18.8-49.2-18.8-67.9 0l-56.6 56.6 128 128 56.6-56.6c18.8-18.8 18.8-49.2 0-67.9z" />
+            </svg>
+            {user.avatarURL && (
+              <div className="user-profile-image-subcontainer" style={{ backgroundImage: `url(${user.avatarURL})` }}>
+                {/* {user.avatarURL && <img src={user.avatarURL} alt={`${user.name}'s profile picture`}></img>} */}
+              </div>
+            )}
           </Col>
           <Col sm={9} className="user-profile-form-container">
             <Form>
@@ -61,24 +111,42 @@ const UserProfile = () => {
                 </Form.Group>
               </Row>
               <div className="user-profile-form-buttons-container">
-                {/*<Col sm={3}> */}
-                <Button variant="primary" type="text" onClick={() => setIsEditing(!isEditing)}>
-                  Edit profile
+                <Button variant="primary" type="text" onClick={() => setShowModal(true)}>
+                  Edit Avatar
                 </Button>
-                {/* </Col>*/}
               </div>
-              {/* <Form.Group className="mb-3" id="formGridCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
-              </Form.Group>
-
-              <Button variant="primary" type="submit">
-                Submit
-              </Button> */}
             </Form>
           </Col>
         </Row>
       )}
-      {/* <h1>{user.name}</h1> */}
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Upload Avatar</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formFile">
+              <Form.Label>Select an image</Form.Label>
+              <Form.Control type="file" onChange={handleFileChange} />
+            </Form.Group>
+            <Button variant="primary" type="submit" className="mt-3">
+              Upload
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+
+      {/* Success message */}
+      {showSuccessMessage && (
+        <Alert
+          variant="success"
+          className="text-center position-fixed w-100"
+          style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1050 }}
+        >
+          Image successfully uploaded!
+        </Alert>
+      )}
     </Container>
   );
 };
