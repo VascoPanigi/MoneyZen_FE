@@ -165,9 +165,13 @@ a.nav-link.active {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid rgba($body-color, 0.8);
+    border-right: 1px solid rgba($body-color, 0.2);
+    // border: 1px solid rgba($body-color, 0.8);
     &:hover {
       background-color: $secondary;
+    }
+    &:last-of-type {
+      border-right: 0px solid transparent;
     }
 
     .mobile-menu-bar-icon {

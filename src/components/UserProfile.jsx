@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row, Modal, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserInfo, patchUserAvatar } from "../redux/actions";
+import { fetchUserInfo, modifyUserProfileAction, patchUserAvatarAction } from "../redux/actions";
 import ImageResizer from "react-image-file-resizer";
 
 const UserProfile = () => {
@@ -15,6 +15,8 @@ const UserProfile = () => {
   const [showModal, setShowModal] = useState(false);
   const [file, setFile] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(false);
 
   const user = useSelector((state) => state.user.user_info);
 
@@ -50,24 +52,50 @@ const UserProfile = () => {
     optimizedImageResizing(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleNewAvatarSubmit = (e) => {
     e.preventDefault();
-    console.log("sono nel submit wow");
 
     if (file) {
-      console.log("ora sono nell-if del submit ");
-
-      dispatch(patchUserAvatar(file, token)).then(() => {
+      dispatch(patchUserAvatarAction(file, token)).then(() => {
         setShowModal(false);
         setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 3000); // Hide after 3 seconds
+        setTimeout(() => setShowSuccessMessage(false), 3000);
       });
     }
   };
 
+  const handleUpdatedProfileSubmit = (e) => {
+    e.preventDefault();
+
+    const userObject = {
+      name: name,
+      surname: surname,
+      username: username,
+      email: email,
+    };
+    console.log("sto modificando i dati dell-utente");
+
+    dispatch(modifyUserProfileAction(token, userObject)).then(() => {
+      setIsEditing(false);
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+    });
+  };
+
+  const handleEditingChange = () => {
+    setIsEditing(true);
+  };
+  const handleCloseEditingChange = () => {
+    setIsEditing(false);
+    setName(user.name);
+    setSurname(user.surname);
+    setUsername(user.username);
+    setEmail(user.email);
+  };
+
   return (
     <Container fluid className="user-profile-page-container">
-      {user && (
+      {user && !isEditing ? (
         <Row className="user-profile-section-container">
           <Col sm={3} className="user-profile-image-container">
             <svg
@@ -111,8 +139,75 @@ const UserProfile = () => {
                 </Form.Group>
               </Row>
               <div className="user-profile-form-buttons-container">
-                <Button variant="primary" type="text" onClick={() => setShowModal(true)}>
+                <Button variant="primary" type="text" onClick={handleEditingChange}>
                   Edit Avatar
+                </Button>
+              </div>
+            </Form>
+          </Col>
+        </Row>
+      ) : (
+        <Row className="user-profile-section-container">
+          <Col sm={3} className="user-profile-image-container">
+            {user.avatarURL && (
+              <div className="user-profile-image-subcontainer" style={{ backgroundImage: `url(${user.avatarURL})` }}>
+                {/* {user.avatarURL && <img src={user.avatarURL} alt={`${user.name}'s profile picture`}></img>} */}
+              </div>
+            )}
+          </Col>
+          <Col sm={9} className="user-profile-form-container">
+            <Form onSubmit={handleUpdatedProfileSubmit}>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="name">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Insert your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="surname">
+                  <Form.Label>Surname</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Insert your surname"
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                  />
+                </Form.Group>
+              </Row>
+
+              <Row>
+                <Form.Group controlId="username">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Insert your username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </Form.Group>
+              </Row>
+              <Row>
+                <Form.Group controlId="email" aria-disabled>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Insert your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Form.Group>
+              </Row>
+
+              <div className="user-profile-form-buttons-container-edit">
+                <Button variant="outline-primary" type="button" onClick={handleCloseEditingChange}>
+                  Back
+                </Button>
+                <Button variant="primary" type="submit">
+                  Save changes
                 </Button>
               </div>
             </Form>
@@ -125,7 +220,7 @@ const UserProfile = () => {
           <Modal.Title>Upload Avatar</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleNewAvatarSubmit}>
             <Form.Group controlId="formFile">
               <Form.Label>Select an image</Form.Label>
               <Form.Control type="file" onChange={handleFileChange} />
@@ -144,7 +239,7 @@ const UserProfile = () => {
           className="text-center position-fixed w-100"
           style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1050 }}
         >
-          Image successfully uploaded!
+          Profile successfully uploaded!
         </Alert>
       )}
     </Container>

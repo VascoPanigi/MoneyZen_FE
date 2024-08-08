@@ -43,6 +43,12 @@
           margin-block-start: 1rem;
         }
       }
+
+      .user-profile-form-buttons-container-edit {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
     }
   }
 }

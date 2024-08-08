@@ -81,7 +81,7 @@ export const fetchUserInfo = (token) => {
 };
 
 // Patch user profile picture
-export const patchUserAvatar = (file, token) => {
+export const patchUserAvatarAction = (file, token) => {
   return async (dispatch) => {
     try {
       const formData = new FormData();
@@ -101,10 +101,10 @@ export const patchUserAvatar = (file, token) => {
 };
 
 // Update user profile
-export const modifyUserProfile = (token, userObject) => {
+export const modifyUserProfileAction = (token, userObject) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put("http://localhost:3001/users/me/", userObject, {
+      const response = await axios.put("http://localhost:3001/users/me", userObject, {
         headers: {
           Authorization: "Bearer " + token,
         },
