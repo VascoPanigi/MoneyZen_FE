@@ -131,11 +131,21 @@ a.nav-link.active {
       align-items: center;
       margin-block-start: auto;
       margin-block-end: 3rem;
-      .users-avatar {
+
+      .users-avatar-profile-photo {
         border-radius: 50%;
         height: 75px;
         width: 75px;
+
+        background-size: 110px;
+        background-repeat: no-repeat;
+        background-position: center;
       }
+      // .users-avatar {
+      //   border-radius: 50%;
+      //   height: 75px;
+      //   width: 75px;
+      // }
     }
   }
 }

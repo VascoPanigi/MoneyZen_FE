@@ -67,12 +67,11 @@ const MyNavbar = () => {
             <div className="sidebar-footer">
               <div className="users-avatar-container">
                 {users_avatar && (
-                  <img
-                    className="users-avatar"
-                    src={users_avatar}
-                    alt="logged user avatar"
+                  <div
+                    className="users-avatar-profile-photo"
+                    style={{ backgroundImage: `url(${users_avatar})` }}
                     onClick={handleClickOnUserAvatar}
-                  ></img>
+                  ></div>
                 )}
               </div>
             </div>
