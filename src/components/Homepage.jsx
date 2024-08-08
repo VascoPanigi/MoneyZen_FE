@@ -399,7 +399,9 @@ const Homepage = () => {
               </Row>
               <Row>
                 <Col>
+                  {/* {selectedWallet && selectedWalletTransactions && ( */}
                   <LargeChart />
+                  {/* )} */}
                 </Col>
               </Row>
               {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}

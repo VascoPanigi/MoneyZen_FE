@@ -37,7 +37,7 @@ $themes: (
 );
 
 // Default theme - to change dinamically later with a switch inside the app
-$theme: map-get($themes, dark);
+$theme: map-get($themes, light);
 
 // Override Bootstrap variables
 $body-color: map-get($theme, text);
