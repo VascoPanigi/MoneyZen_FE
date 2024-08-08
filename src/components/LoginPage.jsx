@@ -6,7 +6,7 @@ import { LoginUserAction, registerUserAction } from "../redux/actions";
 import NotLoggedUserSidebar from "./NotLoggedUserSidebar";
 
 const LoginPage = () => {
-  const [isRegistering, setIsRegistering]
+  const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
