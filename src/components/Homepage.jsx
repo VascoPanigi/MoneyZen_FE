@@ -192,6 +192,7 @@ const Homepage = () => {
     const walletId = wallets[selectedWalletIndex].id;
     dispatch(addNewTransactionAction(transactionObject, walletId, token));
     dispatch(fetchUserWallets(token));
+    setShowNewTransactionModal(false);
   };
 
   // Delete an existing transaction
@@ -407,7 +408,12 @@ const Homepage = () => {
               {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}
             </Col>
             <Col lg={{ span: 5, order: 2 }}>
-              <h3>Last transactions</h3>
+              <Container className="last-transactionms-title-container">
+                <h3>Last transactions</h3>
+                <Button variant="primary" onClick={handleShowNewTransaction} className="new-transaction-button">
+                  New Transaction
+                </Button>
+              </Container>
 
               <Container className="last-transactionms-section-container">
                 {/* <Row className="last-transactionms-section-title-container">
@@ -441,40 +447,15 @@ const Homepage = () => {
           </>
         )}
       </Row>
-      {/* <Row>
-        {selectedWallet && (
-          <Col className="new-transaction-container">
-            <h2>Create a new transaction</h2>
-            <h3>{selectedWallet.name}</h3>
-            <Button variant="primary" onClick={handleShowNewTransaction}>
-              New Transaction
-            </Button>
-            <TransactionModal
-              show={showNewTransactionModal}
-              handleClose={handleCloseNewTransaction}
-              handleSubmit={handleNewTransactionSubmit}
-              categories={transactionCategories}
-              incomeOptions={incomeOptions}
-              outcomeOptions={outcomeOptions}
-            />
-            <p>Balance: {selectedWallet.balance}:-</p>
-            <ListGroup>
-              {selectedWallet.transactions.length > 0 ? (
-                selectedWallet.transactions.map((transaction) => (
-                  <SingleExpense
-                    key={transaction.id}
-                    transaction={transaction}
-                    // onModify={() => handleModify(transaction.id)}
-                    handleDelete={() => handleDeleteTransaction(transaction.id)}
-                  />
-                ))
-              ) : (
-                <h3>There are no transactions yet!</h3>
-              )}
-            </ListGroup>
-          </Col>
-        )}
-      </Row> */}
+
+      <TransactionModal
+        show={showNewTransactionModal}
+        handleClose={handleCloseNewTransaction}
+        handleSubmit={handleNewTransactionSubmit}
+        categories={transactionCategories}
+        incomeOptions={incomeOptions}
+        outcomeOptions={outcomeOptions}
+      />
     </Container>
   );
 };

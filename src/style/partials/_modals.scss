@@ -1,8 +1,5 @@
 .modal-content {
-  //   background-color: rgba($secondary, 0.6);
-  // background-color: #282828;
-  background-color: #151b25;
-  // border: 1px solid $primary;
+  // background-color: #151b25;
   .modal-header {
     border: 0px;
   }
@@ -28,16 +25,24 @@
   }
 }
 
-.form-control,
-.form-select,
-.form-check-input {
-  background-color: #2b374b;
-  &:focus {
-    background-color: #4b5b77;
-  }
-  &:disabled {
-    background-color: #303742;
-    color: white;
-    cursor: not-allowed;
+// .form-control,
+// .form-select,
+// .form-check-input {
+//   background-color: #2b374b;
+//   &:focus {
+//     background-color: #4b5b77;
+//   }
+//   &:disabled {
+//     background-color: #303742;
+//     color: white;
+//     cursor: not-allowed;
+//   }
+// }
+
+.new-transaction-modal-container {
+  .modal-dialog {
+    .modal-content {
+      padding: 2rem;
+    }
   }
 }

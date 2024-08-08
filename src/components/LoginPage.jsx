@@ -6,6 +6,7 @@ import { LoginUserAction, registerUserAction } from "../redux/actions";
 import NotLoggedUserSidebar from "./NotLoggedUserSidebar";
 
 const LoginPage = () => {
+  const [isRegistering, setIsRegistering]
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -40,7 +41,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <NotLoggedUserSidebar />
+      {/* <NotLoggedUserSidebar /> */}
       <Container fluid className="login-page-container">
         <Row>
           <Col sm={5} className="login-container">

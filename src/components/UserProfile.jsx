@@ -140,7 +140,7 @@ const UserProfile = () => {
               </Row>
               <div className="user-profile-form-buttons-container">
                 <Button variant="primary" type="text" onClick={handleEditingChange}>
-                  Edit Avatar
+                  Edit
                 </Button>
               </div>
             </Form>

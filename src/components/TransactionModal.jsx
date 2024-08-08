@@ -26,7 +26,7 @@ const TransactionModal = ({ show, handleClose, handleSubmit, categories, incomeO
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal show={show} onHide={handleClose} centered className="new-transaction-modal-container">
       <Modal.Header closeButton>
         <Modal.Title>New Transaction</Modal.Title>
       </Modal.Header>
