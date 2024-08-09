@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LoginUserAction, registerUserAction } from "../redux/actions";
@@ -46,7 +46,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <div className="logo-container">
+      <div className="logo-container-login-page">
         <svg id="logo-81" width="72" height="40" viewBox="0 0 72 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             className="ccustom logo"
@@ -64,77 +64,116 @@ const LoginPage = () => {
           <Col className="login-page-form-container">
             {!isRegistering ? (
               <Col sm={10} className="form-container">
-                <h1>Welcome back</h1>
-                <p>Please enter your details</p>
-                <Form onSubmit={handleLoginSubmit}>
-                  <Form.Group className="mb-3" controlId="loginEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+                <div className="login-page-greetings-container">
+                  <h1>Welcome </h1>
+                  <p>Please enter your details</p>
+                </div>
+                <Form onSubmit={handleLoginSubmit} className="login-page-form">
+                  <FloatingLabel controlId="loginEmail" label="Email address" className="mb-3">
+                    <Form.Control
+                      type="email"
+                      placeholder="name@example.com"
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
                     <Form.Text className="text-muted">We&apos;ll never share your email with anyone else.</Form.Text>
-                  </Form.Group>
-
-                  <Form.Group className="mb-3" controlId="loginPassword">
-                    <Form.Label>Password</Form.Label>
+                  </FloatingLabel>
+                  <FloatingLabel controlId="loginPassword" label="Password">
                     <Form.Control
                       type="password"
                       placeholder="Password"
                       onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
-                  </Form.Group>
+                  </FloatingLabel>
                   <Form.Group className="mb-3" controlId="loginCheckbox">
                     <Form.Check type="checkbox" label="Check me out" />
                   </Form.Group>
-                  <Button variant="primary" type="submit">
-                    Submit
-                  </Button>
+                  <div className="login-page-button-container">
+                    <Button type="submit">Submit</Button>
+                  </div>
                 </Form>
-                <p onClick={handleClickOnRegister}>Not a member? Sign up now!</p>
+                <div className="login-page-form-switch-container">
+                  <p>
+                    Not a member?{" "}
+                    <span className="login-page-clickable-span" onClick={handleClickOnRegister}>
+                      Sign up now!
+                    </span>
+                  </p>
+                </div>
               </Col>
             ) : (
               <Col sm={10} className="form-container">
-                <Form onSubmit={handleRegisterSubmit}>
-                  <Form.Group className="mb-3" controlId="userName">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control type="name" placeholder="Enter name" onChange={(e) => setName(e.target.value)} />
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="userSurname">
-                    <Form.Label>Surname</Form.Label>
+                <div className="login-page-greetings-container">
+                  <h1>Welcome!</h1>
+                  <p>Please enter your details and register</p>
+                </div>
+                <Form onSubmit={handleRegisterSubmit} className="login-page-form">
+                  <Row>
+                    <Col className="login-page-formatted-input-container">
+                      <FloatingLabel controlId="registerName" label="Name" className="mb-3">
+                        <Form.Control
+                          type="text"
+                          placeholder="John"
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                        />
+                      </FloatingLabel>
+                    </Col>
+                    <Col className="login-page-formatted-input-container">
+                      <FloatingLabel controlId="registerSurname" label="Surname" className="mb-3">
+                        <Form.Control
+                          type="text"
+                          placeholder="Smith"
+                          onChange={(e) => setSurname(e.target.value)}
+                          required
+                        />
+                      </FloatingLabel>
+                    </Col>
+                  </Row>
+                  <FloatingLabel controlId="registerUsername" label="Username" className="mb-3">
                     <Form.Control
-                      type="surname"
-                      placeholder="Enter surname"
-                      onChange={(e) => setSurname(e.target.value)}
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="userUsername">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                      type="username"
-                      placeholder="Enter username"
+                      type="text"
+                      placeholder="Smith"
                       onChange={(e) => setUsername(e.target.value)}
+                      required
                     />
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="userEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
-                    <Form.Text className="text-muted">We&apos;ll never share your email with anyone else.</Form.Text>
-                  </Form.Group>
+                  </FloatingLabel>
 
-                  <Form.Group className="mb-3" controlId="userPassword">
-                    <Form.Label>Password</Form.Label>
+                  <FloatingLabel controlId="registerEmail" label="Email address" className="mb-3">
+                    <Form.Control
+                      type="email"
+                      placeholder="name@example.com"
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                    <Form.Text className="text-muted">We&apos;ll never share your email with anyone else.</Form.Text>
+                  </FloatingLabel>
+                  <FloatingLabel controlId="registerPassword" label="Password">
                     <Form.Control
                       type="password"
                       placeholder="Password"
                       onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
-                  </Form.Group>
+                  </FloatingLabel>
                   <Form.Group className="mb-3" controlId="registerCheckbox">
                     <Form.Check type="checkbox" label="Check me out" />
                   </Form.Group>
-                  <Button variant="primary" type="submit">
-                    Submit
-                  </Button>
+                  <div className="login-page-button-container">
+                    <Button variant="primary" type="submit">
+                      Submit
+                    </Button>
+                  </div>
                 </Form>
-                <p onClick={handleClickOnRegister}>Are you already a member? Log in here!</p>
+                <div className="login-page-form-switch-container">
+                  <p>
+                    Are you already a member?{" "}
+                    <span className="login-page-clickable-span" onClick={handleClickOnRegister}>
+                      Log in here!{" "}
+                    </span>
+                  </p>
+                </div>
               </Col>
             )}
           </Col>
