@@ -16,7 +16,6 @@ const NotLoggedUserSidebar = () => {
               fill="white"
             ></path>
           </svg>
-          {/* <img src={white_logo} alt="vasco panigi's logo" className="logo" /> */}
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
