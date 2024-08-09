@@ -6,7 +6,6 @@ import {
   addNewSharedWalletAction,
   addNewTransactionAction,
   addUserToSharedWallet,
-  deleteTransactionAction,
   deleteWalletAction,
   fetchAllCategories,
   fetchSpecificWalletTransactionsActions,
@@ -17,10 +16,8 @@ import {
   updateWalletAction,
 } from "../redux/actions";
 import SingleWallet from "./SingleWallet";
-import SingleExpense from "./SingleExpense";
 import TransactionModal from "./TransactionModal";
 import NewWalletModal from "./NewWalletModal";
-import Slider from "react-slick";
 import BalancePreview from "./BalancePreview";
 import { LargeChart } from "./LargeChart";
 import LastTransactionsSection from "./LastTransactionsSection";
@@ -195,11 +192,6 @@ const Homepage = () => {
     setShowNewTransactionModal(false);
   };
 
-  // Delete an existing transaction
-  const handleDeleteTransaction = (transactionId) => {
-    dispatch(deleteTransactionAction(transactionId, selectedWallet.id, token));
-  };
-
   const handleEditWalletClick = (index) => {
     setEditWalletIndex(index);
     setEditWalletName(wallets[index].name);
@@ -270,47 +262,141 @@ const Homepage = () => {
             <h1 className="homepage-greeting">
               Hello, <span className="homepage-greeting-name">{user_info.name}</span>!
             </h1>
-            <p className="homepage-greating-paragraph">Choose a wallet and start managing your expenses</p>
+            {wallets.length > 0 ? (
+              <p className="homepage-greating-paragraph">Choose a wallet and start managing your expenses</p>
+            ) : (
+              <p className="homepage-greating-paragraph">Welcome in MoneyZen</p>
+            )}
           </>
         )}
       </Row>
-      <Row className="wallets-preview-container">
-        <h5>Your wallets</h5>
-        <div className="wallets-scroll-container">
-          {wallets.length > 0 &&
-            wallets.map((wallet, index) => (
-              <SingleWallet
-                key={wallet.id}
-                wallet={wallet}
-                isSelected={index === selectedWalletIndex}
-                onSelect={() => handleWalletSelection(index)}
-                onEdit={() => handleEditWalletClick(index)}
-              />
-            ))}
-          {/* <Col className="wallet-preview-add" onClick={handleShowNewWalletModal}> */}
-          <Button variant="primary" onClick={handleShowNewWalletModal} className="wallet-preview-button-add">
-            <Container className="wallet-plus-container">
+      {wallets.length > 0 ? (
+        <>
+          <Row className="wallets-preview-container">
+            <h5>Your wallets</h5>
+            <div className="wallets-scroll-container">
+              {wallets.length > 0 &&
+                wallets.map((wallet, index) => (
+                  <SingleWallet
+                    key={wallet.id}
+                    wallet={wallet}
+                    isSelected={index === selectedWalletIndex}
+                    onSelect={() => handleWalletSelection(index)}
+                    onEdit={() => handleEditWalletClick(index)}
+                  />
+                ))}
+              <Button variant="primary" onClick={handleShowNewWalletModal} className="wallet-preview-button-add">
+                <Container className="wallet-plus-container">
+                  <i className="bi bi-plus-lg"></i>
+                  <p className="wallet-plus-text">Add wallet</p>
+                </Container>
+              </Button>
+            </div>
+          </Row>
+
+          <Row className="homepage-body-container">
+            {selectedWallet && (
+              <>
+                <Col lg={{ span: 7, order: 1 }}>
+                  <Row>
+                    <h3>Current month statistics</h3>
+                    <Col>
+                      <BalancePreview
+                        TransactionType={"Income"}
+                        balance={currentIncome}
+                        balanceChange={incomeChange}
+                        balanceVariation={totalBalanceChangeLastMonthInCurrency}
+                      />
+                    </Col>
+                    <Col>
+                      <BalancePreview
+                        TransactionType={"Expense"}
+                        balance={currentOutcome}
+                        balanceChange={outcomeChange}
+                        balanceVariation={totalBalanceChangeLastMonthInCurrency}
+                      />
+                    </Col>
+                    <Col>
+                      <BalancePreview
+                        TransactionType={"Total"}
+                        balance={selectedWallet.balance}
+                        balanceChange={0}
+                        balanceVariation={totalBalanceChangeLastMonthInCurrency}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <LargeChart />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col lg={{ span: 5, order: 2 }}>
+                  <Container className="last-transactionms-title-container">
+                    <h3>Last transactions</h3>
+                    <Button variant="primary" onClick={handleShowNewTransaction} className="new-transaction-button">
+                      New Transaction
+                    </Button>
+                  </Container>
+
+                  <Container className="last-transactionms-section-container">
+                    <Card className="last-transactionms-section-container ">
+                      <Row className="last-transactionms-section-single-transaction-legenda-container">
+                        <Col>Name</Col>
+                        <Col>Amount</Col>
+                        <Col>Date</Col>
+                        <Col>Category</Col>
+                      </Row>
+                      {selectedWalletTransactions && selectedWalletTransactions.length > 0 ? (
+                        selectedWalletTransactions
+                          .slice(0, 5)
+                          .map((transaction) => (
+                            <LastTransactionsSection transaction={transaction} key={transaction.id} />
+                          ))
+                      ) : (
+                        <div className="d-flex align-items-center justify-content-center my-2">
+                          <p>No transactions in your history</p>
+                        </div>
+                      )}
+                      {selectedWalletTransactions && selectedWalletTransactions.length > 0 && (
+                        <Row
+                          className="last-transactionms-section-footer-redirect "
+                          onClick={handleCLickOnTransactionPage}
+                        >
+                          <p>Click here to see all your transactions</p>
+                        </Row>
+                      )}
+                    </Card>
+                  </Container>
+                </Col>
+              </>
+            )}
+          </Row>
+        </>
+      ) : (
+        <Container className="homepage-no-wallets-container">
+          <h1>Create your first wallet!</h1>
+          <Button
+            variant="primary"
+            onClick={handleShowNewWalletModal}
+            className="wallet-preview-button-add-homepage-no-wallets"
+          >
+            <Container className="wallet-plus-container ">
               <i className="bi bi-plus-lg"></i>
               <p className="wallet-plus-text">Add wallet</p>
             </Container>
           </Button>
-          <NewWalletModal
-            show={showNewWalletCreationModal}
-            handleClose={handleCloseNewWalletModal}
-            handleSubmit={handleNewWalletCreation}
-            showNamingOptionNewWallet={showNamingOptionNewWallet}
-            isChoosingSharedWalletOption={isChoosingSharedWalletOption}
-            handlePersonal={handleClickOnNewPersonalWalletModal}
-            handleShared={handleClickOnNewSharedWalletModal}
-            handleCreateNewSharedWallet={handleCreateNewSharedWallet}
-            handleJoinSharedWallet={handleJoinSharedWallet}
-            setName={setName}
-            setWalletId={setWalletId}
-            joinSharedWallet={joinSharedWallet}
-          />
-          {/* </Col> */}
-        </div>
-      </Row>
+        </Container>
+      )}
+      <TransactionModal
+        show={showNewTransactionModal}
+        handleClose={handleCloseNewTransaction}
+        handleSubmit={handleNewTransactionSubmit}
+        categories={transactionCategories}
+        incomeOptions={incomeOptions}
+        outcomeOptions={outcomeOptions}
+      />
+
       <Modal show={showEditWalletModal} onHide={handleCloseEditWalletModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Edit Wallet</Modal.Title>
@@ -337,124 +423,20 @@ const Homepage = () => {
           </Modal.Footer>
         </Form>
       </Modal>
-      {/* </Slider>
-        </div> */}
-      {/* <Col>
-          <Button variant="primary" onClick={handleShow}>
-            +
-          </Button>
-          <NewWalletModal
-            show={show}
-            handleClose={handleClose}
-            handleSubmit={handleNewWalletCreation}
-            showNamingOptionNewWallet={showNamingOptionNewWallet}
-            handlePersonal={handleClickOnNewPersonalWalletModal}
-            handleShared={handleClickOnNewSharedWalletModal}
-            setName={setName}
-          />
-        </Col> */}
-      {/* </Row>
-      <h2>Create a new transaction</h2>
-      <h3>{selectedWallet.name}</h3>
-      <Button variant="primary" onClick={handleShowNewTransaction}>
-        New Transaction
-      </Button>
-      <TransactionModal
-        show={showNewTransactionModal}
-        handleClose={handleCloseNewTransaction}
-        handleSubmit={handleNewTransactionSubmit}
-        categories={transactionCategories}
-        incomeOptions={incomeOptions}
-        outcomeOptions={outcomeOptions}
-      /> */}
-      <Row className="homepage-body-container">
-        {selectedWallet && (
-          <>
-            <Col lg={{ span: 7, order: 1 }}>
-              <Row>
-                <h3>Current month statistics</h3>
-                <Col>
-                  <BalancePreview
-                    TransactionType={"Income"}
-                    balance={currentIncome}
-                    balanceChange={incomeChange}
-                    balanceVariation={totalBalanceChangeLastMonthInCurrency}
-                  />
-                </Col>
-                <Col>
-                  <BalancePreview
-                    TransactionType={"Expense"}
-                    balance={currentOutcome}
-                    balanceChange={outcomeChange}
-                    balanceVariation={totalBalanceChangeLastMonthInCurrency}
-                  />
-                </Col>
-                <Col>
-                  <BalancePreview
-                    TransactionType={"Total"}
-                    balance={selectedWallet.balance}
-                    balanceChange={0}
-                    balanceVariation={totalBalanceChangeLastMonthInCurrency}
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  {/* {selectedWallet && selectedWalletTransactions && ( */}
-                  <LargeChart />
-                  {/* )} */}
-                </Col>
-              </Row>
-              {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}
-            </Col>
-            <Col lg={{ span: 5, order: 2 }}>
-              <Container className="last-transactionms-title-container">
-                <h3>Last transactions</h3>
-                <Button variant="primary" onClick={handleShowNewTransaction} className="new-transaction-button">
-                  New Transaction
-                </Button>
-              </Container>
 
-              <Container className="last-transactionms-section-container">
-                {/* <Row className="last-transactionms-section-title-container">
-                  <h4>Last transactions</h4>
-                  </Row> */}
-
-                <Card className="last-transactionms-section-container ">
-                  <Row className="last-transactionms-section-single-transaction-legenda-container">
-                    <Col>Name</Col>
-                    <Col>Amount</Col>
-                    <Col>Date</Col>
-                    <Col>Category</Col>
-                  </Row>
-                  {selectedWalletTransactions && selectedWalletTransactions.length > 0 ? (
-                    selectedWalletTransactions
-                      .slice(0, 5)
-                      .map((transaction) => <LastTransactionsSection transaction={transaction} key={transaction.id} />)
-                  ) : (
-                    <p>No transactions in your history</p>
-                  )}
-                  {/* <LastTransactionsSection /> */}
-                  {selectedWalletTransactions && selectedWalletTransactions.length > 0 && (
-                    <Row className="last-transactionms-section-footer-redirect " onClick={handleCLickOnTransactionPage}>
-                      <p>Click here to see all your transactions</p>
-                    </Row>
-                  )}
-                </Card>
-              </Container>
-              {/* <BalancePreview TransactionType={"income"} balance={selectedWallet.balance} /> */}
-            </Col>
-          </>
-        )}
-      </Row>
-
-      <TransactionModal
-        show={showNewTransactionModal}
-        handleClose={handleCloseNewTransaction}
-        handleSubmit={handleNewTransactionSubmit}
-        categories={transactionCategories}
-        incomeOptions={incomeOptions}
-        outcomeOptions={outcomeOptions}
+      <NewWalletModal
+        show={showNewWalletCreationModal}
+        handleClose={handleCloseNewWalletModal}
+        handleSubmit={handleNewWalletCreation}
+        showNamingOptionNewWallet={showNamingOptionNewWallet}
+        isChoosingSharedWalletOption={isChoosingSharedWalletOption}
+        handlePersonal={handleClickOnNewPersonalWalletModal}
+        handleShared={handleClickOnNewSharedWalletModal}
+        handleCreateNewSharedWallet={handleCreateNewSharedWallet}
+        handleJoinSharedWallet={handleJoinSharedWallet}
+        setName={setName}
+        setWalletId={setWalletId}
+        joinSharedWallet={joinSharedWallet}
       />
     </Container>
   );

@@ -3,7 +3,6 @@ import { Button, Col, Container, FloatingLabel, Form, Row } from "react-bootstra
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LoginUserAction, registerUserAction } from "../redux/actions";
-import NotLoggedUserSidebar from "./NotLoggedUserSidebar";
 import photo from "../assets/login_photo_2.jpg";
 
 const LoginPage = () => {

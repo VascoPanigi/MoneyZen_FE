@@ -113,7 +113,8 @@ a.nav-link.active {
         margin-block-end: 2rem;
         border-radius: 20px;
         &:hover {
-          background-color: #122721;
+          // background-color: #122721;
+          background-color: rgba($body-color, 0.5);
           cursor: pointer;
         }
         .sidebar-icons {

@@ -206,3 +206,25 @@
 // .card-footer {
 //   background-color: transparent !important;
 // }
+
+//-------------------------------HOMEPAGE NO WALLET PREVIEW-----------------------
+
+.homepage-no-wallets-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.wallet-preview-button-add-homepage-no-wallets {
+  height: 100px;
+  margin-block-start: 10rem;
+  border: 1px dashed #14715d;
+  background-color: transparent;
+  opacity: 0.8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+}
