@@ -16,6 +16,8 @@ export const FETCH_FILTERED_TRANSACTIONS_FAILURE = "FETCH_FILTERED_TRANSACTIONS_
 
 //----------------------------------------------- ID SELECTION OPERATIONS ------------------------------------------------------------
 
+const baseURL = "http://localhost:3001/";
+
 // Store selected wallet id in the store
 export const setSelectedWalletIdAction = (walletId) => {
   return {
@@ -37,7 +39,7 @@ export const getTransactionId = (value) => {
 export const LoginUserAction = (loginObject, navigate) => {
   return async () => {
     try {
-      const response = await axios.post("http://localhost:3001/auth/login", loginObject);
+      const response = await axios.post(baseURL + "auth/login", loginObject);
       // console.log("Token:", response.data.accessToken);
       localStorage.setItem("Bearer", response.data.accessToken);
       // console.log("Token set in localStorage:", localStorage.getItem("Bearer"));
@@ -53,7 +55,7 @@ export const LoginUserAction = (loginObject, navigate) => {
 export const registerUserAction = (registerObject) => {
   return async () => {
     try {
-      const response = await axios.post(`http://localhost:3001/auth/register`, registerObject);
+      const response = await axios.post(baseURL + "auth/register", registerObject);
       console.log(response.data);
     } catch (err) {
       console.log(err.message);
@@ -66,7 +68,7 @@ export const registerUserAction = (registerObject) => {
 export const fetchUserInfo = (token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get("http://localhost:3001/users/me", {
+      const response = await axios.get(baseURL + "users/me", {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch({
@@ -86,7 +88,7 @@ export const patchUserAvatarAction = (file, token) => {
     try {
       const formData = new FormData();
       formData.append("avatar", file);
-      const response = await axios.patch("http://localhost:3001/users/me/avatar", formData, {
+      const response = await axios.patch(baseURL + "users/me/avatar", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
@@ -104,7 +106,7 @@ export const patchUserAvatarAction = (file, token) => {
 export const modifyUserProfileAction = (token, userObject) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put("http://localhost:3001/users/me", userObject, {
+      const response = await axios.put(baseURL + "users/me", userObject, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -123,7 +125,7 @@ export const modifyUserProfileAction = (token, userObject) => {
 export const fetchUserWallets = (token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get("http://localhost:3001/wallets/my-wallets", {
+      const response = await axios.get(baseURL + "wallets/my-wallets", {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch({
@@ -141,7 +143,7 @@ export const fetchUserWallets = (token) => {
 export const addNewPersonalWalletAction = (registerObject, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post("http://localhost:3001/wallets/personal-wallets", registerObject, {
+      const response = await axios.post(baseURL + "wallets/personal-wallets", registerObject, {
         headers: { Authorization: "Bearer " + token },
       });
       console.log(response.data);
@@ -156,7 +158,7 @@ export const addNewPersonalWalletAction = (registerObject, token) => {
 export const addNewSharedWalletAction = (registerObject, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post("http://localhost:3001/wallets/shared-wallets", registerObject, {
+      const response = await axios.post(baseURL + "wallets/shared-wallets", registerObject, {
         headers: { Authorization: "Bearer " + token },
       });
       console.log(response.data);
@@ -171,7 +173,7 @@ export const addNewSharedWalletAction = (registerObject, token) => {
 export const fetchUserSpecificWalletAction = (walletId, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get("http://localhost:3001/wallets/" + walletId, {
+      const response = await axios.get(baseURL + "wallets/" + walletId, {
         headers: { Authorization: "Bearer " + token },
       });
       console.log(response.data);
@@ -190,7 +192,7 @@ export const fetchUserSpecificWalletAction = (walletId, token) => {
 export const updateWalletAction = (walletObject, walletId, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.patch("http://localhost:3001/wallets/" + walletId + "/name", walletObject, {
+      const response = await axios.patch(baseURL + "wallets/" + walletId + "/name", walletObject, {
         headers: { Authorization: "Bearer " + token },
       });
       console.log(response.data);
@@ -205,7 +207,7 @@ export const updateWalletAction = (walletObject, walletId, token) => {
 export const deleteWalletAction = (walletId, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete("http://localhost:3001/wallets/" + walletId, {
+      const response = await axios.delete(baseURL + "wallets/" + walletId, {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch(fetchUserWallets(token));
@@ -220,7 +222,7 @@ export const deleteWalletAction = (walletId, token) => {
 export const addUserToSharedWallet = (token, walletId) => {
   return async (dispatch) => {
     try {
-      const response = await axios.patch("http://localhost:3001/wallets/shared-wallets/users", walletId, {
+      const response = await axios.patch(baseURL + "wallets/shared-wallets/users", walletId, {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch(fetchUserWallets(token));
@@ -244,7 +246,8 @@ export const fetchSpecificWalletTransactionsActions = (
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/transactions/wallet/" +
+        baseURL +
+          "transactions/wallet/" +
           walletId +
           "?pageNumber=" +
           pageNum +
@@ -279,7 +282,7 @@ export const fetchSpecificWalletTransactionsActions = (
 export const fetchSpecificWalletTransactionsByNameActions = (walletId, token, name) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get("http://localhost:3001/transactions/wallet/" + walletId + "?name=" + name, {
+      const response = await axios.get(baseURL + "transactions/wallet/" + walletId + "?name=" + name, {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch({
@@ -315,7 +318,7 @@ export const fetchFilteredTransactions = (walletId, token, filters) => {
   return async (dispatch) => {
     dispatch(fetchFilteredTransactionsRequest(walletId, token, filters));
     try {
-      const response = await axios.get(`http://localhost:3001/transactions/wallet/${walletId}`, {
+      const response = await axios.get(baseURL + `transactions/wallet/${walletId}`, {
         params: filters,
         headers: { Authorization: "Bearer " + token },
       });
@@ -330,7 +333,7 @@ export const fetchFilteredTransactions = (walletId, token, filters) => {
 export const addNewTransactionAction = (transactionObject, walletId, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post("http://localhost:3001/transactions/" + walletId, transactionObject, {
+      const response = await axios.post(baseURL + "transactions/" + walletId, transactionObject, {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch(fetchUserSpecificWalletAction(walletId, token));
@@ -345,7 +348,7 @@ export const addNewTransactionAction = (transactionObject, walletId, token) => {
 export const deleteTransactionAction = (transactionId, walletId, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete("http://localhost:3001/transactions/" + transactionId, {
+      const response = await axios.delete(baseURL + "transactions/" + transactionId, {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch(fetchSpecificWalletTransactionsActions(walletId, token));
@@ -360,7 +363,7 @@ export const deleteTransactionAction = (transactionId, walletId, token) => {
 export const modifyTransactionAction = (transactionId, token, walletId, transactionObject) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put("http://localhost:3001/transactions/" + transactionId, transactionObject, {
+      const response = await axios.put(baseURL + "transactions/" + transactionId, transactionObject, {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch(fetchSpecificWalletTransactionsActions(walletId, token));
@@ -376,7 +379,7 @@ export const modifyTransactionAction = (transactionId, token, walletId, transact
 export const fetchAllCategories = (token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get("http://localhost:3001/categories", {
+      const response = await axios.get(baseURL + "categories", {
         headers: { Authorization: "Bearer " + token },
       });
       dispatch({
