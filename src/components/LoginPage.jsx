@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LoginUserAction, registerUserAction } from "../redux/actions";
 import NotLoggedUserSidebar from "./NotLoggedUserSidebar";
-import photo from "../assets/login_photo.jpg";
+import photo from "../assets/login_photo_2.jpg";
 
 const LoginPage = () => {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -63,7 +63,7 @@ const LoginPage = () => {
         <Row className="login-page-main-row">
           <Col className="login-page-form-container">
             {!isRegistering ? (
-              <Col sm={5} className="form-container">
+              <Col sm={10} className="form-container">
                 <h1>Welcome back</h1>
                 <p>Please enter your details</p>
                 <Form onSubmit={handleLoginSubmit}>
@@ -91,7 +91,7 @@ const LoginPage = () => {
                 <p onClick={handleClickOnRegister}>Not a member? Sign up now!</p>
               </Col>
             ) : (
-              <Col sm={5} className="form-container">
+              <Col sm={10} className="form-container">
                 <Form onSubmit={handleRegisterSubmit}>
                   <Form.Group className="mb-3" controlId="userName">
                     <Form.Label>Name</Form.Label>
@@ -138,8 +138,17 @@ const LoginPage = () => {
               </Col>
             )}
           </Col>
-          <Col className="login-page-photo-container">
-            <img className="login-page-photo" src={photo} alt="A person with a yellow jacket that faces a waterfall" />
+          <Col className="login-page-photo-section-container">
+            <div className="login-page-photo-container">
+              <img
+                className="login-page-photo"
+                src={photo}
+                alt="A person with a yellow jacket that faces a waterfall"
+              />
+              <div className="login-page-photo-text-container">
+                <h3>Your journey to financial freedom starts here</h3>
+              </div>
+            </div>
           </Col>
         </Row>
       </Container>

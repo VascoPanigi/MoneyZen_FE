@@ -23,17 +23,43 @@
     }
   }
 
-  .login-page-photo-container {
+  .login-page-photo-section-container {
     display: flex;
     justify-content: center;
     align-items: center;
     max-height: 90vh;
     max-width: 90%;
-    .login-page-photo {
-      border-radius: 20px;
-      width: 85%;
+    .login-page-photo-container {
+      aspect-ratio: 2 / 3;
       height: 100%;
+      max-width: 930px;
+      width: 100%;
+      border-radius: 20px;
+      .login-page-photo {
+        border-radius: 20px;
+        width: 100%;
+        height: 100%;
+        // z-index: -1;
+      }
+      .login-page-photo-text-container {
+        position: relative;
+        bottom: 200px;
+        left: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        h3 {
+          color: white;
+          text-align: center;
+          font-size: 2.5rem;
+          text-shadow: 1px 3px black;
+        }
+      }
     }
+    // .login-page-photo-text-container {
+    //   // z-index: 9995;
+    // }
   }
 }
 
