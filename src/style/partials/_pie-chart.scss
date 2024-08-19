@@ -1,0 +1,12 @@
+.card-content-pie-chart {
+  height: 300px;
+  .pie-chart-container {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.pie-chart-outer-container {
+  border: 1px solid $body-color !important;
+  border-radius: var(--bs-border-radius) !important;
+}

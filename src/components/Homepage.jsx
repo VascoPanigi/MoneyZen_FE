@@ -380,7 +380,7 @@ const Homepage = () => {
             )}
           </Row>
 
-          {selectedWalletTransactions.length > 0 ? (
+          {selectedWallet && selectedWalletTransactions && selectedWalletTransactions.length > 0 ? (
             <>
               <Row>
                 <LargeChart />
