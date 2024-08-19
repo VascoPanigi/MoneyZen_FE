@@ -256,6 +256,8 @@ const Homepage = () => {
     navigate("/transactions");
   };
 
+  // ----------------------------------------------------CHART LOGIC--------------------------------------------------------------
+
   return (
     <Container className="homepage-container margin-right-navbar-open">
       <Row className="homepage-greeting-container">
@@ -328,13 +330,13 @@ const Homepage = () => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col>
-                      <PieChartHome />
+                    <Col sm={12} lg={6}>
+                      <PieChartHome transactions={selectedWalletTransactions} type={"INCOME"} />
                       {/* <BarChartHome /> */}
                       {/* <LargeChart /> */}
                     </Col>
-                    <Col>
-                      <PieChartHome />
+                    <Col sm={12} lg={6}>
+                      <PieChartHome transactions={selectedWalletTransactions} type={"OUTCOME"} />
                     </Col>
                   </Row>
                 </Col>
