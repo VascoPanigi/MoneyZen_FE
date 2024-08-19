@@ -123,7 +123,7 @@ export function LargeChart() {
   const selectedWalletTransactions = useSelector((state) => state.transactions.wallet_transactions.content);
   const [timeRange, setTimeRange] = React.useState("90d");
 
-  console.log(selectedWalletTransactions);
+  // console.log(selectedWalletTransactions);
 
   // function aggregateTransactions(transactions) {
   //   const aggregatedData = {};
