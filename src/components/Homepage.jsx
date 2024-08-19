@@ -24,6 +24,8 @@ import LastTransactionsSection from "./LastTransactionsSection";
 import moment from "moment";
 import { groupTransactionsByMonth, calculateMonthlyTotals } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
+import { BarChartHome } from "./BarChartHome";
+import { PieChartHome } from "./PieChartHome";
 
 const Homepage = () => {
   const token = localStorage.getItem("Bearer");
@@ -327,7 +329,12 @@ const Homepage = () => {
                   </Row>
                   <Row>
                     <Col>
-                      <LargeChart />
+                      <PieChartHome />
+                      {/* <BarChartHome /> */}
+                      {/* <LargeChart /> */}
+                    </Col>
+                    <Col>
+                      <PieChartHome />
                     </Col>
                   </Row>
                 </Col>
@@ -372,6 +379,19 @@ const Homepage = () => {
               </>
             )}
           </Row>
+
+          {selectedWalletTransactions.length > 0 ? (
+            <>
+              <Row>
+                <LargeChart />
+              </Row>
+              <Row>
+                <BarChartHome />
+              </Row>{" "}
+            </>
+          ) : (
+            <></>
+          )}
         </>
       ) : (
         <Container className="homepage-no-wallets-container">
