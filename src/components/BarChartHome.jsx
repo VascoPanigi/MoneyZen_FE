@@ -44,7 +44,9 @@ export function BarChartHome({ transactions }) {
     return acc;
   }, {});
 
-  const chartData = Object.values(monthlyData);
+  const chartData = Object.values(monthlyData).reverse();
+
+  console.log(chartData);
 
   const chartConfig = {
     income: {
