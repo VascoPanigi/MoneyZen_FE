@@ -1,0 +1,23 @@
+.card-content-bar-chart {
+  height: 300px;
+}
+
+.bar-chart-outer-container {
+  border: 1px solid $body-color !important;
+  border-radius: var(--bs-border-radius) !important;
+  //   margin-block: 2rem;
+
+  .bar-chart-card-header {
+    .bar-chart-card-title {
+      font-size: 1rem;
+      margin-block: 1rem;
+      margin-inline-start: 1rem;
+    }
+    .bar-chart-card-description {
+      font-size: 0.9rem;
+
+      margin-block: 1rem;
+      margin-inline-start: 1rem;
+    }
+  }
+}

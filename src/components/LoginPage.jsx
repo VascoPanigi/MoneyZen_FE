@@ -86,7 +86,7 @@ const LoginPage = () => {
                     />
                   </FloatingLabel>
                   <Form.Group className="mb-3" controlId="loginCheckbox">
-                    <Form.Check type="checkbox" label="Check me out" />
+                    <Form.Check type="checkbox" label="I agree to Terms & Conditions" />
                   </Form.Group>
                   <div className="login-page-button-container">
                     <Button type="submit">Submit</Button>
@@ -157,7 +157,7 @@ const LoginPage = () => {
                     />
                   </FloatingLabel>
                   <Form.Group className="mb-3" controlId="registerCheckbox">
-                    <Form.Check type="checkbox" label="Check me out" />
+                    <Form.Check type="checkbox" label="I agree to Terms & Conditions" />
                   </Form.Group>
                   <div className="login-page-button-container">
                     <Button variant="primary" type="submit">

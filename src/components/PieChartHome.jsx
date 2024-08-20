@@ -92,7 +92,7 @@ export function PieChartHome({ transactions, type }) {
     chartData = Object.keys(aggregatedData).map((categoryName) => ({
       label: categoryName,
       value: aggregatedData[categoryName],
-      fill: "#14715d",
+      fill: "#1e5fc8",
     }));
 
     chartConfig = {
@@ -104,7 +104,7 @@ export function PieChartHome({ transactions, type }) {
           categoryName.toLowerCase(),
           {
             label: categoryName,
-            color: "#14715d",
+            color: "#1e5fc8",
           },
         ])
       ),

@@ -384,11 +384,11 @@ const Homepage = () => {
 
           {selectedWallet && selectedWalletTransactions && selectedWalletTransactions.length > 0 ? (
             <>
+              <Row>{/* <LargeChart /> */}</Row>
               <Row>
-                <LargeChart />
-              </Row>
-              <Row>
-                <BarChartHome />
+                <Col className="homepage-large-charts-container">
+                  <BarChartHome transactions={selectedWalletTransactions} />
+                </Col>
               </Row>{" "}
             </>
           ) : (
