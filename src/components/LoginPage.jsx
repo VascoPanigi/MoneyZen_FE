@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
+import { Alert, Button, Col, Container, FloatingLabel, Form, Modal, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LoginUserAction, registerUserAction } from "../redux/actions";
@@ -16,31 +16,44 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     console.log("Attempting to login.");
     const loginObject = {
       email: email,
       password: password,
     };
-    dispatch(LoginUserAction(loginObject, navigate));
+    const result = await dispatch(LoginUserAction(loginObject, navigate));
+
+    if (result.success) {
+      return;
+    } else {
+      setErrorMessage(result.message);
+    }
   };
 
-  const handleRegisterSubmit = (e) => {
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
-    console.log("Attempting to register a new user.");
-    const loginObject = {
-      name: name,
-      surname: surname,
-      username: username,
-      email: email,
-      password: password,
-    };
-    dispatch(registerUserAction(loginObject));
+    const registerObject = { name, surname, username, email, password };
+    const result = await dispatch(registerUserAction(registerObject));
+
+    if (result.success) {
+      navigate("/home");
+    } else {
+      setErrorMessage(result.message);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   const handleClickOnRegister = () => {
     setIsRegistering(!isRegistering);
+    setErrorMessage(null);
   };
 
   return (
@@ -67,6 +80,8 @@ const LoginPage = () => {
                   <h1>Welcome </h1>
                   <p>Please enter your details</p>
                 </div>
+                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+
                 <Form onSubmit={handleLoginSubmit} className="login-page-form">
                   <FloatingLabel controlId="loginEmail" label="Email address" className="mb-3">
                     <Form.Control
@@ -107,6 +122,7 @@ const LoginPage = () => {
                   <h1>Welcome!</h1>
                   <p>Please enter your details and register</p>
                 </div>
+                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
                 <Form onSubmit={handleRegisterSubmit} className="login-page-form">
                   <Row>
                     <Col className="login-page-formatted-input-container">
@@ -190,6 +206,18 @@ const LoginPage = () => {
           </Col>
         </Row>
       </Container>
+
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Registration Successful</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>You have successfully registered! Now login to get started.</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

@@ -40,13 +40,16 @@ export const LoginUserAction = (loginObject, navigate) => {
   return async () => {
     try {
       const response = await axios.post(baseURL + "auth/login", loginObject);
-      // console.log("Token:", response.data.accessToken);
-      localStorage.setItem("Bearer", response.data.accessToken);
-      // console.log("Token set in localStorage:", localStorage.getItem("Bearer"));
-      console.log(response.data);
-      navigate("/home");
+      if (response.status === 200 || response.status === 201) {
+        localStorage.setItem("Bearer", response.data.accessToken);
+        console.log(response.data);
+        navigate("/home");
+      }
     } catch (err) {
-      console.log(err.message);
+      if (err.response && err.response.status === 404) {
+        return { success: false, message: err.response.data.errorMessage || "Login failed due to bad request." };
+      }
+      return { success: false, message: "An unexpected error occurred." };
     }
   };
 };
@@ -56,9 +59,14 @@ export const registerUserAction = (registerObject) => {
   return async () => {
     try {
       const response = await axios.post(baseURL + "auth/register", registerObject);
-      console.log(response.data);
+      if (response.status === 200 || response.status === 201) {
+        return { success: true, message: "Registration successful!" };
+      }
     } catch (err) {
-      console.log(err.message);
+      if (err.response && err.response.status === 400) {
+        return { success: false, message: err.response.data.errorMessage || "Registration failed due to bad request." };
+      }
+      return { success: false, message: "An unexpected error occurred." };
     }
   };
 };
