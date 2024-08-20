@@ -329,16 +329,16 @@ const Homepage = () => {
                       />
                     </Col>
                   </Row>
-                  <Row>
-                    <Col sm={12} lg={6}>
-                      <PieChartHome transactions={selectedWalletTransactions} type={"INCOME"} />
-                      {/* <BarChartHome /> */}
-                      {/* <LargeChart /> */}
-                    </Col>
-                    <Col sm={12} lg={6}>
-                      <PieChartHome transactions={selectedWalletTransactions} type={"OUTCOME"} />
-                    </Col>
-                  </Row>
+                  {selectedWalletTransactions && selectedWalletTransactions.length > 0 && (
+                    <Row>
+                      <Col sm={12} lg={6}>
+                        <PieChartHome transactions={selectedWalletTransactions} type={"INCOME"} />
+                      </Col>
+                      <Col sm={12} lg={6}>
+                        <PieChartHome transactions={selectedWalletTransactions} type={"OUTCOME"} />
+                      </Col>
+                    </Row>
+                  )}
                 </Col>
                 <Col lg={{ span: 5, order: 2 }}>
                   <Container className="last-transactionms-title-container">
