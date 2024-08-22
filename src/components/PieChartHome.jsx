@@ -41,9 +41,6 @@ import dayjs from "dayjs"; // Assuming you're using dayjs for date manipulation
 // };
 
 export function PieChartHome({ transactions, type }) {
-  console.log(transactions);
-  console.log(type);
-
   const currentMonth = dayjs().month();
   const currentYear = dayjs().year();
   const months = [
@@ -87,7 +84,7 @@ export function PieChartHome({ transactions, type }) {
       return acc;
     }, {});
 
-    console.log(aggregatedData);
+    // console.log(aggregatedData);
 
     chartData = Object.keys(aggregatedData).map((categoryName) => ({
       label: categoryName,
@@ -110,8 +107,8 @@ export function PieChartHome({ transactions, type }) {
       ),
     };
 
-    console.log(chartData);
-    console.log(chartConfig);
+    // console.log(chartData);
+    // console.log(chartConfig);
   }
 
   return (

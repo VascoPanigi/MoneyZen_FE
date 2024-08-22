@@ -384,7 +384,11 @@ const Homepage = () => {
 
           {selectedWallet && selectedWalletTransactions && selectedWalletTransactions.length > 0 ? (
             <>
-              <Row>{/* <LargeChart /> */}</Row>
+              <Row>
+                <Col className="homepage-large-charts-container">
+                  <LargeChart transactions={selectedWalletTransactions} balance={selectedWallet.balance} />
+                </Col>
+              </Row>
               <Row>
                 <Col className="homepage-large-charts-container">
                   <BarChartHome transactions={selectedWalletTransactions} />

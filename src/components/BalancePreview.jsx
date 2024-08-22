@@ -26,13 +26,14 @@ const BalancePreview = ({ TransactionType, balance, balanceChange, balanceVariat
         <Card.Footer className="balance-preview-footer">
           {balanceVariation < 0 ? (
             <p>
-              You lost <span className={`${totalBalanceVariationClass}`}>&#8364;{Math.abs(balanceVariation)}</span> this
-              month
+              You lost{" "}
+              <span className={`${totalBalanceVariationClass}`}>&#8364;{Math.abs(balanceVariation).toFixed(2)}</span>{" "}
+              this month
             </p>
           ) : (
             <p>
-              You&#8217;re up <span className={`${totalBalanceVariationClass}`}>&#8364;{balanceVariation}</span> this
-              month
+              You&#8217;re up{" "}
+              <span className={`${totalBalanceVariationClass}`}>&#8364;{balanceVariation.toFixed(2)}</span> this month
             </p>
           )}
         </Card.Footer>
