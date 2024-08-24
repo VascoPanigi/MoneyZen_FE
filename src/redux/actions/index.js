@@ -16,7 +16,7 @@ export const FETCH_FILTERED_TRANSACTIONS_FAILURE = "FETCH_FILTERED_TRANSACTIONS_
 
 //----------------------------------------------- ID SELECTION OPERATIONS ------------------------------------------------------------
 
-const baseURL = "http://localhost:3001/";
+const baseURL = import.meta.env.VITE_API_URL;
 
 // Store selected wallet id in the store
 export const setSelectedWalletIdAction = (walletId) => {
