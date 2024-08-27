@@ -101,11 +101,11 @@ export function LargeChart({ transactions, balance }) {
 
   return (
     <div className="bar-chart-outer-container">
-      <CardHeader className="bar-chart-card-header">
+      <CardHeader className="bar-chart-card-header large-chart-header">
         <div>
-          <CardTitle className="bar-chart-card-title">Area Chart - Interactive</CardTitle>
+          <CardTitle className="bar-chart-card-title">Balance trend</CardTitle>
           <CardDescription className="bar-chart-card-description">
-            Showing total visitors for the last 3 months
+            Showing balance fluctuation over the past 3 months
           </CardDescription>
         </div>
         <div className="button-container-large-chart">

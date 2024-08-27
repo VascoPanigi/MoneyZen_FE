@@ -6,40 +6,6 @@ import { CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import dayjs from "dayjs"; // Assuming you're using dayjs for date manipulation
 
-// const chartData = [
-//   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-//   { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-//   { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-//   { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-//   { browser: "other", visitors: 90, fill: "var(--color-other)" },
-// ];
-
-// const chartConfig = {
-//   visitors: {
-//     label: "Visitors",
-//   },
-//   chrome: {
-//     label: "Chrome",
-//     color: "hsl(var(--chart-1))",
-//   },
-//   safari: {
-//     label: "Safari",
-//     color: "hsl(var(--chart-2))",
-//   },
-//   firefox: {
-//     label: "Firefox",
-//     color: "hsl(var(--chart-3))",
-//   },
-//   edge: {
-//     label: "Edge",
-//     color: "hsl(var(--chart-4))",
-//   },
-//   other: {
-//     label: "Other",
-//     color: "hsl(var(--chart-5))",
-//   },
-// };
-
 export function PieChartHome({ transactions, type }) {
   const currentMonth = dayjs().month();
   const currentYear = dayjs().year();
@@ -64,7 +30,6 @@ export function PieChartHome({ transactions, type }) {
   let chartConfig = {};
   let chartData = {};
   if (transactions && transactions.length > 0) {
-    // Step 1: Filter OUTCOME transactions for the current month
     const outcomeTransactionsThisMonth = transactions.filter((transaction) => {
       const transactionDate = dayjs(transaction.date);
       return (
@@ -86,11 +51,17 @@ export function PieChartHome({ transactions, type }) {
 
     // console.log(aggregatedData);
 
-    chartData = Object.keys(aggregatedData).map((categoryName) => ({
-      label: categoryName,
-      value: aggregatedData[categoryName],
-      fill: "#1e5fc8",
-    }));
+    chartData = Object.keys(aggregatedData).map((categoryName) => {
+      // Generate a random color for each category
+      const randomColor = Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, "0");
+      return {
+        label: categoryName,
+        value: aggregatedData[categoryName],
+        fill: `#${randomColor}`,
+      };
+    });
 
     chartConfig = {
       visitors: {
@@ -101,7 +72,9 @@ export function PieChartHome({ transactions, type }) {
           categoryName.toLowerCase(),
           {
             label: categoryName,
-            color: "#1e5fc8",
+            color: `#${Math.floor(Math.random() * 16777215)
+              .toString(16)
+              .padStart(6, "0")}`,
           },
         ])
       ),
