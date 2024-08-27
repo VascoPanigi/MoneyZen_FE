@@ -58,6 +58,7 @@ const Homepage = () => {
   const [joinSharedWallet, setJoinSharedWallet] = useState(false);
   const [walletId, setWalletId] = useState("");
   const [isChoosingSharedWalletOption, setIsChoosingSharedWalletOption] = useState(false);
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     dispatch(fetchUserInfo(token));
@@ -192,7 +193,15 @@ const Homepage = () => {
     dispatch(addNewTransactionAction(transactionObject, walletId, token));
     dispatch(fetchUserWallets(token));
     setShowNewTransactionModal(false);
+    setNotification("Transaction successfully added");
+    setTimeout(() => {
+      setNotification("");
+    }, 1500);
   };
+
+  // useEffect(() => {
+  //   setTimeout(setNotification(""), 3000);
+  // }, [notification]);
 
   const handleEditWalletClick = (index) => {
     setEditWalletIndex(index);
@@ -254,6 +263,10 @@ const Homepage = () => {
   // Handle redirect on transactions page
   const handleCLickOnTransactionPage = () => {
     navigate("/transactions");
+  };
+
+  const handleCloseNotification = () => {
+    setNotification("");
   };
 
   // ----------------------------------------------------CHART LOGIC--------------------------------------------------------------
@@ -448,6 +461,12 @@ const Homepage = () => {
           </Modal.Footer>
         </Form>
       </Modal>
+
+      {notification && (
+        <Modal show={true} onHide={handleCloseNotification} centered>
+          <Modal.Body>{notification}</Modal.Body>
+        </Modal>
+      )}
 
       <NewWalletModal
         show={showNewWalletCreationModal}

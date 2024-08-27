@@ -191,6 +191,9 @@ const TransactionPage = () => {
     dispatch(modifyTransactionAction(selectedTransactionId, token, selectedWalletId, transactionObject));
     setShowEditModal(false);
     setNotification("Transaction successfully edited");
+    setTimeout(() => {
+      setNotification("");
+    }, 1500);
   };
 
   const handleCloseNotification = () => {

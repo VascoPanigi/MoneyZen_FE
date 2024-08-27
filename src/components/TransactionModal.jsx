@@ -4,7 +4,7 @@ import { Modal, Button, Form, Row } from "react-bootstrap";
 const TransactionModal = ({ show, handleClose, handleSubmit, incomeOptions, outcomeOptions }) => {
   const [transactionName, setTransactionName] = useState("");
   const [transactionAmount, setTransactionAmount] = useState(null);
-  const [transactionType, setTransactionType] = useState("Outcome");
+  // const [transactionType, setTransactionType] = useState("Outcome");
   const [transactionCategory, setTransactionCategory] = useState("");
   const [transactionDescription, setTransactionDescription] = useState("");
   const [transactionRecurrence, setTransactionRecurrence] = useState("NONE");
