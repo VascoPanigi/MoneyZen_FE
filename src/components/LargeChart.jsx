@@ -37,25 +37,37 @@ export function LargeChart({ transactions, balance }) {
       daysToSubtract = 7;
     }
 
-    startDate.setDate(now.getDate() - daysToSubtract);
-
     // Initialize the balance tracking
     let cumulativeBalance = initialBalance;
     const balanceByDate = {};
 
     // Sort transactions by date (descending order)
     transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const lastTransactionDate = new Date(transactions[0]?.date);
+
+    let endingDate = null;
+
+    if (startDate < lastTransactionDate) {
+      startDate.setDate(lastTransactionDate.getDate() - daysToSubtract);
+      endingDate = lastTransactionDate;
+    } else {
+      startDate.setDate(now.getDate() - daysToSubtract);
+      endingDate = new Date();
+    }
+
+    // this line ensure that every transaction made on the same day is visible on the chart
+    endingDate.setDate(lastTransactionDate.getDate() + 1);
 
     // Populate the balanceByDate with transactions
     transactions.forEach((transaction) => {
       const transactionDate = new Date(transaction.date);
       const dateStr = transactionDate.toISOString().split("T")[0];
+      console.log(transaction);
 
-      if (transactionDate >= startDate && transactionDate <= now) {
+      if (transactionDate >= startDate) {
         if (!balanceByDate[dateStr]) {
           balanceByDate[dateStr] = 0;
         }
-
         if (transaction.category.transactionType === "INCOME") {
           balanceByDate[dateStr] += transaction.amount;
         } else if (transaction.category.transactionType === "OUTCOME") {
@@ -65,8 +77,9 @@ export function LargeChart({ transactions, balance }) {
     });
 
     const chartData = [];
+    console.log(endingDate);
 
-    for (let d = new Date(now); d >= startDate; d.setDate(d.getDate() - 1)) {
+    for (let d = endingDate; d >= startDate; d.setDate(d.getDate() - 1)) {
       const dateStr = d.toISOString().split("T")[0];
 
       if (balanceByDate[dateStr] !== undefined) {

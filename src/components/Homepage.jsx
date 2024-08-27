@@ -418,7 +418,6 @@ const Homepage = () => {
         show={showNewTransactionModal}
         handleClose={handleCloseNewTransaction}
         handleSubmit={handleNewTransactionSubmit}
-        categories={transactionCategories}
         incomeOptions={incomeOptions}
         outcomeOptions={outcomeOptions}
       />

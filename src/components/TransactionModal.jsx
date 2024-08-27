@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Row } from "react-bootstrap";
 
-const TransactionModal = ({ show, handleClose, handleSubmit, categories, incomeOptions, outcomeOptions }) => {
+const TransactionModal = ({ show, handleClose, handleSubmit, incomeOptions, outcomeOptions }) => {
   const [transactionName, setTransactionName] = useState("");
   const [transactionAmount, setTransactionAmount] = useState(null);
   const [transactionType, setTransactionType] = useState("Outcome");
@@ -25,25 +25,29 @@ const TransactionModal = ({ show, handleClose, handleSubmit, categories, incomeO
     setTransactionCategory(selectedOption.label);
   };
 
+  const handleFormSubmit = (e) => {
+    handleSubmit(
+      e,
+      transactionName,
+      transactionAmount,
+      transactionCategory,
+      transactionDescription,
+      transactionRecurrence,
+      transactionDate
+    );
+    setOptions({});
+    setTransactionDate(null);
+    setRadio(0);
+    setTransactionDescription("");
+  };
+
   return (
     <Modal show={show} onHide={handleClose} centered className="new-transaction-modal-container">
       <Modal.Header closeButton>
         <Modal.Title>New Transaction</Modal.Title>
       </Modal.Header>
       <Row className="new-transaction-form-container">
-        <Form
-          onSubmit={(e) =>
-            handleSubmit(
-              e,
-              transactionName,
-              transactionAmount,
-              transactionCategory,
-              transactionDescription,
-              transactionRecurrence,
-              transactionDate
-            )
-          }
-        >
+        <Form onSubmit={(e) => handleFormSubmit(e)}>
           <Form.Group className="mb-3" controlId="newTransactionName">
             <Form.Label>Name</Form.Label>
             <Form.Control
