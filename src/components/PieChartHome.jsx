@@ -7,6 +7,27 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import dayjs from "dayjs"; // Assuming you're using dayjs for date manipulation
 
 export function PieChartHome({ transactions, type }) {
+  const chartColors = [
+    "#3843F5",
+    "#A838F5",
+    "#6B38F5",
+    "#387FF5",
+    "#008080",
+    "#E638F5",
+    "#A68AF5",
+    "#C3629C",
+    "#089B75",
+    "#062746",
+    "#D2A4C9",
+    "#20399E",
+    "#5C31C7",
+    "#AF36CC",
+    "#E64C3D",
+    "#32C8C2",
+    "#91C929",
+    "#4E9396",
+  ];
+
   const currentMonth = dayjs().month();
   const currentYear = dayjs().year();
   const months = [
@@ -51,15 +72,18 @@ export function PieChartHome({ transactions, type }) {
 
     // console.log(aggregatedData);
 
-    chartData = Object.keys(aggregatedData).map((categoryName) => {
-      // Generate a random color for each category
-      const randomColor = Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, "0");
+    chartData = Object.keys(aggregatedData).map((categoryName, index) => {
+      console.log(categoryName + index);
+      let color = "";
+
+      if (index < chartColors.length) {
+        color = chartColors[index];
+      } else color = chartColors[index - (index - 1)];
+
       return {
         label: categoryName,
         value: aggregatedData[categoryName],
-        fill: `#${randomColor}`,
+        fill: color,
       };
     });
 
