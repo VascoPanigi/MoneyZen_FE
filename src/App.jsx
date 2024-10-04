@@ -18,7 +18,7 @@ function App() {
       <BrowserRouter>
         <MyNavbar />
         <Routes>
-          <Route path="/auth" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/home" element={<Homepage />} />
           <Route path="/transactions" element={<TransactionPage />} />
           <Route path="/me" element={<UserProfile />} />
