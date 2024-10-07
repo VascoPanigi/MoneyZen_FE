@@ -9,7 +9,7 @@ import { Col, Row } from "react-bootstrap";
 const MyNavbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isSearchPage = location.pathname === "/auth";
+  const isSearchPage = location.pathname === "/";
   // console.log(isSearchPage);
 
   // const [collapsed, setCollapsed] = useState(true);
