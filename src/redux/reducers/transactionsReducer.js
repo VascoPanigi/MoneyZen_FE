@@ -4,11 +4,14 @@ import {
   FETCH_FILTERED_TRANSACTIONS_SUCCESS,
   FETCH_FILTERED_TRANSACTIONS_FAILURE,
   GET_WALLET_TRANSACTIONS,
+  GET_WALLET_TRANSACTIONS_LIST,
 } from "../actions/index";
+import cloneDeep from "lodash/cloneDeep";
 
 const initialState = {
   selected_transaction_id: null,
   wallet_transactions: {},
+  wallet_transactions_list: [],
   loading: false,
   error: null,
 };
@@ -19,6 +22,11 @@ const transactionsReducer = (state = initialState, action) => {
       return {
         ...state,
         wallet_transactions: action.payload,
+      };
+    case GET_WALLET_TRANSACTIONS_LIST:
+      return {
+        ...state,
+        wallet_transactions_list: cloneDeep(action.payload),
       };
     case GET_TRANSACTION_ID:
       return {

@@ -73,7 +73,7 @@ export function PieChartHome({ transactions, type }) {
     // console.log(aggregatedData);
 
     chartData = Object.keys(aggregatedData).map((categoryName, index) => {
-      console.log(categoryName + index);
+      // console.log(categoryName + index);
       let color = "";
 
       if (index < chartColors.length) {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import cloneDeep from "lodash/cloneDeep";
 
 //------------------------------------------------ACTION TYPES EXPORTS-----------------------------------------------------------
 export const TOGGLE_IS_LOGGED = "TOGGLE_IS_LOGGED";
@@ -9,13 +10,11 @@ export const GET_SPECIFIC_WALLET = "GET_SPECIFIC_WALLET";
 export const GET_WALLET_TRANSACTIONS = "GET_WALLET_TRANSACTIONS";
 export const GET_SELECTED_WALLET_ID = "GET_SELECTED_WALLET_ID";
 export const GET_TRANSACTION_ID = "GET_TRANSACTION_ID";
+export const GET_WALLET_TRANSACTIONS_LIST = "GET_WALLET_TRANSACTIONS_LIST";
 
-export const FETCH_FILTERED_TRANSACTIONS_REQUEST =
-  "FETCH_FILTERED_TRANSACTIONS_REQUEST";
-export const FETCH_FILTERED_TRANSACTIONS_SUCCESS =
-  "FETCH_FILTERED_TRANSACTIONS_SUCCESS";
-export const FETCH_FILTERED_TRANSACTIONS_FAILURE =
-  "FETCH_FILTERED_TRANSACTIONS_FAILURE";
+export const FETCH_FILTERED_TRANSACTIONS_REQUEST = "FETCH_FILTERED_TRANSACTIONS_REQUEST";
+export const FETCH_FILTERED_TRANSACTIONS_SUCCESS = "FETCH_FILTERED_TRANSACTIONS_SUCCESS";
+export const FETCH_FILTERED_TRANSACTIONS_FAILURE = "FETCH_FILTERED_TRANSACTIONS_FAILURE";
 
 //----------------------------------------------- ID SELECTION OPERATIONS ------------------------------------------------------------
 
@@ -46,16 +45,13 @@ export const LoginUserAction = (loginObject, navigate) => {
       const response = await axios.post(baseURL + "auth/login", loginObject);
       if (response.status === 200 || response.status === 201) {
         localStorage.setItem("Bearer", response.data.accessToken);
-        console.log(response.data);
         navigate("/home");
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
         return {
           success: false,
-          message:
-            err.response.data.errorMessage ||
-            "Login failed due to bad request.",
+          message: err.response.data.errorMessage || "Login failed due to bad request.",
         };
       }
       return { success: false, message: "An unexpected error occurred." };
@@ -67,10 +63,7 @@ export const LoginUserAction = (loginObject, navigate) => {
 export const registerUserAction = (registerObject) => {
   return async () => {
     try {
-      const response = await axios.post(
-        baseURL + "auth/register",
-        registerObject
-      );
+      const response = await axios.post(baseURL + "auth/register", registerObject);
       if (response.status === 200 || response.status === 201) {
         return { success: true, message: "Registration successful!" };
       }
@@ -78,9 +71,7 @@ export const registerUserAction = (registerObject) => {
       if (err.response && err.response.status === 400) {
         return {
           success: false,
-          message:
-            err.response.data.errorMessage ||
-            "Registration failed due to bad request.",
+          message: err.response.data.errorMessage || "Registration failed due to bad request.",
         };
       }
       return { success: false, message: "An unexpected error occurred." };
@@ -100,7 +91,6 @@ export const fetchUserInfo = (token) => {
         type: GET_USER_INFO,
         payload: response.data,
       });
-      console.log(response);
     } catch (err) {
       console.log(err.message);
     }
@@ -113,16 +103,12 @@ export const patchUserAvatarAction = (file, token) => {
     try {
       const formData = new FormData();
       formData.append("avatar", file);
-      const response = await axios.patch(
-        baseURL + "users/me/avatar",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      const response = await axios.patch(baseURL + "users/me/avatar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + token,
+        },
+      });
       dispatch(fetchUserInfo(token));
       console.log(response.data);
     } catch (err) {
@@ -161,7 +147,6 @@ export const fetchUserWallets = (token) => {
         type: GET_USER_WALLETS,
         payload: response.data,
       });
-      console.log(response);
     } catch (err) {
       console.log(err.message);
     }
@@ -172,13 +157,9 @@ export const fetchUserWallets = (token) => {
 export const addNewPersonalWalletAction = (registerObject, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post(
-        baseURL + "wallets/personal-wallets",
-        registerObject,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.post(baseURL + "wallets/personal-wallets", registerObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
       console.log(response.data);
       dispatch(fetchUserWallets(token));
     } catch (err) {
@@ -191,13 +172,9 @@ export const addNewPersonalWalletAction = (registerObject, token) => {
 export const addNewSharedWalletAction = (registerObject, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post(
-        baseURL + "wallets/shared-wallets",
-        registerObject,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.post(baseURL + "wallets/shared-wallets", registerObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
       console.log(response.data);
       dispatch(fetchUserWallets(token));
     } catch (err) {
@@ -213,7 +190,6 @@ export const fetchUserSpecificWalletAction = (walletId, token) => {
       const response = await axios.get(baseURL + "wallets/" + walletId, {
         headers: { Authorization: "Bearer " + token },
       });
-      console.log(response.data);
       dispatch({
         type: GET_SPECIFIC_WALLET,
         payload: response.data,
@@ -229,13 +205,9 @@ export const fetchUserSpecificWalletAction = (walletId, token) => {
 export const updateWalletAction = (walletObject, walletId, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.patch(
-        baseURL + "wallets/" + walletId + "/name",
-        walletObject,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.patch(baseURL + "wallets/" + walletId + "/name", walletObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
       console.log(response.data);
       dispatch(fetchUserSpecificWalletAction(walletId, token));
     } catch (err) {
@@ -263,13 +235,9 @@ export const deleteWalletAction = (walletId, token) => {
 export const addUserToSharedWallet = (token, walletId) => {
   return async (dispatch) => {
     try {
-      const response = await axios.patch(
-        baseURL + "wallets/shared-wallets/users",
-        walletId,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.patch(baseURL + "wallets/shared-wallets/users", walletId, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dispatch(fetchUserWallets(token));
       console.log(response.data);
     } catch (err) {
@@ -280,7 +248,27 @@ export const addUserToSharedWallet = (token, walletId) => {
 
 //-----------------------------------------------TRANSACTIONS OPERATIONS------------------------------------------------------------
 
-// Get all the transaction for a specific wallet
+// Get all the transaction for a specific wallet LIST
+export const fetchAllWalletTransactions = (walletId, token) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(baseURL + "transactions/wallet/" + walletId + "/all-transactions", {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      dispatch({
+        type: GET_WALLET_TRANSACTIONS_LIST,
+        payload: cloneDeep(response.data),
+      });
+
+      // console.log(response);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
+// Get all the transaction for a specific wallet PAGEABLE
 export const fetchSpecificWalletTransactionsActions = (
   walletId,
   token,
@@ -324,19 +312,12 @@ export const fetchSpecificWalletTransactionsActions = (
 };
 
 // Filter transaction by name
-export const fetchSpecificWalletTransactionsByNameActions = (
-  walletId,
-  token,
-  name
-) => {
+export const fetchSpecificWalletTransactionsByNameActions = (walletId, token, name) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(
-        baseURL + "transactions/wallet/" + walletId + "?name=" + name,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.get(baseURL + "transactions/wallet/" + walletId + "?name=" + name, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dispatch({
         type: GET_WALLET_TRANSACTIONS,
         payload: {
@@ -370,13 +351,10 @@ export const fetchFilteredTransactions = (walletId, token, filters) => {
   return async (dispatch) => {
     dispatch(fetchFilteredTransactionsRequest(walletId, token, filters));
     try {
-      const response = await axios.get(
-        baseURL + `transactions/wallet/${walletId}`,
-        {
-          params: filters,
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.get(baseURL + `transactions/wallet/${walletId}`, {
+        params: filters,
+        headers: { Authorization: "Bearer " + token },
+      });
       dispatch(fetchFilteredTransactionsSuccess(response.data));
     } catch (error) {
       dispatch(fetchFilteredTransactionsFailure(error.message));
@@ -388,13 +366,9 @@ export const fetchFilteredTransactions = (walletId, token, filters) => {
 export const addNewTransactionAction = (transactionObject, walletId, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post(
-        baseURL + "transactions/" + walletId,
-        transactionObject,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.post(baseURL + "transactions/" + walletId, transactionObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dispatch(fetchUserSpecificWalletAction(walletId, token));
       console.log(response.data);
     } catch (err) {
@@ -407,12 +381,9 @@ export const addNewTransactionAction = (transactionObject, walletId, token) => {
 export const deleteTransactionAction = (transactionId, walletId, token) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(
-        baseURL + "transactions/" + transactionId,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.delete(baseURL + "transactions/" + transactionId, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dispatch(fetchSpecificWalletTransactionsActions(walletId, token));
       console.log(response.data);
     } catch (err) {
@@ -422,21 +393,12 @@ export const deleteTransactionAction = (transactionId, walletId, token) => {
 };
 
 //modify a transaction
-export const modifyTransactionAction = (
-  transactionId,
-  token,
-  walletId,
-  transactionObject
-) => {
+export const modifyTransactionAction = (transactionId, token, walletId, transactionObject) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put(
-        baseURL + "transactions/" + transactionId,
-        transactionObject,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
+      const response = await axios.put(baseURL + "transactions/" + transactionId, transactionObject, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dispatch(fetchSpecificWalletTransactionsActions(walletId, token));
       console.log(response.data);
     } catch (err) {
@@ -457,7 +419,6 @@ export const fetchAllCategories = (token) => {
         type: GET_ALL_CATEGORIES,
         payload: response.data,
       });
-      console.log(response);
     } catch (err) {
       console.log(err.message);
     }

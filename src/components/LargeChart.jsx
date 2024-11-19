@@ -21,9 +21,6 @@ const chartConfig = {
 };
 
 export function LargeChart({ transactions, balance }) {
-  console.log(transactions);
-  console.log(balance);
-
   const [timeRange, setTimeRange] = React.useState("90d");
 
   const generateChartData = (transactions, initialBalance) => {
@@ -62,7 +59,6 @@ export function LargeChart({ transactions, balance }) {
     transactions.forEach((transaction) => {
       const transactionDate = new Date(transaction.date);
       const dateStr = transactionDate.toISOString().split("T")[0];
-      console.log(transaction);
 
       if (transactionDate >= startDate) {
         if (!balanceByDate[dateStr]) {
@@ -77,7 +73,6 @@ export function LargeChart({ transactions, balance }) {
     });
 
     const chartData = [];
-    console.log(endingDate);
 
     for (let d = endingDate; d >= startDate; d.setDate(d.getDate() - 1)) {
       const dateStr = d.toISOString().split("T")[0];
@@ -96,8 +91,6 @@ export function LargeChart({ transactions, balance }) {
   };
 
   const chartData = generateChartData(transactions, balance);
-
-  console.log(chartData);
 
   return (
     <div className="bar-chart-outer-container">

@@ -8,6 +8,7 @@ import {
   addUserToSharedWallet,
   deleteWalletAction,
   fetchAllCategories,
+  fetchAllWalletTransactions,
   fetchSpecificWalletTransactionsActions,
   fetchUserInfo,
   // fetchUserSpecificWalletAction,
@@ -54,6 +55,8 @@ const Homepage = () => {
   const selectedWallet = useSelector((state) => state.wallets.user_wallets[selectedWalletIndex]);
   const transactionCategories = useSelector((state) => state.transaction_categories);
   const selectedWalletTransactions = useSelector((state) => state.transactions.wallet_transactions.content);
+  const selectedWalletTransactionsList = useSelector((state) => state.transactions.wallet_transactions_list);
+  let selectedWalletTransactionsListCopy = [...selectedWalletTransactionsList];
 
   const [joinSharedWallet, setJoinSharedWallet] = useState(false);
   const [walletId, setWalletId] = useState("");
@@ -69,6 +72,7 @@ const Homepage = () => {
   useEffect(() => {
     if (wallets.length > 0 && selectedWalletIndex < wallets.length) {
       dispatch(fetchSpecificWalletTransactionsActions(wallets[selectedWalletIndex].id, token));
+      dispatch(fetchAllWalletTransactions(wallets[selectedWalletIndex].id, token));
       // dispatch(setSelectedWalletIdAction(wallets[selectedWalletIndex].id, dispatch));
     }
   }, [wallets, selectedWalletIndex]);
@@ -342,13 +346,13 @@ const Homepage = () => {
                       />
                     </Col>
                   </Row>
-                  {selectedWalletTransactions && selectedWalletTransactions.length > 0 && (
+                  {selectedWalletTransactionsListCopy && selectedWalletTransactionsListCopy.length > 0 && (
                     <Row>
                       <Col sm={12} lg={6}>
-                        <PieChartHome transactions={selectedWalletTransactions} type={"INCOME"} />
+                        <PieChartHome transactions={selectedWalletTransactionsListCopy} type={"INCOME"} />
                       </Col>
                       <Col sm={12} lg={6}>
-                        <PieChartHome transactions={selectedWalletTransactions} type={"OUTCOME"} />
+                        <PieChartHome transactions={selectedWalletTransactionsListCopy} type={"OUTCOME"} />
                       </Col>
                     </Row>
                   )}
@@ -395,16 +399,16 @@ const Homepage = () => {
             )}
           </Row>
 
-          {selectedWallet && selectedWalletTransactions && selectedWalletTransactions.length > 0 ? (
+          {selectedWallet && selectedWalletTransactionsListCopy && selectedWalletTransactionsListCopy.length > 0 ? (
             <>
               <Row>
                 <Col className="homepage-large-charts-container">
-                  <LargeChart transactions={selectedWalletTransactions} balance={selectedWallet.balance} />
+                  <LargeChart transactions={selectedWalletTransactionsListCopy} balance={selectedWallet.balance} />
                 </Col>
               </Row>
               <Row>
                 <Col className="homepage-large-charts-container">
-                  <BarChartHome transactions={selectedWalletTransactions} />
+                  <BarChartHome transactions={selectedWalletTransactionsListCopy} />
                 </Col>
               </Row>{" "}
             </>
