@@ -41,7 +41,11 @@ const LoginPage = () => {
     const result = await dispatch(registerUserAction(registerObject));
 
     if (result.success) {
-      navigate("/home");
+      console.log(result);
+      setShowModal(true);
+      setTimeout(() => setIsRegistering(false), 2000);
+      clearData();
+      // navigate("/home");
     } else {
       setErrorMessage(result.message);
     }
@@ -54,6 +58,14 @@ const LoginPage = () => {
   const handleClickOnRegister = () => {
     setIsRegistering(!isRegistering);
     setErrorMessage(null);
+  };
+
+  const clearData = () => {
+    setEmail("");
+    setPassword("");
+    setName("");
+    setSurname("");
+    setUsername("");
   };
 
   return (

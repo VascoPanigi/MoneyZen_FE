@@ -65,6 +65,7 @@ export const registerUserAction = (registerObject) => {
     try {
       const response = await axios.post(baseURL + "auth/register", registerObject);
       if (response.status === 200 || response.status === 201) {
+        localStorage.setItem("Bearer", response.data.userId);
         return { success: true, message: "Registration successful!" };
       }
     } catch (err) {
