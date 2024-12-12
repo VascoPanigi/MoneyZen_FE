@@ -31,13 +31,14 @@
     }
   }
   .user-profile-form-container {
-    form {
+    form,
+    div {
       .row {
         margin-block: 1rem;
       }
       .user-profile-form-buttons-container {
         display: flex;
-        justify-content: end;
+        justify-content: space-between;
         align-items: center;
         button {
           margin-block-start: 1rem;

@@ -9,16 +9,30 @@ const TransactionModal = ({ show, handleClose, handleSubmit, incomeOptions, outc
   const [transactionDescription, setTransactionDescription] = useState("");
   const [transactionRecurrence, setTransactionRecurrence] = useState("NONE");
   const [transactionDate, setTransactionDate] = useState(null);
-  const [radio, setRadio] = useState(0);
+  const [radio, setRadio] = useState("1");
   const [options, setOptions] = useState({});
 
   useEffect(() => {
-    if (radio === "2") {
-      setOptions(incomeOptions);
-    } else if (radio === "1") {
-      setOptions(outcomeOptions);
+    if (incomeOptions && outcomeOptions && incomeOptions.length > 0 && outcomeOptions.length > 0) {
+      if (radio === "2") {
+        setOptions(incomeOptions);
+        changeCategory(true);
+      } else if (radio === "1") {
+        setOptions(outcomeOptions);
+        changeCategory(false);
+      }
     }
   }, [radio, incomeOptions, outcomeOptions]);
+
+  const changeCategory = (isIncome) => {
+    if (!incomeOptions?.length || !outcomeOptions?.length) return;
+
+    if (isIncome && incomeOptions.length > 0) {
+      setTransactionCategory(incomeOptions[0].label);
+    } else if (!isIncome && outcomeOptions.length > 0) {
+      setTransactionCategory(outcomeOptions[0].label);
+    }
+  };
 
   const handleCategoryChange = (event) => {
     const selectedOption = event.target.options[event.target.selectedIndex];
@@ -69,14 +83,30 @@ const TransactionModal = ({ show, handleClose, handleSubmit, incomeOptions, outc
           <Form.Group className="mb-3" controlId="transactionAmount">
             <Form.Label>Insert transaction amount </Form.Label>
             <Form.Control
-              type="name"
+              type="number"
+              min={0}
+              step=".01"
               placeholder="Enter transaction amount"
               onChange={(e) => setTransactionAmount(e.target.value)}
             />
           </Form.Group>
           <Form.Group required className="mb-3" onChange={(e) => setRadio(e.target.value)}>
-            <Form.Check type="radio" label="Outcome" name="group1" value={1} />
-            <Form.Check type="radio" label="Income" name="group1" value={2} />
+            <Form.Check
+              type="radio"
+              label="Outcome"
+              name="group1"
+              value={"1"}
+              checked={radio === "1"}
+              onChange={(e) => setRadio(e.target.value)}
+            />
+            <Form.Check
+              type="radio"
+              label="Income"
+              name="group1"
+              value={"2"}
+              checked={radio === "2"}
+              onChange={(e) => setRadio(e.target.value)}
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Category</Form.Label>

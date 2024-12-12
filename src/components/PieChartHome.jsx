@@ -103,14 +103,12 @@ export function PieChartHome({ transactions, type }) {
         ])
       ),
     };
-
-    // console.log(chartData);
-    // console.log(chartConfig);
   }
 
   return (
     <>
       {/* {selectedWalletTransactions && selectedWalletTransactions.length > 0 && ( */}
+      {/* {chartData.length > 0 ? ( */}
       <div className="flex flex-col pie-chart-outer-container">
         <CardHeader className="items-center pb-0 pie-chart-header-container">
           <CardDescription className="pie-chart-header-p">
@@ -129,6 +127,11 @@ export function PieChartHome({ transactions, type }) {
           <p>Breakdown of your transactions in this month</p>
         </CardFooter> */}
       </div>
+      {/* ) : (
+        <div className="flex flex-col pie-chart-outer-container">
+          <h3>No transactions in your history.</h3>
+        </div>
+      )} */}
       {/* )} */}
     </>
   );

@@ -11,15 +11,17 @@ const BalancePreview = ({ TransactionType, balance, balanceChange, balanceVariat
   // let lessMore = balanceChange < 0 ? "less" : "more";
 
   if (TransactionType === "Income") {
-    keyword = "gained";
+    keyword = "Gained";
+  } else if (TransactionType === "Total") {
+    keyword = "Total";
   } else {
-    keyword = "spent";
+    keyword = "Spent";
   }
 
   return (
     <Card className="balance-preview-container">
       <Card.Body className="balance-preview-body">
-        <Card.Title className="balance-preview-type">{TransactionType}</Card.Title>
+        <Card.Title className="balance-preview-type">{keyword}</Card.Title>
         <Card.Text className="balance-preview-balance">&#8364;{balance.toFixed(2)}</Card.Text>
       </Card.Body>
       {TransactionType === "Total" ? (

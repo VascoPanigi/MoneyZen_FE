@@ -3,9 +3,11 @@ import { Button, Col, Container, Form, Row, Modal, Alert } from "react-bootstrap
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserInfo, modifyUserProfileAction, patchUserAvatarAction } from "../redux/actions";
 import ImageResizer from "react-image-file-resizer";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = localStorage.getItem("Bearer");
 
   const [name, setName] = useState("");
@@ -73,7 +75,6 @@ const UserProfile = () => {
       username: username,
       email: email,
     };
-    console.log("sto modificando i dati dell-utente");
 
     dispatch(modifyUserProfileAction(token, userObject)).then(() => {
       setIsEditing(false);
@@ -91,6 +92,11 @@ const UserProfile = () => {
     setSurname(user.surname);
     setUsername(user.username);
     setEmail(user.email);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("Bearer");
+    navigate("/");
   };
 
   return (
@@ -113,7 +119,7 @@ const UserProfile = () => {
             )}
           </Col>
           <Col sm={9} className="user-profile-form-container">
-            <Form>
+            <div>
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="name">
                   <Form.Label>Name</Form.Label>
@@ -139,11 +145,14 @@ const UserProfile = () => {
                 </Form.Group>
               </Row>
               <div className="user-profile-form-buttons-container">
-                <Button variant="primary" type="text" onClick={handleEditingChange}>
+                <Button variant="danger" type="button" onClick={handleLogout}>
+                  Logout
+                </Button>
+                <Button variant="primary" type="button" onClick={handleEditingChange}>
                   Edit
                 </Button>
               </div>
-            </Form>
+            </div>
           </Col>
         </Row>
       ) : (
